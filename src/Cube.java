@@ -61,11 +61,13 @@ public class Cube {
     }
 
     public void rotateBottomFaceClockwise() {
-
+        bottomFace.rotateClockwise();
+        rotateHorizontalRingClockwise(CubeValues.BOTTOM_ROW.getValue());
     }
 
     public void rotateBottomFaceCounterclockwise() {
-
+        bottomFace.rotateCounterclockwise();
+        rotateHorizontalRingCounterclockwise(CubeValues.BOTTOM_ROW.getValue());
     }
 
     public void rotateMiddleColumnsUpwards() {
