@@ -29,19 +29,23 @@ public class Cube {
     }
 
     public void rotateLeftFaceClockwise() {
-
+        leftFace.rotateClockwise();
+        rotateVerticalRingDownwards(CubeValues.LEFT_COLUMN.getValue());
     }
 
     public void rotateLeftFaceCounterclockwise() {
-
+        leftFace.rotateCounterclockwise();
+        rotateVerticalRingUpwards(CubeValues.LEFT_COLUMN.getValue());
     }
 
     public void rotateRightFaceClockwise() {
-
+        rightFace.rotateClockwise();
+        rotateVerticalRingUpwards(CubeValues.RIGHT_COLUMN.getValue());
     }
 
     public void rotateRightFaceCounterclockwise() {
-
+        rightFace.rotateCounterclockwise();
+        rotateVerticalRingDownwards(CubeValues.RIGHT_COLUMN.getValue());
     }
 
     public void rotateFrontFaceClockwise() {
@@ -71,11 +75,11 @@ public class Cube {
     }
 
     public void rotateMiddleColumnsUpwards() {
-
+        rotateVerticalRingUpwards(CubeValues.MIDDLE_COLUMN.getValue());
     }
 
     public void rotateMiddleColumnsDownwards() {
-
+        rotateVerticalRingDownwards(CubeValues.MIDDLE_COLUMN.getValue());
     }
 
     public void rotateMiddleRowsClockwise() {
