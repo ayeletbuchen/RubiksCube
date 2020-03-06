@@ -79,11 +79,11 @@ public class Cube {
     }
 
     public void rotateMiddleRowsClockwise() {
-
+        rotateHorizontalRingClockwise(CubeValues.MIDDLE_ROW.getValue());
     }
 
     public void rotateMiddleRowsCounterclockwise() {
-
+        rotateHorizontalRingCounterclockwise(CubeValues.MIDDLE_ROW.getValue());
     }
 
     private void rotateHorizontalRingClockwise(int row) {
