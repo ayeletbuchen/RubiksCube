@@ -135,6 +135,14 @@ public class Cube {
     }
 
     private void rotateVerticalRingDownwards(int column) {
+        Square[] topColumn = topFace.getColumn(column);
+        Square[] backColumn = backFace.getColumn(column);
+        Square[] bottomColumn = bottomFace.getColumn(column);
+        Square[] frontColumn = frontFace.getColumn(column);
 
+        topFace.setColumn(column, backColumn);
+        backFace.setColumn(column, bottomColumn);
+        bottomFace.setColumn(column, frontColumn);
+        frontFace.setColumn(column, frontColumn);
     }
 }
