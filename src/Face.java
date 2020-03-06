@@ -30,16 +30,10 @@ public class Face {
         squares[row][RIGHT_COLUMN] = rightSquare;
     }
 
-    public void setLeftColumn(Square topSquare, Square middleSquare, Square bottomSquare) {
-        setColumn(LEFT_COLUMN, topSquare, middleSquare, bottomSquare);
-    }
-
-    public void setMiddleColumn(Square topSquare, Square middleSquare, Square bottomSquare) {
-        setColumn(MIDDLE_COLUMN, topSquare, middleSquare, bottomSquare);
-    }
-
-    public void setRightColumn(Square topSquare, Square middleSquare, Square bottomSquare) {
-        setColumn(RIGHT_COLUMN, topSquare, middleSquare, bottomSquare);
+    public void setColumn(int column, Square[] newColumn) {
+        squares[TOP_ROW][column] = newColumn[TOP_ROW];
+        squares[MIDDLE_ROW][column] = newColumn[MIDDLE_ROW];
+        squares[BOTTOM_ROW][column] = newColumn[BOTTOM_ROW];
     }
 
     private void setColumn(int column, Square topSquare, Square middleSquare, Square bottomSquare) {
@@ -77,47 +71,17 @@ public class Face {
                 squaresCopy[BOTTOM_ROW][LEFT_COLUMN]);
     }
 
-    public Square[] getTopRow() {
-        return squares[TOP_ROW];
-    }
-
-    public Square[] getMiddleRow() {
-        return squares[MIDDLE_ROW];
-    }
-
-    public Square[] getBottomRow() {
-        return squares[BOTTOM_ROW];
-    }
-
     public Square[] getRow(int row) {
         return squares[row];
     }
 
-    public Square[] getLeftColumn() {
-        Square[] leftColumn = new Square[SIZE];
+    public Square[] getColumn(int column) {
+        Square[] arrColumn = new Square[SIZE];
 
-        for (int row = 0; row < squares.length; row++) {
-            leftColumn[row] = squares[row][LEFT_COLUMN];
+        for (int row = TOP_ROW; row < SIZE; row++) {
+            arrColumn[row] = squares[row][column];
         }
-        return leftColumn;
-    }
-
-    public Square[] getMiddleColumn() {
-        Square[] middleColumn = new Square[SIZE];
-
-        for (int row = 0; row < squares.length; row++) {
-            middleColumn[row] = squares[row][MIDDLE_COLUMN];
-        }
-        return middleColumn;
-    }
-
-    public Square[] getRightColumn() {
-        Square[] rightColumn = new Square[SIZE];
-
-        for (int row = 0; row < squares.length; row++) {
-            rightColumn[row] = squares[row][RIGHT_COLUMN];
-        }
-        return rightColumn;
+        return arrColumn;
     }
 
     private Square[][] deepCopy() {

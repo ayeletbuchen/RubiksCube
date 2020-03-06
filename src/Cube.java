@@ -86,6 +86,14 @@ public class Cube {
         rotateHorizontalRingCounterclockwise(CubeValues.MIDDLE_ROW.getValue());
     }
 
+    public void rotateMiddleRowsAndColumnsRight() {
+
+    }
+
+    public void rotateMiddleRowsAndColumnsLeft() {
+
+    }
+
     private void rotateHorizontalRingClockwise(int row) {
         Square[] frontRow = frontFace.getRow(row);
         Square[] rightRow = rightFace.getRow(row);
@@ -112,5 +120,23 @@ public class Cube {
         leftFace.setRow(row, backRow);
         backFace.setRow(row, rightRow);
         rightFace.setRow(row, tempRow);
+    }
+
+    private void rotateVerticalRingUpwards(int column) {
+        Square[] topColumn = topFace.getColumn(column);
+        Square[] backColumn = backFace.getColumn(column);
+        Square[] bottomColumn = bottomFace.getColumn(column);
+        Square[] frontColumn = frontFace.getColumn(column);
+
+        Square[] tempColumn = Arrays.copyOf(topColumn, topFace.SIZE);
+
+        topFace.setColumn(column, frontColumn);
+        frontFace.setColumn(column, bottomColumn);
+        bottomFace.setColumn(column, backColumn);
+        backFace.setColumn(column, tempColumn);
+    }
+
+    private void rotateVerticalRingDownwards() {
+
     }
 }
