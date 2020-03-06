@@ -128,15 +128,13 @@ public class Cube {
         Square[] bottomColumn = bottomFace.getColumn(column);
         Square[] frontColumn = frontFace.getColumn(column);
 
-        Square[] tempColumn = Arrays.copyOf(topColumn, topFace.SIZE);
-
         topFace.setColumn(column, frontColumn);
         frontFace.setColumn(column, bottomColumn);
         bottomFace.setColumn(column, backColumn);
-        backFace.setColumn(column, tempColumn);
+        backFace.setColumn(column, topColumn);
     }
 
-    private void rotateVerticalRingDownwards() {
+    private void rotateVerticalRingDownwards(int column) {
 
     }
 }
