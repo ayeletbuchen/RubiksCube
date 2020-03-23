@@ -9,7 +9,7 @@ public class Face {
     private final int MIDDLE_ROW = CubeValues.MIDDLE_ROW.getValue();
     private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
 
-    public Face(Square[][] squares/*Row topRow, Row middleRow, Row bottomRow*/) {
+    public Face(Square[][] squares) {
         this.squares = new Square[SIZE][SIZE];
         for (int row = 0; row < squares.length; row++) {
             for (int col = 0; col < squares[row].length; col++) {
@@ -20,7 +20,7 @@ public class Face {
 
     public void setRow(int row, Square[] newRow) {
         squares[row][LEFT_COLUMN] = newRow[LEFT_COLUMN];
-        squares[row][MIDDLE_COLUMN] = newRow[MIDDLE_ROW];
+        squares[row][MIDDLE_COLUMN] = newRow[MIDDLE_COLUMN];
         squares[row][RIGHT_COLUMN] = newRow[RIGHT_COLUMN];
     }
 
@@ -84,7 +84,7 @@ public class Face {
         return arrColumn;
     }
 
-    private Square[][] deepCopy() {
+    public Square[][] deepCopy() {
         Square[][] squareCopies = new Square[SIZE][SIZE];
 
         for (int row = 0; row < squares.length; row++) {
