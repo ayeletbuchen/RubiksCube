@@ -1,13 +1,13 @@
 public class Face {
 
     private Square[][] squares;
-    final int SIZE = CubeValues.DIMENSION.getValue();
-    private final int LEFT_COLUMN = CubeValues.LEFT_COLUMN.getValue();
-    private final int MIDDLE_COLUMN = CubeValues.MIDDLE_COLUMN.getValue();
-    private final int RIGHT_COLUMN = CubeValues.RIGHT_COLUMN.getValue();
-    private final int TOP_ROW = CubeValues.TOP_ROW.getValue();
-    private final int MIDDLE_ROW = CubeValues.MIDDLE_ROW.getValue();
-    private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
+    final int SIZE = CubeInfo.DIMENSION.getValue();
+    private final int LEFT_COLUMN = CubeInfo.LEFT_COLUMN.getValue();
+    private final int MIDDLE_COLUMN = CubeInfo.MIDDLE_COLUMN.getValue();
+    private final int RIGHT_COLUMN = CubeInfo.RIGHT_COLUMN.getValue();
+    private final int TOP_ROW = CubeInfo.TOP_ROW.getValue();
+    private final int MIDDLE_ROW = CubeInfo.MIDDLE_ROW.getValue();
+    private final int BOTTOM_ROW = CubeInfo.BOTTOM_ROW.getValue();
 
     public Face(Square[][] squares) {
         this.squares = new Square[SIZE][SIZE];
