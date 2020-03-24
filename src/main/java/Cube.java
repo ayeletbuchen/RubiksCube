@@ -64,37 +64,37 @@ public class Cube {
 
     }
 
-    public void rotateBottomFaceClockwise() {
+    public void rotateDownFaceClockwise() {
         downFace.rotateClockwise();
         rotateHorizontalRingClockwise(CubeValues.BOTTOM_ROW.getValue());
     }
 
-    public void rotateBottomFaceCounterclockwise() {
+    public void rotateDownFaceCounterclockwise() {
         downFace.rotateCounterclockwise();
         rotateHorizontalRingCounterclockwise(CubeValues.BOTTOM_ROW.getValue());
     }
 
-    public void rotateMiddleColumnsUpwards() {
+    public void sliceMiddleColumnsUpwards() {
         rotateVerticalRingUpwards(CubeValues.MIDDLE_COLUMN.getValue());
     }
 
-    public void rotateMiddleColumnsDownwards() {
+    public void sliceMiddleColumnsDownwards() {
         rotateVerticalRingDownwards(CubeValues.MIDDLE_COLUMN.getValue());
     }
 
-    public void rotateMiddleRowsClockwise() {
+    public void sliceMiddleRowsClockwise() {
         rotateHorizontalRingClockwise(CubeValues.MIDDLE_ROW.getValue());
     }
 
-    public void rotateMiddleRowsCounterclockwise() {
+    public void sliceMiddleRowsCounterclockwise() {
         rotateHorizontalRingCounterclockwise(CubeValues.MIDDLE_ROW.getValue());
     }
 
-    public void rotateMiddleRowsAndColumnsRight() {
+    public void sliceMiddleRowsAndColumnsRight() {
 
     }
 
-    public void rotateMiddleRowsAndColumnsLeft() {
+    public void sliceMiddleRowsAndColumnsLeft() {
 
     }
 
@@ -136,6 +136,53 @@ public class Cube {
         frontFace.setColumn(column, downColumn);
         downFace.setColumn(column, backColumn);
         backFace.setColumn(column, topColumn);
+    }
+
+    public void rotateRingOfRowsAndColumns(boolean clockwise, int topFaceRow) {
+        int top;
+        int down;
+        int left;
+        int right;
+
+        top = topFaceRow;
+
+        if (topFaceRow == CubeValues.TOP_ROW.getValue()) {
+            right = CubeValues.RIGHT_COLUMN.getValue();
+            down = CubeValues.BOTTOM_ROW.getValue();
+            left = CubeValues.LEFT_COLUMN.getValue();
+        } else if (topFaceRow == CubeValues.MIDDLE_ROW.getValue()) {
+            right = CubeValues.MIDDLE_COLUMN.getValue();
+            down = CubeValues.MIDDLE_ROW.getValue();
+            left = CubeValues.MIDDLE_COLUMN.getValue();
+        } else { // Bottom row
+            right = CubeValues.LEFT_COLUMN.getValue();
+            down = CubeValues.TOP_ROW.getValue();
+            left = CubeValues.RIGHT_COLUMN.getValue();
+        }
+
+        if (clockwise) {
+            rotateRingOfRowsAndColumnsClockwise(top, right, down, left);
+        } else {
+            rotateRingOfRowsAndColumnsCounterclockwise(top, right, down, left);
+        }
+    }
+
+    private void rotateRingOfRowsAndColumnsClockwise(int topRow, int rightColumn, int downRow, int leftColumn) {
+        Square[] temp = Arrays.copyOf(topFace.getRow(topRow), topFace.SIZE);
+
+        topFace.setRow(topRow, leftFace.getColumn(leftColumn));
+        leftFace.setColumn(leftColumn, downFace.getRow(downRow));
+        downFace.setRow(downRow, rightFace.getColumn(rightColumn));
+        rightFace.setColumn(rightColumn, temp);
+    }
+
+    private void rotateRingOfRowsAndColumnsCounterclockwise(int topRow, int rightColumn, int downRow, int leftColumn) {
+        Square[] temp = Arrays.copyOf(topFace.getRow(topRow), topFace.SIZE);
+
+        topFace.setRow(topRow, rightFace.getColumn(rightColumn));
+        rightFace.setColumn(rightColumn, downFace.getRow(downRow));
+        downFace.setRow(downRow, leftFace.getColumn(leftColumn));
+        leftFace.setColumn(leftColumn, temp);
     }
 
     private void rotateVerticalRingDownwards(int column) {

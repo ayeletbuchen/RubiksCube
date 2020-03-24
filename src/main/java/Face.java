@@ -36,7 +36,7 @@ public class Face {
         squares[BOTTOM_ROW][column] = newColumn[BOTTOM_ROW];
     }
 
-    private void setColumn(int column, Square topSquare, Square middleSquare, Square bottomSquare) {
+    public void setColumn(int column, Square topSquare, Square middleSquare, Square bottomSquare) {
         squares[TOP_ROW][column] = topSquare;
         squares[MIDDLE_ROW][column] = middleSquare;
         squares[BOTTOM_ROW][column] = bottomSquare;
