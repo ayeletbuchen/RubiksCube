@@ -52,30 +52,6 @@ public class Cube {
 
     }
 
-    private void turnCubeRight() { // TODO LOOK THIS OVER
-        topFace.rotateCounterclockwise();
-        Square[][] frontFaceCopy = frontFace.deepCopy();
-        frontFace = leftFace;
-        leftFace = backFace;
-        backFace = rightFace;
-        rightFace.setRow(CubeValues.TOP_ROW.getValue(), frontFaceCopy[CubeValues.TOP_ROW.getValue()]);
-        rightFace.setRow(CubeValues.MIDDLE_ROW.getValue(), frontFaceCopy[CubeValues.MIDDLE_ROW.getValue()]);
-        rightFace.setRow(CubeValues.BOTTOM_ROW.getValue(), frontFaceCopy[CubeValues.BOTTOM_ROW.getValue()]);
-        downFace.rotateCounterclockwise();
-    }
-
-    private void turnCubeLeft() { // TODO LOOK THIS OVER
-        topFace.rotateClockwise();
-        Square[][] frontFaceCopy = frontFace.deepCopy();
-        frontFace = rightFace;
-        rightFace = backFace;
-        backFace = leftFace;
-        leftFace.setRow(CubeValues.TOP_ROW.getValue(), frontFaceCopy[CubeValues.TOP_ROW.getValue()]);
-        leftFace.setRow(CubeValues.MIDDLE_ROW.getValue(), frontFaceCopy[CubeValues.MIDDLE_ROW.getValue()]);
-        leftFace.setRow(CubeValues.BOTTOM_ROW.getValue(), frontFaceCopy[CubeValues.BOTTOM_ROW.getValue()]);
-        downFace.rotateCounterclockwise();
-    }
-
     public void rotateFrontFaceCounterclockwise() {
 
     }
@@ -172,5 +148,33 @@ public class Cube {
         backFace.setColumn(column, downColumn);
         downFace.setColumn(column, frontColumn);
         frontFace.setColumn(column, topColumn);
+    }
+
+    public void turnCubeRight() { // TODO LOOK THIS OVER
+        topFace.rotateCounterclockwise();
+        Square[][] frontFaceCopy = frontFace.deepCopy();
+        frontFace = leftFace;
+        leftFace = backFace;
+        backFace = rightFace;
+        rightFace.setRow(CubeValues.TOP_ROW.getValue(), frontFaceCopy[CubeValues.TOP_ROW.getValue()]);
+        rightFace.setRow(CubeValues.MIDDLE_ROW.getValue(), frontFaceCopy[CubeValues.MIDDLE_ROW.getValue()]);
+        rightFace.setRow(CubeValues.BOTTOM_ROW.getValue(), frontFaceCopy[CubeValues.BOTTOM_ROW.getValue()]);
+        downFace.rotateCounterclockwise();
+    }
+
+    public void turnCubeLeft() { // TODO LOOK THIS OVER
+        topFace.rotateClockwise();
+        Square[][] frontFaceCopy = frontFace.deepCopy();
+        frontFace = rightFace;
+        rightFace = backFace;
+        backFace = leftFace;
+        leftFace.setRow(CubeValues.TOP_ROW.getValue(), frontFaceCopy[CubeValues.TOP_ROW.getValue()]);
+        leftFace.setRow(CubeValues.MIDDLE_ROW.getValue(), frontFaceCopy[CubeValues.MIDDLE_ROW.getValue()]);
+        leftFace.setRow(CubeValues.BOTTOM_ROW.getValue(), frontFaceCopy[CubeValues.BOTTOM_ROW.getValue()]);
+        downFace.rotateCounterclockwise();
+    }
+
+    public void shuffle() {
+
     }
 }
