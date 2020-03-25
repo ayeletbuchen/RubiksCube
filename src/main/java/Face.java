@@ -28,27 +28,27 @@ public class Face extends JPanel {
     }
 
     public void setRow(int row, Square[] newRow) {
-        squares[row][LEFT_COLUMN] = newRow[LEFT_COLUMN];
-        squares[row][MIDDLE_COLUMN] = newRow[MIDDLE_COLUMN];
-        squares[row][RIGHT_COLUMN] = newRow[RIGHT_COLUMN];
+        squares[row][LEFT_COLUMN].setColor(newRow[LEFT_COLUMN].getColor());
+        squares[row][MIDDLE_COLUMN].setColor(newRow[MIDDLE_COLUMN].getColor());
+        squares[row][RIGHT_COLUMN].setColor(newRow[RIGHT_COLUMN].getColor());
     }
 
     public void setRow(int row, Square leftSquare, Square middleSquare, Square rightSquare) {
-        squares[row][LEFT_COLUMN] = leftSquare;
-        squares[row][MIDDLE_COLUMN] = middleSquare;
-        squares[row][RIGHT_COLUMN] = rightSquare;
+        squares[row][LEFT_COLUMN].setColor(leftSquare.getColor());
+        squares[row][MIDDLE_COLUMN].setColor(middleSquare.getColor());
+        squares[row][RIGHT_COLUMN].setColor(rightSquare.getColor());
     }
 
     public void setColumn(int column, Square[] newColumn) {
-        squares[TOP_ROW][column] = newColumn[TOP_ROW];
-        squares[MIDDLE_ROW][column] = newColumn[MIDDLE_ROW];
-        squares[BOTTOM_ROW][column] = newColumn[BOTTOM_ROW];
+        squares[TOP_ROW][column].setColor(newColumn[TOP_ROW].getColor());
+        squares[MIDDLE_ROW][column].setColor(newColumn[MIDDLE_ROW].getColor());
+        squares[BOTTOM_ROW][column].setColor(newColumn[BOTTOM_ROW].getColor());
     }
 
     public void setColumn(int column, Square topSquare, Square middleSquare, Square bottomSquare) {
-        squares[TOP_ROW][column] = topSquare;
-        squares[MIDDLE_ROW][column] = middleSquare;
-        squares[BOTTOM_ROW][column] = bottomSquare;
+        squares[TOP_ROW][column].setColor(topSquare.getColor());
+        squares[MIDDLE_ROW][column].setColor(middleSquare.getColor());
+        squares[BOTTOM_ROW][column].setColor(bottomSquare.getColor());
     }
 
     public void rotateClockwise() {
@@ -58,8 +58,8 @@ public class Face extends JPanel {
                 squaresCopy[BOTTOM_ROW][LEFT_COLUMN],
                 squaresCopy[MIDDLE_ROW][LEFT_COLUMN],
                 squaresCopy[TOP_ROW][LEFT_COLUMN]);
-        squares[MIDDLE_ROW][LEFT_COLUMN] = squaresCopy[BOTTOM_ROW][MIDDLE_COLUMN];
-        squares[MIDDLE_ROW][RIGHT_COLUMN] = squaresCopy[TOP_ROW][MIDDLE_COLUMN];
+        squares[MIDDLE_ROW][LEFT_COLUMN].setColor(squaresCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+        squares[MIDDLE_ROW][RIGHT_COLUMN].setColor(squaresCopy[TOP_ROW][MIDDLE_COLUMN].getColor());
         setRow(BOTTOM_ROW,
                 squaresCopy[BOTTOM_ROW][RIGHT_COLUMN],
                 squaresCopy[MIDDLE_ROW][RIGHT_COLUMN],
@@ -72,8 +72,8 @@ public class Face extends JPanel {
         setRow(TOP_ROW, squaresCopy[TOP_ROW][RIGHT_COLUMN],
                 squaresCopy[MIDDLE_ROW][RIGHT_COLUMN],
                 squaresCopy[BOTTOM_ROW][RIGHT_COLUMN]);
-        squares[MIDDLE_ROW][LEFT_COLUMN] = squaresCopy[TOP_ROW][MIDDLE_COLUMN];
-        squares[MIDDLE_ROW][RIGHT_COLUMN] = squaresCopy[BOTTOM_ROW][MIDDLE_COLUMN];
+        squares[MIDDLE_ROW][LEFT_COLUMN].setColor(squaresCopy[TOP_ROW][MIDDLE_COLUMN].getColor());
+        squares[MIDDLE_ROW][RIGHT_COLUMN].setColor(squaresCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
         setRow(BOTTOM_ROW,
                 squaresCopy[TOP_ROW][LEFT_COLUMN],
                 squaresCopy[MIDDLE_ROW][LEFT_COLUMN],
