@@ -1,5 +1,3 @@
-package backEnd;
-
 import javax.swing.*;
 import java.awt.*;
 

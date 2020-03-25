@@ -1,5 +1,3 @@
-package backEnd;
-
 import java.awt.*;
 
 public enum CubeColors {

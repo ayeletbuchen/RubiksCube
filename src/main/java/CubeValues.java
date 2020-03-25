@@ -1,5 +1,3 @@
-package backEnd;
-
 public enum CubeValues {
     TOP_ROW(0),
     MIDDLE_ROW(1),
