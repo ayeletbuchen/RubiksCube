@@ -1,8 +1,9 @@
 package backEnd;
 
+import javax.swing.*;
 import java.awt.*;
 
-public class Face {
+public class Face extends JPanel {
 
     private Square[][] squares;
     final int SIZE = CubeValues.DIMENSION.getValue();
@@ -12,12 +13,18 @@ public class Face {
     private final int TOP_ROW = CubeValues.TOP_ROW.getValue();
     private final int MIDDLE_ROW = CubeValues.MIDDLE_ROW.getValue();
     private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
+    private final int MARGIN = 10;
 
     public Face(Color color) {
+        setLayout(new GridLayout(SIZE, SIZE, MARGIN, MARGIN));
+        setSize(200, 200);
+        setBackground(Color.BLACK);
+
         squares = new Square[SIZE][SIZE];
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 squares[row][col] = new Square(color);
+                add(squares[row][col]);
             }
         }
     }

@@ -1,8 +1,9 @@
 package backEnd;
 
+import javax.swing.*;
 import java.util.Arrays;
 
-public class Cube {
+public class Cube extends JComponent {
 
     private Face topFace;
     private Face leftFace;
@@ -18,6 +19,9 @@ public class Cube {
         downFace = new Face(CubeColors.ORANGE.getColor());
         backFace = new Face(CubeColors.YELLOW.getColor());
         rightFace = new Face(CubeColors.GREEN.getColor());
+
+        topFace.setLocation(100, 100);
+        add(topFace);
     }
 
     public void rotateTopFaceClockwise() {
