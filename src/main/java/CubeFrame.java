@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class CubeFrame extends JFrame {
 
@@ -13,6 +15,32 @@ public class CubeFrame extends JFrame {
         JPanel root = new JPanel(new BorderLayout());
         Cube cube = new Cube();
         root.add(cube, BorderLayout.CENTER);
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                cube.sliceMiddleColumnsDownwards();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
         setContentPane(root);
     }
 }

@@ -93,12 +93,30 @@ public class Face extends JPanel {
         return arrColumn;
     }
 
+    public Square[] getRowDeepCopy(int row) {
+        Square[] copy = new Square[SIZE];
+
+        for (int col = 0; col < SIZE; col++) {
+            copy[col] = new Square(squares[row][col].getColor());
+        }
+        return copy;
+    }
+
+    public Square[] getColumnDeepCopy(int col) {
+        Square[] copy = new Square[SIZE];
+
+        for (int row = 0; row < SIZE; row++) {
+            copy[row] = new Square(squares[row][col].getColor());
+        }
+        return copy;
+    }
+
     public Square[][] deepCopy() {
         Square[][] squareCopies = new Square[SIZE][SIZE];
 
         for (int row = 0; row < squares.length; row++) {
             for (int col = 0; col < squares[row].length; col++) {
-                squareCopies[row][col] = squares[row][col];
+                squareCopies[row][col] = new Square(squares[row][col].getColor());
             }
         }
         return squareCopies;

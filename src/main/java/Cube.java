@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.util.Arrays;
 
 public class Cube extends JComponent {
 
@@ -103,35 +102,31 @@ public class Cube extends JComponent {
     }
 
     private void rotateHorizontalRingClockwise(int row) {
-        Square[] frontRow = frontFace.getRow(row);
+        Square[] frontRow = frontFace.getRowDeepCopy(row);
         Square[] rightRow = rightFace.getRow(row);
         Square[] backRow = backFace.getRow(row);
         Square[] leftRow = leftFace.getRow(row);
-
-        Square[] tempRow = Arrays.copyOf(frontRow, frontFace.SIZE);
 
         frontFace.setRow(row, rightRow);
         rightFace.setRow(row, backRow);
         backFace.setRow(row, leftRow);
-        leftFace.setRow(row, tempRow);
+        leftFace.setRow(row, frontRow);
     }
 
     private void rotateHorizontalRingCounterclockwise(int row) {
-        Square[] frontRow = frontFace.getRow(row);
+        Square[] frontRow = frontFace.getRowDeepCopy(row);
         Square[] rightRow = rightFace.getRow(row);
         Square[] backRow = backFace.getRow(row);
         Square[] leftRow = leftFace.getRow(row);
 
-        Square[] tempRow = Arrays.copyOf(frontRow, frontFace.SIZE);
-
         frontFace.setRow(row, leftRow);
         leftFace.setRow(row, backRow);
         backFace.setRow(row, rightRow);
-        rightFace.setRow(row, tempRow);
+        rightFace.setRow(row, frontRow);
     }
 
     private void rotateVerticalRingUpwards(int column) {
-        Square[] topColumn = topFace.getColumn(column);
+        Square[] topColumn = topFace.getColumnDeepCopy(column);
         Square[] backColumn = backFace.getColumn(column);
         Square[] downColumn = downFace.getColumn(column);
         Square[] frontColumn = frontFace.getColumn(column);
@@ -172,7 +167,7 @@ public class Cube extends JComponent {
     }
 
     private void rotateRingOfRowsAndColumnsClockwise(int topRow, int rightColumn, int downRow, int leftColumn) {
-        Square[] temp = Arrays.copyOf(topFace.getRow(topRow), topFace.SIZE);
+        Square[] temp = topFace.getRowDeepCopy(topRow);
 
         topFace.setRow(topRow, leftFace.getColumn(leftColumn));
         leftFace.setColumn(leftColumn, downFace.getRow(downRow));
@@ -181,7 +176,7 @@ public class Cube extends JComponent {
     }
 
     private void rotateRingOfRowsAndColumnsCounterclockwise(int topRow, int rightColumn, int downRow, int leftColumn) {
-        Square[] temp = Arrays.copyOf(topFace.getRow(topRow), topFace.SIZE);
+        Square[] temp = topFace.getRowDeepCopy(topRow);
 
         topFace.setRow(topRow, rightFace.getColumn(rightColumn));
         rightFace.setColumn(rightColumn, downFace.getRow(downRow));
@@ -190,7 +185,7 @@ public class Cube extends JComponent {
     }
 
     private void rotateVerticalRingDownwards(int column) {
-        Square[] topColumn = topFace.getColumn(column);
+        Square[] topColumn = topFace.getColumnDeepCopy(column);
         Square[] backColumn = backFace.getColumn(column);
         Square[] downColumn = downFace.getColumn(column);
         Square[] frontColumn = frontFace.getColumn(column);
