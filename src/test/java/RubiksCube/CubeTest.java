@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class CubeTest {
 
     Cube cube;
@@ -23,7 +21,7 @@ public class CubeTest {
 
     @Test
     public void rotateVerticalRingDownwardsTest() {
-        cube.sliceMiddleColumnsDownwards();
+        cube.sliceMiddleLayerCounterclockwise();
         // assertEquals();
     }
 

@@ -1,7 +1,7 @@
 package RubiksCube;
 
 public enum CubeValues {
-    TOP_ROW(0),
+    UP_ROW(0),
     MIDDLE_ROW(1),
     BOTTOM_ROW(2),
     LEFT_COLUMN(0),
