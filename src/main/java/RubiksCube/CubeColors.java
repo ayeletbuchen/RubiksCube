@@ -1,3 +1,5 @@
+package RubiksCube;
+
 import java.awt.*;
 
 public enum CubeColors {

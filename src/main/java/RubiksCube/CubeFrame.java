@@ -1,3 +1,5 @@
+package RubiksCube;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -28,7 +30,13 @@ public class CubeFrame extends JFrame {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                cube.sliceMiddleColumnsDownwards();
+                // cube.sliceMiddleColumnsUpwards();
+                // cube.rotateLeftFaceCounterclockwise();
+                // cube.rotateRightFaceClockwise();
+
+                // cube.sliceMiddleRowsClockwise();
+                // cube.rotateTopFaceClockwise();
+                // cube.rotateDownFaceCounterclockwise(); // TODO fix issue here
             }
 
             @Override

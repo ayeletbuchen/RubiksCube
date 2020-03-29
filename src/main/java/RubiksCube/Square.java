@@ -1,3 +1,5 @@
+package RubiksCube;
+
 import javax.swing.*;
 import java.awt.*;
 

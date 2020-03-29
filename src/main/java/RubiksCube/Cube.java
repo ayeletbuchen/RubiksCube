@@ -1,3 +1,5 @@
+package RubiksCube;
+
 import javax.swing.*;
 
 public class Cube extends JComponent {
@@ -17,8 +19,8 @@ public class Cube extends JComponent {
         backFace = new Face(CubeColors.YELLOW.getColor());
         rightFace = new Face(CubeColors.GREEN.getColor());
 
-        topFace.setLocation(100, 100);
-        add(topFace);
+        frontFace.setLocation(100, 100);
+        add(frontFace);
     }
 
     public void rotateTopFaceClockwise() {
