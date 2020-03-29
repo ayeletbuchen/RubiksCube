@@ -10,7 +10,7 @@ public class Face extends JPanel {
     private final int LEFT_COLUMN = CubeValues.LEFT_COLUMN.getValue();
     private final int MIDDLE_COLUMN = CubeValues.MIDDLE_COLUMN.getValue();
     private final int RIGHT_COLUMN = CubeValues.RIGHT_COLUMN.getValue();
-    private final int UP_ROW = CubeValues.UP_ROW.getValue();
+    private final int UP_ROW = CubeValues.TOP_ROW.getValue();
     private final int MIDDLE_ROW = CubeValues.MIDDLE_ROW.getValue();
     private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
     private final int MARGIN = FrameValues.FACE_MARGIN;

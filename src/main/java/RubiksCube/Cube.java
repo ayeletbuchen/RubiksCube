@@ -36,12 +36,12 @@ public class Cube extends JComponent {
 
     public void rotateUpFaceClockwise() {
         upFace.rotateClockwise();
-        rotateHorizontalRingClockwise(CubeValues.UP_ROW.getValue());
+        rotateHorizontalRingCounterclockwise(CubeValues.TOP_ROW.getValue());
     }
 
     public void rotateUpFaceCounterclockwise() {
         upFace.rotateCounterclockwise();
-        rotateHorizontalRingCounterclockwise(CubeValues.UP_ROW.getValue());
+        rotateHorizontalRingClockwise(CubeValues.TOP_ROW.getValue());
     }
 
     public void rotateLeftFaceClockwise() {
@@ -76,12 +76,12 @@ public class Cube extends JComponent {
 
     public void rotateBackFaceClockwise() {
         backFace.rotateClockwise();
-        rotateRingOfRowsAndColumns(true, CubeValues.UP_ROW.getValue());
+        rotateRingOfRowsAndColumns(true, CubeValues.TOP_ROW.getValue());
     }
 
     public void rotateBackFaceCounterclockwise() {
         backFace.rotateCounterclockwise();
-        rotateRingOfRowsAndColumns(false, CubeValues.UP_ROW.getValue());
+        rotateRingOfRowsAndColumns(false, CubeValues.TOP_ROW.getValue());
     }
 
     public void rotateDownFaceClockwise() {
@@ -95,11 +95,11 @@ public class Cube extends JComponent {
     }
 
     public void sliceMiddleLayerClockwise() {
-        rotateVerticalRingUpwards(CubeValues.MIDDLE_COLUMN.getValue());
+        rotateVerticalRingDownwards(CubeValues.MIDDLE_COLUMN.getValue());
     }
 
     public void sliceMiddleLayerCounterclockwise() {
-        rotateVerticalRingDownwards(CubeValues.MIDDLE_COLUMN.getValue());
+        rotateVerticalRingUpwards(CubeValues.MIDDLE_COLUMN.getValue());
     }
 
     public void sliceEquatorialLayerClockwise() {
@@ -118,7 +118,7 @@ public class Cube extends JComponent {
         rotateRingOfRowsAndColumns(false, CubeValues.MIDDLE_ROW.getValue());
     }
 
-    private void rotateHorizontalRingClockwise(int row) {
+    private void rotateHorizontalRingCounterclockwise(int row) {
         Square[] frontRow = frontFace.getRowDeepCopy(row);
         Square[] rightRow = rightFace.getRow(row);
         Square[] backRow = backFace.getRow(row);
@@ -130,7 +130,7 @@ public class Cube extends JComponent {
         leftFace.setRow(row, frontRow);
     }
 
-    private void rotateHorizontalRingCounterclockwise(int row) {
+    private void rotateHorizontalRingClockwise(int row) {
         Square[] frontRow = frontFace.getRowDeepCopy(row);
         Square[] rightRow = rightFace.getRow(row);
         Square[] backRow = backFace.getRow(row);
@@ -172,7 +172,7 @@ public class Cube extends JComponent {
             left = CubeValues.MIDDLE_COLUMN.getValue();
         } else { // Top row
             right = CubeValues.LEFT_COLUMN.getValue();
-            down = CubeValues.UP_ROW.getValue();
+            down = CubeValues.TOP_ROW.getValue();
             left = CubeValues.RIGHT_COLUMN.getValue();
         }
 
@@ -219,7 +219,7 @@ public class Cube extends JComponent {
         frontFace = leftFace;
         leftFace = backFace;
         backFace = rightFace;
-        rightFace.setRow(CubeValues.UP_ROW.getValue(), frontFaceCopy[CubeValues.UP_ROW.getValue()]);
+        rightFace.setRow(CubeValues.TOP_ROW.getValue(), frontFaceCopy[CubeValues.TOP_ROW.getValue()]);
         rightFace.setRow(CubeValues.MIDDLE_ROW.getValue(), frontFaceCopy[CubeValues.MIDDLE_ROW.getValue()]);
         rightFace.setRow(CubeValues.BOTTOM_ROW.getValue(), frontFaceCopy[CubeValues.BOTTOM_ROW.getValue()]);
         downFace.rotateCounterclockwise();
@@ -231,7 +231,7 @@ public class Cube extends JComponent {
         frontFace = rightFace;
         rightFace = backFace;
         backFace = leftFace;
-        leftFace.setRow(CubeValues.UP_ROW.getValue(), frontFaceCopy[CubeValues.UP_ROW.getValue()]);
+        leftFace.setRow(CubeValues.TOP_ROW.getValue(), frontFaceCopy[CubeValues.TOP_ROW.getValue()]);
         leftFace.setRow(CubeValues.MIDDLE_ROW.getValue(), frontFaceCopy[CubeValues.MIDDLE_ROW.getValue()]);
         leftFace.setRow(CubeValues.BOTTOM_ROW.getValue(), frontFaceCopy[CubeValues.BOTTOM_ROW.getValue()]);
         downFace.rotateCounterclockwise();
