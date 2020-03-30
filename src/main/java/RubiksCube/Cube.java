@@ -162,7 +162,7 @@ public class Cube extends JComponent {
 
         up = upFaceRow;
 
-        if (upFaceRow == CubeValues.BOTTOM_ROW.getValue()) {
+        if (upFaceRow == CubeValues.TOP_ROW.getValue()) {
             right = CubeValues.RIGHT_COLUMN.getValue();
             down = CubeValues.BOTTOM_ROW.getValue();
             left = CubeValues.LEFT_COLUMN.getValue();
@@ -170,7 +170,7 @@ public class Cube extends JComponent {
             right = CubeValues.MIDDLE_COLUMN.getValue();
             down = CubeValues.MIDDLE_ROW.getValue();
             left = CubeValues.MIDDLE_COLUMN.getValue();
-        } else { // Top row
+        } else { // Bottom row
             right = CubeValues.LEFT_COLUMN.getValue();
             down = CubeValues.TOP_ROW.getValue();
             left = CubeValues.RIGHT_COLUMN.getValue();
