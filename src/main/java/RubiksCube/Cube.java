@@ -46,22 +46,22 @@ public class Cube extends JComponent {
 
     public void rotateLeftFaceClockwise() {
         leftFace.rotateClockwise();
-        rotateVerticalRingDownwards(CubeValues.LEFT_COLUMN.getValue());
+        rotateVerticalRingDownwards(CubeValues.LEFT_COLUMN.getValue(), true);
     }
 
     public void rotateLeftFaceCounterclockwise() {
         leftFace.rotateCounterclockwise();
-        rotateVerticalRingUpwards(CubeValues.LEFT_COLUMN.getValue());
+        rotateVerticalRingUpwards(CubeValues.LEFT_COLUMN.getValue(), true);
     }
 
     public void rotateRightFaceClockwise() {
         rightFace.rotateClockwise();
-        rotateVerticalRingUpwards(CubeValues.RIGHT_COLUMN.getValue());
+        rotateVerticalRingUpwards(CubeValues.RIGHT_COLUMN.getValue(), true);
     }
 
     public void rotateRightFaceCounterclockwise() {
         rightFace.rotateCounterclockwise();
-        rotateVerticalRingDownwards(CubeValues.RIGHT_COLUMN.getValue());
+        rotateVerticalRingDownwards(CubeValues.RIGHT_COLUMN.getValue(), true);
     }
 
     public void rotateFrontFaceClockwise() {
@@ -95,11 +95,11 @@ public class Cube extends JComponent {
     }
 
     public void sliceMiddleLayerClockwise() {
-        rotateVerticalRingDownwards(CubeValues.MIDDLE_COLUMN.getValue());
+        rotateVerticalRingDownwards(CubeValues.MIDDLE_COLUMN.getValue(), false);
     }
 
     public void sliceMiddleLayerCounterclockwise() {
-        rotateVerticalRingUpwards(CubeValues.MIDDLE_COLUMN.getValue());
+        rotateVerticalRingUpwards(CubeValues.MIDDLE_COLUMN.getValue(), false);
     }
 
     public void sliceEquatorialLayerClockwise() {
@@ -142,16 +142,24 @@ public class Cube extends JComponent {
         rightFace.setRow(row, frontRow);
     }
 
-    private void rotateVerticalRingUpwards(int column) {
+    private void rotateVerticalRingUpwards(int column, boolean faceRotation) {
+        int backColumnInt;
+        Square[] backColumn;
+
+        if (faceRotation) {
+            backColumnInt = CubeValues.RIGHT_COLUMN.getValue() - column;
+        } else {
+            backColumnInt = column;
+        }
         Square[] upColumn = upFace.getColumnDeepCopy(column);
-        Square[] backColumn = backFace.getColumn(column);
+        backColumn = backFace.getColumn(backColumnInt);
         Square[] downColumn = downFace.getColumn(column);
         Square[] frontColumn = frontFace.getColumn(column);
 
         upFace.setColumn(column, frontColumn);
         frontFace.setColumn(column, downColumn);
         downFace.setColumn(column, backColumn);
-        backFace.setColumn(column, upColumn);
+        backFace.setColumn(backColumnInt, upColumn);
     }
 
     private void rotateRingOfRowsAndColumns(boolean clockwise, int upFaceRow) {
@@ -201,14 +209,23 @@ public class Cube extends JComponent {
         leftFace.setColumn(leftColumn, temp);
     }
 
-    private void rotateVerticalRingDownwards(int column) {
+    private void rotateVerticalRingDownwards(int column, boolean faceRotation) {
+        int backColumnInt;
+
+        Square[] backColumn;
+        if (faceRotation) {
+            backColumnInt = CubeValues.RIGHT_COLUMN.getValue() - column;
+        } else {
+            backColumnInt = column;
+        }
+
         Square[] upColumn = upFace.getColumnDeepCopy(column);
-        Square[] backColumn = backFace.getColumn(column);
-        Square[] downColumn = downFace.getColumn(column);
         Square[] frontColumn = frontFace.getColumn(column);
+        Square[] downColumn = downFace.getColumn(column);
+        backColumn = backFace.getColumn(backColumnInt);
 
         upFace.setColumn(column, backColumn);
-        backFace.setColumn(column, downColumn);
+        backFace.setColumn(backColumnInt, downColumn);
         downFace.setColumn(column, frontColumn);
         frontFace.setColumn(column, upColumn);
     }
