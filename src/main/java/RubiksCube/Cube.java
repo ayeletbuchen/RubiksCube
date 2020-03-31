@@ -1,6 +1,7 @@
 package RubiksCube;
 
 import javax.swing.*;
+import java.util.Random;
 
 public class Cube extends JComponent {
 
@@ -10,6 +11,8 @@ public class Cube extends JComponent {
     private Face frontFace;
     private Face backFace;
     private Face downFace;
+    private Random random;
+    private final int NUM_POSSIBLE_ROTATIONS = 18;
 
     public Cube() {
         frontFace = new Face(CubeColors.WHITE.getColor());
@@ -18,6 +21,7 @@ public class Cube extends JComponent {
         downFace = new Face(CubeColors.ORANGE.getColor());
         backFace = new Face(CubeColors.YELLOW.getColor());
         rightFace = new Face(CubeColors.GREEN.getColor());
+        random = new Random();
 
         upFace.setLocation(FrameValues.FRAME_MARGIN + FrameValues.FACE_WIDTH, FrameValues.FRAME_MARGIN);
         leftFace.setLocation(FrameValues.FRAME_MARGIN, upFace.getY() + FrameValues.FACE_WIDTH);
@@ -242,7 +246,65 @@ public class Cube extends JComponent {
     }
 
     public void shuffle() {
-
+        for (int rotation = 0; rotation < 5; rotation++) {
+            int method = random.nextInt(NUM_POSSIBLE_ROTATIONS);
+            switch(method) {
+                case 0:
+                    rotateUpFaceClockwise();
+                    break;
+                case 1:
+                    rotateUpFaceCounterclockwise();
+                    break;
+                case 2:
+                    rotateLeftFaceClockwise();
+                    break;
+                case 3:
+                    rotateLeftFaceCounterclockwise();
+                    break;
+                case 4:
+                    rotateFrontFaceClockwise();
+                    break;
+                case 5:
+                    rotateFrontFaceCounterclockwise();
+                    break;
+                case 6:
+                    rotateRightFaceClockwise();
+                    break;
+                case 7:
+                    rotateRightFaceCounterclockwise();
+                    break;
+                case 8:
+                    rotateBackFaceClockwise();
+                    break;
+                case 9:
+                    rotateBackFaceCounterclockwise();
+                    break;
+                case 10:
+                    rotateDownFaceClockwise();
+                    break;
+                case 11:
+                    rotateDownFaceCounterclockwise();
+                    break;
+                case 12:
+                    sliceMiddleLayerClockwise();
+                    break;
+                case 13:
+                    sliceMiddleLayerCounterclockwise();
+                    break;
+                case 14:
+                    sliceEquatorialLayerClockwise();
+                    break;
+                case 15:
+                    sliceEquatorialLayerCounterclockwise();
+                    break;
+                case 16:
+                    sliceStandingLayerClockwise();
+                    break;
+                default:
+                    sliceStandingLayerCounterclockwise();
+                    break;
+            }
+        }
     }
 
     private int getBackColumnIntForVerticalRing(int column, boolean faceRotation) {
