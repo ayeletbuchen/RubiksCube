@@ -76,12 +76,14 @@ public class Cube extends JComponent {
 
     public void rotateBackFaceClockwise() {
         backFace.rotateClockwise();
-        rotateRingOfRowsAndColumns(true, CubeValues.TOP_ROW.getValue());
+        // ring rotation is not clockwise from perspective of back face
+        rotateRingOfRowsAndColumns(false, CubeValues.TOP_ROW.getValue());
     }
 
     public void rotateBackFaceCounterclockwise() {
         backFace.rotateCounterclockwise();
-        rotateRingOfRowsAndColumns(false, CubeValues.TOP_ROW.getValue());
+        // ring rotation is clockwise from perspective of back face
+        rotateRingOfRowsAndColumns(true, CubeValues.TOP_ROW.getValue());
     }
 
     public void rotateDownFaceClockwise() {
@@ -143,16 +145,10 @@ public class Cube extends JComponent {
     }
 
     private void rotateVerticalRingUpwards(int column, boolean faceRotation) {
-        int backColumnInt;
-        Square[] backColumn;
+        int backColumnInt = getBackColumnIntForVerticalRing(column, faceRotation);
 
-        if (faceRotation) {
-            backColumnInt = CubeValues.RIGHT_COLUMN.getValue() - column;
-        } else {
-            backColumnInt = column;
-        }
         Square[] upColumn = upFace.getColumnDeepCopy(column);
-        backColumn = backFace.getColumn(backColumnInt);
+        Square[] backColumn = backFace.getColumn(backColumnInt);
         Square[] downColumn = downFace.getColumn(column);
         Square[] frontColumn = frontFace.getColumn(column);
 
@@ -163,12 +159,10 @@ public class Cube extends JComponent {
     }
 
     private void rotateRingOfRowsAndColumns(boolean clockwise, int upFaceRow) {
-        int up;
+        int up = upFaceRow;
         int down;
         int left;
         int right;
-
-        up = upFaceRow;
 
         if (upFaceRow == CubeValues.TOP_ROW.getValue()) {
             right = CubeValues.RIGHT_COLUMN.getValue();
@@ -210,19 +204,12 @@ public class Cube extends JComponent {
     }
 
     private void rotateVerticalRingDownwards(int column, boolean faceRotation) {
-        int backColumnInt;
-
-        Square[] backColumn;
-        if (faceRotation) {
-            backColumnInt = CubeValues.RIGHT_COLUMN.getValue() - column;
-        } else {
-            backColumnInt = column;
-        }
+        int backColumnInt = getBackColumnIntForVerticalRing(column, faceRotation);
 
         Square[] upColumn = upFace.getColumnDeepCopy(column);
         Square[] frontColumn = frontFace.getColumn(column);
         Square[] downColumn = downFace.getColumn(column);
-        backColumn = backFace.getColumn(backColumnInt);
+        Square[] backColumn = backFace.getColumn(backColumnInt);
 
         upFace.setColumn(column, backColumn);
         backFace.setColumn(backColumnInt, downColumn);
@@ -256,5 +243,12 @@ public class Cube extends JComponent {
 
     public void shuffle() {
 
+    }
+
+    private int getBackColumnIntForVerticalRing(int column, boolean faceRotation) {
+        if (faceRotation) {
+            return CubeValues.RIGHT_COLUMN.getValue() - column;
+        }
+        return column;
     }
 }
