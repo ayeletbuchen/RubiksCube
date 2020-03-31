@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class Face extends JPanel {
 
-    private Square[][] squares;
+    Square[][] squares;
     final int SIZE = CubeValues.DIMENSION.getValue();
     private final int LEFT_COLUMN = CubeValues.LEFT_COLUMN.getValue();
     private final int MIDDLE_COLUMN = CubeValues.MIDDLE_COLUMN.getValue();

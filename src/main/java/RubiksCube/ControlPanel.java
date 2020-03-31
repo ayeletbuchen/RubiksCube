@@ -6,12 +6,14 @@ import java.awt.*;
 public class ControlPanel extends JPanel {
 
     private Cube cube;
+    private Solver solver;
     private JButton shuffleButton;
 
-    public ControlPanel(Cube cube) {
+    public ControlPanel(Cube cube, Solver solver) {
         this.cube = cube;
+        this.solver = solver;
         setLayout(new BorderLayout());
-        add(new RotationsPanel(cube), BorderLayout.CENTER);
+        add(new RotationsPanel(cube, solver), BorderLayout.CENTER);
         addShuffleButton();
     }
 

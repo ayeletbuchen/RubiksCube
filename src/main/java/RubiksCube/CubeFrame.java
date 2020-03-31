@@ -10,8 +10,11 @@ public class CubeFrame extends JFrame {
         setSize(FrameValues.FRAME_WIDTH, FrameValues.FRAME_HEIGHT);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel root = new JPanel(new BorderLayout());
+
         Cube cube = new Cube();
-        ControlPanel controlPanel = new ControlPanel(cube);
+        Solver solver = new Solver(cube);
+        ControlPanel controlPanel = new ControlPanel(cube, solver);
+
         root.add(cube, BorderLayout.CENTER);
         root.add(controlPanel, BorderLayout.SOUTH);
         setContentPane(root);

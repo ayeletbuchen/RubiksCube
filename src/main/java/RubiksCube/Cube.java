@@ -15,12 +15,13 @@ public class Cube extends JComponent {
     private final int NUM_POSSIBLE_ROTATIONS = 18;
 
     public Cube() {
-        frontFace = new Face(CubeColors.WHITE.getColor());
-        leftFace = new Face(CubeColors.BLUE.getColor());
-        upFace = new Face(CubeColors.RED.getColor());
-        downFace = new Face(CubeColors.ORANGE.getColor());
-        backFace = new Face(CubeColors.YELLOW.getColor());
-        rightFace = new Face(CubeColors.GREEN.getColor());
+        upFace = new Face(CubeColors.WHITE.getColor());
+        leftFace = new Face(CubeColors.RED.getColor());
+        frontFace = new Face(CubeColors.BLUE.getColor());
+        rightFace = new Face(CubeColors.ORANGE.getColor());
+        backFace = new Face(CubeColors.GREEN.getColor());
+        downFace = new Face(CubeColors.YELLOW.getColor());
+
         random = new Random();
 
         upFace.setLocation(FrameValues.FRAME_MARGIN + FrameValues.FACE_WIDTH, FrameValues.FRAME_MARGIN);
@@ -208,6 +209,30 @@ public class Cube extends JComponent {
                     break;
             }
         }
+    }
+
+    protected Face getUpFace() {
+        return upFace;
+    }
+
+    protected Face getLeftFace() {
+        return leftFace;
+    }
+
+    protected Face getFrontFace() {
+        return frontFace;
+    }
+
+    protected Face getRightFace() {
+        return rightFace;
+    }
+
+    protected Face getBackFace() {
+        return backFace;
+    }
+
+    protected Face getDownFace() {
+        return downFace;
     }
 
     private void rotateHorizontalRingCounterclockwise(int row) {
