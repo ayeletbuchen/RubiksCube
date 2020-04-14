@@ -124,16 +124,14 @@ public class Cube extends JComponent {
         rotateRingOfRowsAndColumns(false, CubeValues.MIDDLE_ROW.getValue());
     }
 
-    public void turnCubeRight() { // TODO LOOK THIS OVER
+    public void turnCubeRight() { // TODO LOOK THIS OVER // rotateAlongYaxisCounterclockwise
         upFace.rotateCounterclockwise();
         Square[][] frontFaceCopy = frontFace.deepCopy();
         frontFace = leftFace;
         leftFace = backFace;
         backFace = rightFace;
-        rightFace.setRow(CubeValues.TOP_ROW.getValue(), frontFaceCopy[CubeValues.TOP_ROW.getValue()]);
-        rightFace.setRow(CubeValues.MIDDLE_ROW.getValue(), frontFaceCopy[CubeValues.MIDDLE_ROW.getValue()]);
-        rightFace.setRow(CubeValues.BOTTOM_ROW.getValue(), frontFaceCopy[CubeValues.BOTTOM_ROW.getValue()]);
-        downFace.rotateCounterclockwise();
+        rightFace.setFace(frontFaceCopy);
+        downFace.rotateClockwise();
     }
 
     public void turnCubeLeft() { // TODO LOOK THIS OVER

@@ -47,6 +47,12 @@ public class Face extends JPanel {
         squares[BOTTOM_ROW][column].setColor(newColumn[BOTTOM_ROW].getColor());
     }
 
+    public void setFace(Square[][] newFace) {
+        setRow(CubeValues.TOP_ROW.getValue(), newFace[CubeValues.TOP_ROW.getValue()]);
+        setRow(CubeValues.MIDDLE_ROW.getValue(), newFace[CubeValues.MIDDLE_ROW.getValue()]);
+        setRow(CubeValues.BOTTOM_ROW.getValue(), newFace[CubeValues.BOTTOM_ROW.getValue()]);
+    }
+
     public void setColumn(int column, Square upSquare, Square middleSquare, Square bottomSquare) {
         squares[UP_ROW][column].setColor(upSquare.getColor());
         squares[MIDDLE_ROW][column].setColor(middleSquare.getColor());
