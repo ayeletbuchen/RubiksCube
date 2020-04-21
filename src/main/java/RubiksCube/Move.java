@@ -23,7 +23,9 @@ public enum Move {
     LEFT_TURN("Turn cube to the left", "Left Turn"),
     RIGHT_TURN("Turn cube to the right", "Right Turn"),
     UP_TURN("Turn cube upwards", "Up Turn"),
-    DOWN_TURN("Turn cube downwards", "Down Turn");
+    DOWN_TURN("Turn cube downwards", "Down Turn"),
+    SHUFFLE("Shuffle cube", "Shuffle"),
+    RESET("Reset cube", "Reset");
 
     private String prompt;
     private String symbol;

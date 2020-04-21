@@ -1,10 +1,18 @@
 package RubiksCube;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 import io.reactivex.subjects.PublishSubject;
 
 public class Cube extends JComponent {
+
+    private final Color upFaceColor = CubeColors.WHITE.getColor();
+    private final Color leftFaceColor = CubeColors.RED.getColor();
+    private final Color frontFaceColor = CubeColors.BLUE.getColor();
+    private final Color rightFaceColor = CubeColors.ORANGE.getColor();
+    private final Color backFaceColor = CubeColors.GREEN.getColor();
+    private final Color downFaceColor = CubeColors.YELLOW.getColor();
 
     private final Face upFace;
     private final Face leftFace;
@@ -12,17 +20,18 @@ public class Cube extends JComponent {
     private final Face frontFace;
     private final Face backFace;
     private final Face downFace;
+
     private Random random;
     private final int NUM_POSSIBLE_ROTATIONS = 18;
     PublishSubject<Move> subject;
 
     public Cube() {
-        upFace = new Face(CubeColors.WHITE.getColor());
-        leftFace = new Face(CubeColors.RED.getColor());
-        frontFace = new Face(CubeColors.BLUE.getColor());
-        rightFace = new Face(CubeColors.ORANGE.getColor());
-        backFace = new Face(CubeColors.GREEN.getColor());
-        downFace = new Face(CubeColors.YELLOW.getColor());
+        upFace = new Face(upFaceColor);
+        leftFace = new Face(leftFaceColor);
+        frontFace = new Face(frontFaceColor);
+        rightFace = new Face(rightFaceColor);
+        backFace = new Face(backFaceColor);
+        downFace = new Face(downFaceColor);
 
         random = new Random();
         subject = PublishSubject.create();
@@ -197,6 +206,7 @@ public class Cube extends JComponent {
     }
 
     public void shuffle() {
+        subject.onNext(Move.SHUFFLE);
         for (int rotation = 0; rotation < 5; rotation++) {
             int method = random.nextInt(NUM_POSSIBLE_ROTATIONS);
             switch(method) {
@@ -256,6 +266,16 @@ public class Cube extends JComponent {
                     break;
             }
         }
+    }
+
+    public void reset() {
+        upFace.reset();
+        leftFace.reset();
+        frontFace.reset();
+        rightFace.reset();
+        backFace.reset();
+        downFace.reset();
+        subject.onNext(Move.RESET);
     }
 
     protected Face getUpFace() {

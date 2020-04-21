@@ -6,7 +6,8 @@ import java.awt.*;
 public class Face extends JPanel {
 
     Square[][] squares;
-    final int SIZE = CubeValues.DIMENSION.getValue();
+    private final Color originalColor;
+    private final int SIZE = CubeValues.DIMENSION.getValue();
     private final int LEFT_COLUMN = CubeValues.LEFT_COLUMN.getValue();
     private final int MIDDLE_COLUMN = CubeValues.MIDDLE_COLUMN.getValue();
     private final int RIGHT_COLUMN = CubeValues.RIGHT_COLUMN.getValue();
@@ -16,6 +17,7 @@ public class Face extends JPanel {
     private final int MARGIN = FrameValues.FACE_MARGIN;
 
     public Face(Color color) {
+        originalColor = color;
         setLayout(new GridLayout(SIZE, SIZE, MARGIN, MARGIN));
         setSize(FrameValues.FACE_WIDTH, FrameValues.FACE_WIDTH);
         setBackground(Color.BLACK);
@@ -57,12 +59,6 @@ public class Face extends JPanel {
         squares[TOP_ROW][column].setColor(newColumn[TOP_ROW].getColor());
         squares[MIDDLE_ROW][column].setColor(newColumn[MIDDLE_ROW].getColor());
         squares[BOTTOM_ROW][column].setColor(newColumn[BOTTOM_ROW].getColor());
-    }
-
-    public void setColumn(int column, Square upSquare, Square middleSquare, Square bottomSquare) {
-        squares[TOP_ROW][column].setColor(upSquare.getColor());
-        squares[MIDDLE_ROW][column].setColor(middleSquare.getColor());
-        squares[BOTTOM_ROW][column].setColor(bottomSquare.getColor());
     }
 
     public void rotateClockwise() {
@@ -134,5 +130,13 @@ public class Face extends JPanel {
             }
         }
         return squareCopies;
+    }
+
+    public void reset() {
+        for (int row = 0; row < squares.length; row++) {
+            for (int col = 0; col < squares[row].length; col++) {
+                squares[row][col].setColor(originalColor);
+            }
+        }
     }
 }

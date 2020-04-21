@@ -6,7 +6,6 @@ import java.awt.*;
 public class RotationsPanel extends JPanel {
 
     private Cube cube;
-    private Solver solver;
     private final int ROWS = 4;
     private final int COLS = 6;
 
@@ -36,9 +35,8 @@ public class RotationsPanel extends JPanel {
     private JButton upTurnButton;
     private JButton downTurnButton;
 
-    public RotationsPanel(Cube cube, Solver solver) {
+    public RotationsPanel(Cube cube) {
         this.cube = cube;
-        this.solver = solver;
         setLayout(new GridLayout(ROWS, COLS));
         addClockwiseFaceRotationButtons();
         addCounterclockwiseFaceRotationButtons();
@@ -82,129 +80,97 @@ public class RotationsPanel extends JPanel {
 
     private void addUpClockwiseButton() {
         upClockwiseButton = new JButton(Move.U.getSymbol());
-        upClockwiseButton.addActionListener(e -> {
-            cube.rotateUpFaceClockwise();
-        });
+        upClockwiseButton.addActionListener(e -> cube.rotateUpFaceClockwise());
         add(upClockwiseButton);
     }
 
     private void addLeftClockwiseButton() {
         leftClockwiseButton = new JButton(Move.L.getSymbol());
-        leftClockwiseButton.addActionListener(e -> {
-            cube.rotateLeftFaceClockwise();
-        });
+        leftClockwiseButton.addActionListener(e -> cube.rotateLeftFaceClockwise());
         add(leftClockwiseButton);
     }
 
     private void addFrontClockwiseButton() {
         frontClockwiseButton = new JButton(Move.F.getSymbol());
-        frontClockwiseButton.addActionListener(e -> {
-            cube.rotateFrontFaceClockwise();
-        });
+        frontClockwiseButton.addActionListener(e -> cube.rotateFrontFaceClockwise());
         add(frontClockwiseButton);
     }
 
     private void addRightClockwiseButton() {
         rightClockwiseButton = new JButton(Move.R.getSymbol());
-        rightClockwiseButton.addActionListener(e -> {
-            cube.rotateRightFaceClockwise();
-        });
+        rightClockwiseButton.addActionListener(e -> cube.rotateRightFaceClockwise());
         add(rightClockwiseButton);
     }
 
     private void addBackClockwiseButton() {
         backClockwiseButton = new JButton(Move.B.getSymbol());
-        backClockwiseButton.addActionListener(e -> {
-            cube.rotateBackFaceClockwise();
-        });
+        backClockwiseButton.addActionListener(e -> cube.rotateBackFaceClockwise());
         add(backClockwiseButton);
     }
 
     private void addDownClockwiseButton() {
         downClockwiseButton = new JButton(Move.D.getSymbol());
-        downClockwiseButton.addActionListener(e -> {
-            cube.rotateDownFaceClockwise();
-        });
+        downClockwiseButton.addActionListener(e -> cube.rotateDownFaceClockwise());
         add(downClockwiseButton);
     }
 
     private void addUpCounterclockwiseButton() {
         upCounterclockwiseButton = new JButton(Move.U_PRIME.getSymbol());
-        upCounterclockwiseButton.addActionListener(e -> {
-            cube.rotateUpFaceCounterclockwise();
-        });
+        upCounterclockwiseButton.addActionListener(e -> cube.rotateUpFaceCounterclockwise());
         add(upCounterclockwiseButton);
     }
 
     private void addLeftCounterclockwiseButton() {
         leftCounterclockwiseButton = new JButton(Move.L_PRIME.getSymbol());
-        leftCounterclockwiseButton.addActionListener(e -> {
-            cube.rotateLeftFaceCounterclockwise();
-        });
+        leftCounterclockwiseButton.addActionListener(e -> cube.rotateLeftFaceCounterclockwise());
         add(leftCounterclockwiseButton);
     }
 
     private void addFrontCounterclockwiseButton() {
         frontCounterclockwiseButton = new JButton(Move.F_PRIME.getSymbol());
-        frontCounterclockwiseButton.addActionListener(e -> {
-            cube.rotateFrontFaceCounterclockwise();
-        });
+        frontCounterclockwiseButton.addActionListener(e -> cube.rotateFrontFaceCounterclockwise());
         add(frontCounterclockwiseButton);
     }
 
     private void addRightCounterclockwiseButton() {
         rightCounterclockwiseButton = new JButton(Move.R_PRIME.getSymbol());
-        rightCounterclockwiseButton.addActionListener(e -> {
-            cube.rotateRightFaceCounterclockwise();
-        });
+        rightCounterclockwiseButton.addActionListener(e -> cube.rotateRightFaceCounterclockwise());
         add(rightCounterclockwiseButton);
     }
 
     private void addBackCounterclockwiseButton() {
         backCounterclockwiseButton = new JButton(Move.B_PRIME.getSymbol());
-        backCounterclockwiseButton.addActionListener(e -> {
-            cube.rotateBackFaceCounterclockwise();
-        });
+        backCounterclockwiseButton.addActionListener(e -> cube.rotateBackFaceCounterclockwise());
         add(backCounterclockwiseButton);
     }
 
     private void addDownCounterclockwiseButton() {
         downCounterclockwiseButton = new JButton(Move.D_PRIME.getSymbol());
-        downCounterclockwiseButton.addActionListener(e -> {
-            cube.rotateDownFaceCounterclockwise();
-        });
+        downCounterclockwiseButton.addActionListener(e -> cube.rotateDownFaceCounterclockwise());
         add(downCounterclockwiseButton);
     }
 
     private void addMiddleClockwiseButton() {
         middleClockwiseButton = new JButton(Move.M.getSymbol());
-        middleClockwiseButton.addActionListener(e -> {
-            cube.sliceMiddleLayerClockwise();
-        });
+        middleClockwiseButton.addActionListener(e -> cube.sliceMiddleLayerClockwise());
         add(middleClockwiseButton);
     }
 
     private void addMiddleCounterClockwiseButton() {
         middleCounterclockwiseButton = new JButton(Move.M_PRIME.getSymbol());
-        middleCounterclockwiseButton.addActionListener(e -> {
-            cube.sliceMiddleLayerCounterclockwise();
-        });
+        middleCounterclockwiseButton.addActionListener(e -> cube.sliceMiddleLayerCounterclockwise());
         add(middleCounterclockwiseButton);
     }
 
     private void addEquatorialClockwiseButton() {
         equatorialClockwiseButton = new JButton(Move.E.getSymbol());
-        equatorialClockwiseButton.addActionListener(e -> {
-            cube.sliceEquatorialLayerClockwise();
-        });
+        equatorialClockwiseButton.addActionListener(e -> cube.sliceEquatorialLayerClockwise());
         add(equatorialClockwiseButton);
     }
 
     private void addEquatorialCounterClockwiseButton() {
         equatorialCounterclockwiseButton = new JButton(Move.E_PRIME.getSymbol());
-        equatorialCounterclockwiseButton.addActionListener(e -> {
-            cube.sliceEquatorialLayerCounterclockwise();
-        });
+        equatorialCounterclockwiseButton.addActionListener(e -> cube.sliceEquatorialLayerCounterclockwise());
         add(equatorialCounterclockwiseButton);
     }
 
