@@ -31,8 +31,10 @@ public class RotationsPanel extends JPanel {
     private JButton standingClockwiseButton;
     private JButton standingCounterclockwiseButton;
 
-    private JButton rightTurnButton;
     private JButton leftTurnButton;
+    private JButton rightTurnButton;
+    private JButton upTurnButton;
+    private JButton downTurnButton;
 
     public RotationsPanel(Cube cube, Solver solver) {
         this.cube = cube;
@@ -74,6 +76,8 @@ public class RotationsPanel extends JPanel {
     private void addCubeTurnButtons() {
         addLeftTurnButton();
         addRightTurnButton();
+        addUpTurnButton();
+        addDownTurnButton();
     }
 
     private void addUpClockwiseButton() {
@@ -226,5 +230,17 @@ public class RotationsPanel extends JPanel {
         rightTurnButton = new JButton(Move.RIGHT_TURN.getSymbol());
         rightTurnButton.addActionListener(e -> cube.turnCubeRight());
         add(rightTurnButton);
+    }
+
+    private void addUpTurnButton() {
+        upTurnButton = new JButton(Move.UP_TURN.getSymbol());
+        upTurnButton.addActionListener(e -> cube.turnCubeUp());
+        add(upTurnButton);
+    }
+
+    private void addDownTurnButton() {
+        downTurnButton = new JButton(Move.DOWN_TURN.getSymbol());
+        downTurnButton.addActionListener(e -> cube.turnCubeDown());
+        add(downTurnButton);
     }
 }

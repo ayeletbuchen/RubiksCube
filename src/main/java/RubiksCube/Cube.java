@@ -172,6 +172,30 @@ public class Cube extends JComponent {
         subject.onNext(Move.RIGHT_TURN);
     }
 
+    public void turnCubeUp() {
+        Square[][] frontFaceCopy = frontFace.deepCopy();
+        frontFace.setFace(downFace);
+        downFace.setFace(backFace);
+        backFace.setFace(upFace);
+        upFace.setFace(frontFaceCopy);
+
+        rightFace.rotateClockwise();
+        leftFace.rotateCounterclockwise();
+        subject.onNext(Move.UP_TURN);
+    }
+
+    public void turnCubeDown() {
+        Square[][] frontFaceCopy = frontFace.deepCopy();
+        frontFace.setFace(upFace);
+        upFace.setFace(backFace);
+        backFace.setFace(downFace);
+        downFace.setFace(frontFaceCopy);
+
+        rightFace.rotateCounterclockwise();
+        leftFace.rotateClockwise();
+        subject.onNext(Move.DOWN_TURN);
+    }
+
     public void shuffle() {
         for (int rotation = 0; rotation < 5; rotation++) {
             int method = random.nextInt(NUM_POSSIBLE_ROTATIONS);
