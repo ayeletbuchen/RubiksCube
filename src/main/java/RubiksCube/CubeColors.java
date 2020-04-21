@@ -10,7 +10,7 @@ public enum CubeColors {
     YELLOW(Color.YELLOW),
     ORANGE(Color.ORANGE);
 
-    Color color;
+    private Color color;
 
     CubeColors(Color color) {
         this.color = color;

@@ -1,5 +1,7 @@
 package RubiksCube;
 
+import io.reactivex.Observable;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,7 +15,10 @@ public class CubeFrame extends JFrame {
 
         Cube cube = new Cube();
         Solver solver = new Solver(cube);
+        // cube.subject.subscribe(solver);
         ControlPanel controlPanel = new ControlPanel(cube, solver);
+
+        // Observable<Cube> observable = Observable.just(cube);
 
         root.add(cube, BorderLayout.CENTER);
         root.add(controlPanel, BorderLayout.SOUTH);

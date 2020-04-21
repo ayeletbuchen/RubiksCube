@@ -19,7 +19,10 @@ public class ControlPanel extends JPanel {
 
     private void addShuffleButton() {
         shuffleButton = new JButton("Shuffle");
-        shuffleButton.addActionListener(e -> cube.shuffle());
+        shuffleButton.addActionListener(e -> {
+            cube.shuffle();
+            solver.solve();
+        });
         add(shuffleButton, BorderLayout.SOUTH);
     }
 }

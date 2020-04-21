@@ -9,7 +9,7 @@ public enum CubeValues {
     RIGHT_COLUMN(2),
     DIMENSION(3);
 
-    int value;
+    private int value;
 
     CubeValues(int value) {
         this.value = value;
