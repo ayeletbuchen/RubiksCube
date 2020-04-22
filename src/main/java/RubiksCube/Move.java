@@ -20,15 +20,16 @@ public enum Move {
     M_PRIME("Slice middle layer counterclockwise", "M'"),
     E_PRIME("Slice equatorial layer counterclockwise", "E'"),
     S_PRIME("Slice standing layer counterclockwise", "S'"),
-    LEFT_TURN("Turn cube to the left", "Left Turn"),
-    RIGHT_TURN("Turn cube to the right", "Right Turn"),
-    UP_TURN("Turn cube upwards", "Up Turn"),
-    DOWN_TURN("Turn cube downwards", "Down Turn"),
+    CUBE_LEFT_TURN("Turn cube to the left", "Turn cube left"),
+    CUBE_RIGHT_TURN("Turn cube to the right", "Turn cube right"),
+    CUBE_UP_TURN("Turn cube upwards", "Turn cube upwards"),
+    CUBE_DOWN_TURN("Turn cube downwards", "Turn cube downwards"),
     SHUFFLE("Shuffle cube", "Shuffle"),
     RESET("Reset cube", "Reset");
 
     private String prompt;
     private String symbol;
+    private Move counterMove;
 
     Move(String prompt, String symbol) {
         this.prompt = prompt;
@@ -41,5 +42,13 @@ public enum Move {
 
     public String getSymbol() {
         return symbol;
+    }
+
+    public Move getCounterMove() {
+        return counterMove;
+    }
+
+    public void setCounterMove(Move counterMove) {
+        this.counterMove = counterMove;
     }
 }

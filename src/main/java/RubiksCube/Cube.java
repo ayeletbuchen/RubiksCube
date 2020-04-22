@@ -165,7 +165,7 @@ public class Cube extends JComponent {
         rightFace.setFace(frontFaceCopy);
 
         downFace.rotateClockwise();
-        subject.onNext(Move.LEFT_TURN);
+        subject.onNext(Move.CUBE_LEFT_TURN);
     }
 
     public void turnCubeRight() {
@@ -178,7 +178,7 @@ public class Cube extends JComponent {
         leftFace.setFace(frontFaceCopy);
 
         downFace.rotateCounterclockwise();
-        subject.onNext(Move.RIGHT_TURN);
+        subject.onNext(Move.CUBE_RIGHT_TURN);
     }
 
     public void turnCubeUp() {
@@ -190,7 +190,7 @@ public class Cube extends JComponent {
 
         rightFace.rotateClockwise();
         leftFace.rotateCounterclockwise();
-        subject.onNext(Move.UP_TURN);
+        subject.onNext(Move.CUBE_UP_TURN);
     }
 
     public void turnCubeDown() {
@@ -202,7 +202,7 @@ public class Cube extends JComponent {
 
         rightFace.rotateCounterclockwise();
         leftFace.rotateClockwise();
-        subject.onNext(Move.DOWN_TURN);
+        subject.onNext(Move.CUBE_DOWN_TURN);
     }
 
     public void shuffle() {
