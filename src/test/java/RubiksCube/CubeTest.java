@@ -30,6 +30,7 @@ public class CubeTest {
     @BeforeEach
     public void createCube() {
         cube = new Cube();
+        cube.shuffle();
         upFaceCopy = cube.getUpFace().deepCopy();
         leftFaceCopy = cube.getLeftFace().deepCopy();
         frontFaceCopy = cube.getFrontFace().deepCopy();
@@ -105,6 +106,34 @@ public class CubeTest {
 
     @Test
     public void rotateFrontFaceCounterclockwise() {
+        cube.rotateFrontFaceCounterclockwise();
 
+        assertEquals(upFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                leftSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(upFaceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                leftSquares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(upFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
+                leftSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+
+        assertEquals(rightFaceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                upSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+        assertEquals(rightFaceCopy[MIDDLE_ROW][LEFT_COLUMN].getColor(),
+                upSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(rightFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                upSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+
+        assertEquals(downFaceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                rightSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+        assertEquals(downFaceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                rightSquares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+        assertEquals(downFaceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
+                rightSquares[TOP_ROW][LEFT_COLUMN].getColor());
+
+        assertEquals(leftFaceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
+                downSquares[TOP_ROW][LEFT_COLUMN].getColor());
+        assertEquals(leftFaceCopy[MIDDLE_ROW][RIGHT_COLUMN].getColor(),
+                downSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(leftFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
+                downSquares[TOP_ROW][RIGHT_COLUMN].getColor());
     }
 }
