@@ -61,6 +61,12 @@ public class Face extends JPanel {
         squares[BOTTOM_ROW][column].setColor(newColumn[BOTTOM_ROW].getColor());
     }
 
+    public void setColumn(int column, Square topSquare, Square middleSquare, Square bottomSquare) {
+        squares[TOP_ROW][column].setColor(topSquare.getColor());
+        squares[MIDDLE_ROW][column].setColor(middleSquare.getColor());
+        squares[BOTTOM_ROW][column].setColor(bottomSquare.getColor());
+    }
+
     public void rotateClockwise() {
         Square[][] squaresCopy = deepCopy();
 
