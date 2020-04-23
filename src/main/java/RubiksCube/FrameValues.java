@@ -1,8 +1,8 @@
 package RubiksCube;
 
 public interface FrameValues {
-    int FRAME_WIDTH = 750;
-    int FRAME_HEIGHT = 1334;
+    int FRAME_WIDTH = 1000;
+    int FRAME_HEIGHT = 1350;
     int NUM_FACES = 6;
     int FACE_WIDTH = 100;
     int FACE_MARGIN = 1;

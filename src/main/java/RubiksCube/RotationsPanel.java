@@ -34,6 +34,8 @@ public class RotationsPanel extends JPanel {
     private JButton rightTurnButton;
     private JButton upTurnButton;
     private JButton downTurnButton;
+    private JButton zAxisClockwiseButton;
+    private JButton zAxisCounterclockwiseButton;
 
     public RotationsPanel(Cube cube) {
         this.cube = cube;
@@ -76,6 +78,8 @@ public class RotationsPanel extends JPanel {
         addRightTurnButton();
         addUpTurnButton();
         addDownTurnButton();
+        addZAxisClockwiseButton();
+        addZAxisCounterclockwiseButton();
     }
 
     private void addUpClockwiseButton() {
@@ -187,26 +191,38 @@ public class RotationsPanel extends JPanel {
     }
 
     private void addLeftTurnButton() {
-        leftTurnButton = new JButton(Move.CUBE_LEFT_TURN.getSymbol());
+        leftTurnButton = new JButton(Move.Y_PRIME.getSymbol());
         leftTurnButton.addActionListener(e -> cube.turnCubeLeft());
         add(leftTurnButton);
     }
 
     private void addRightTurnButton() {
-        rightTurnButton = new JButton(Move.CUBE_RIGHT_TURN.getSymbol());
+        rightTurnButton = new JButton(Move.Y.getSymbol());
         rightTurnButton.addActionListener(e -> cube.turnCubeRight());
         add(rightTurnButton);
     }
 
     private void addUpTurnButton() {
-        upTurnButton = new JButton(Move.CUBE_UP_TURN.getSymbol());
+        upTurnButton = new JButton(Move.X.getSymbol());
         upTurnButton.addActionListener(e -> cube.turnCubeUp());
         add(upTurnButton);
     }
 
     private void addDownTurnButton() {
-        downTurnButton = new JButton(Move.CUBE_DOWN_TURN.getSymbol());
+        downTurnButton = new JButton(Move.X_PRIME.getSymbol());
         downTurnButton.addActionListener(e -> cube.turnCubeDown());
         add(downTurnButton);
+    }
+
+    private void addZAxisClockwiseButton() {
+        zAxisClockwiseButton = new JButton(Move.Z.getSymbol());
+        zAxisClockwiseButton.addActionListener(e -> cube.turnCubeClockwiseAlongZAxis());
+        add(zAxisClockwiseButton);
+    }
+
+    private void addZAxisCounterclockwiseButton() {
+        zAxisCounterclockwiseButton = new JButton(Move.Z_PRIME.getSymbol());
+        zAxisCounterclockwiseButton.addActionListener(e -> cube.turnCubeCounterclockwiseAlongZAxis());
+        add(zAxisCounterclockwiseButton);
     }
 }

@@ -8,12 +8,15 @@ public class ShuffleBar extends JPanel {
     private Cube cube;
     private JButton shuffleButton;
     private JButton resetButton;
+    // JButton solveButton;
 
     public ShuffleBar(Cube cube) {
         this.cube = cube;
         setLayout(new FlowLayout());
         addResetButton();
         addShuffleButton();
+        // solveButton = new JButton("Solve");
+        // add(solveButton);
     }
 
     private void addResetButton() {

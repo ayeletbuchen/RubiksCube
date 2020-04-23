@@ -39,9 +39,9 @@ public class CubeTest {
     }
 }
 
-        // frontFace = WHITE
-        // leftFace = BLUE
-        // topFace = RED
-        // downFace = ORANGE
-        // backFace = YELLOW
-        // rightFace = GREEN
+        // frontFace = UP_FACE_COLOR
+        // leftFace = FRONT_FACE_COLOR
+        // topFace = LEFT_FACE_COLOR
+        // downFace = RIGHT_FACE_COLOR
+        // backFace = DOWN_FACE_COLOR
+        // rightFace = BACK_FACE_COLOR

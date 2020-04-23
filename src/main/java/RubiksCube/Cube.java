@@ -1,18 +1,10 @@
 package RubiksCube;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Random;
 import io.reactivex.subjects.PublishSubject;
 
 public class Cube extends JComponent {
-
-    private final Color upFaceColor = CubeColors.WHITE.getColor();
-    private final Color leftFaceColor = CubeColors.RED.getColor();
-    private final Color frontFaceColor = CubeColors.BLUE.getColor();
-    private final Color rightFaceColor = CubeColors.ORANGE.getColor();
-    private final Color backFaceColor = CubeColors.GREEN.getColor();
-    private final Color downFaceColor = CubeColors.YELLOW.getColor();
 
     private final Face upFace;
     private final Face leftFace;
@@ -26,12 +18,12 @@ public class Cube extends JComponent {
     PublishSubject<Move> subject;
 
     public Cube() {
-        upFace = new Face(upFaceColor);
-        leftFace = new Face(leftFaceColor);
-        frontFace = new Face(frontFaceColor);
-        rightFace = new Face(rightFaceColor);
-        backFace = new Face(backFaceColor);
-        downFace = new Face(downFaceColor);
+        upFace = new Face(CubeColors.UP_FACE_COLOR.getColor());
+        leftFace = new Face(CubeColors.LEFT_FACE_COLOR.getColor());
+        frontFace = new Face(CubeColors.FRONT_FACE_COLOR.getColor());
+        rightFace = new Face(CubeColors.RIGHT_FACE_COLOR.getColor());
+        backFace = new Face(CubeColors.BACK_FACE_COLOR.getColor());
+        downFace = new Face(CubeColors.DOWN_FACE_COLOR.getColor());
 
         random = new Random();
         subject = PublishSubject.create();
@@ -165,7 +157,7 @@ public class Cube extends JComponent {
         rightFace.setFace(frontFaceCopy);
 
         downFace.rotateClockwise();
-        subject.onNext(Move.CUBE_LEFT_TURN);
+        subject.onNext(Move.Y_PRIME);
     }
 
     public void turnCubeRight() {
@@ -178,7 +170,7 @@ public class Cube extends JComponent {
         leftFace.setFace(frontFaceCopy);
 
         downFace.rotateCounterclockwise();
-        subject.onNext(Move.CUBE_RIGHT_TURN);
+        subject.onNext(Move.Y);
     }
 
     public void turnCubeUp() {
@@ -190,7 +182,7 @@ public class Cube extends JComponent {
 
         rightFace.rotateClockwise();
         leftFace.rotateCounterclockwise();
-        subject.onNext(Move.CUBE_UP_TURN);
+        subject.onNext(Move.X);
     }
 
     public void turnCubeDown() {
@@ -202,11 +194,37 @@ public class Cube extends JComponent {
 
         rightFace.rotateCounterclockwise();
         leftFace.rotateClockwise();
-        subject.onNext(Move.CUBE_DOWN_TURN);
+        subject.onNext(Move.X_PRIME);
+    }
+
+    public void turnCubeClockwiseAlongZAxis() {
+        Square[][] upFaceCopy = upFace.deepCopy();
+
+        upFace.setFace(leftFace);
+        leftFace.setFace(downFace);
+        downFace.setFace(rightFace);
+        rightFace.setFace(upFaceCopy);
+
+        frontFace.rotateClockwise();
+        backFace.rotateCounterclockwise();
+
+        subject.onNext(Move.Z);
+    }
+
+    public void turnCubeCounterclockwiseAlongZAxis() {
+        Square[][] upFaceCopy = upFace.deepCopy();
+
+        upFace.setFace(rightFace);
+        rightFace.setFace(downFace);
+        downFace.setFace(leftFace);
+        leftFace.setFace(upFaceCopy);
+
+        frontFace.rotateCounterclockwise();
+        backFace.rotateClockwise();
+        subject.onNext(Move.Z_PRIME);
     }
 
     public void shuffle() {
-        subject.onNext(Move.SHUFFLE);
         for (int rotation = 0; rotation < 5; rotation++) {
             int method = random.nextInt(NUM_POSSIBLE_ROTATIONS);
             switch(method) {
@@ -266,6 +284,7 @@ public class Cube extends JComponent {
                     break;
             }
         }
+        subject.onNext(Move.SHUFFLE);
     }
 
     public void reset() {

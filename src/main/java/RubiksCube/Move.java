@@ -20,10 +20,12 @@ public enum Move {
     M_PRIME("Slice middle layer counterclockwise", "M'"),
     E_PRIME("Slice equatorial layer counterclockwise", "E'"),
     S_PRIME("Slice standing layer counterclockwise", "S'"),
-    CUBE_LEFT_TURN("Turn cube to the left", "Turn cube left"),
-    CUBE_RIGHT_TURN("Turn cube to the right", "Turn cube right"),
-    CUBE_UP_TURN("Turn cube upwards", "Turn cube upwards"),
-    CUBE_DOWN_TURN("Turn cube downwards", "Turn cube downwards"),
+    Y_PRIME("Turn cube to the left", "Turn cube left"),
+    Y("Turn cube to the right", "Turn cube right"),
+    X("Turn cube upwards", "Turn cube upwards"),
+    X_PRIME("Turn cube downwards", "Turn cube downwards"),
+    Z("Turn cube clockwise along Z axis", "Z axis clockwise turn"),
+    Z_PRIME("Turn cube counterclockwise along Z axis", "Z axis counterclockwise turn"),
     SHUFFLE("Shuffle cube", "Shuffle"),
     RESET("Reset cube", "Reset");
 

@@ -3,12 +3,12 @@ package RubiksCube;
 import java.awt.*;
 
 public enum CubeColors {
-    BLUE(Color.BLUE),
-    GREEN(Color.GREEN),
-    RED(Color.RED),
-    WHITE(Color.WHITE),
-    YELLOW(Color.YELLOW),
-    ORANGE(Color.ORANGE);
+    FRONT_FACE_COLOR(Color.BLUE),
+    BACK_FACE_COLOR(Color.GREEN),
+    LEFT_FACE_COLOR(Color.RED),
+    UP_FACE_COLOR(Color.WHITE),
+    DOWN_FACE_COLOR(Color.YELLOW),
+    RIGHT_FACE_COLOR(Color.ORANGE);
 
     private Color color;
 
