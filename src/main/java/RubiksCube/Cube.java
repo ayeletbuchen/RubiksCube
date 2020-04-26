@@ -427,15 +427,17 @@ public class Cube extends JComponent {
     private void rotateVerticalRingDownwards(int column, boolean faceRotation) {
         int backColumnInt = getBackColumnIntForVerticalRing(column, faceRotation);
 
-        Square[] upColumn = upFace.getColumnDeepCopy(column);
+        Square[] upColumn = upFace.getColumn(column);
         Square[] frontColumn = frontFace.getColumn(column);
-        Square[] downColumn = downFace.getColumn(column);
+        Square[] downColumn = downFace.getColumnDeepCopy(column);
         Square[] backColumn = backFace.getColumn(backColumnInt);
 
-        upFace.setColumn(column, backColumn);
-        backFace.setColumn(backColumnInt, downColumn);
+        // upFace.setColumn(column, backColumn);
+        // backFace.setColumn(backColumnInt, downColumn);
         downFace.setColumn(column, frontColumn);
         frontFace.setColumn(column, upColumn);
+        setColumnInBackwardsOrder(upFace, column, backColumn);
+        setColumnInBackwardsOrder(backFace, backColumnInt, downColumn);
     }
 
     private int getBackColumnIntForVerticalRing(int column, boolean faceRotation) {

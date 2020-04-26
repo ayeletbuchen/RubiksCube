@@ -243,6 +243,100 @@ public class CubeTest {
 
     @Test
     public void rotateRightFaceCounterclockwise() {
+        cube.rotateRightFaceCounterclockwise();
 
+        assertEquals(upFaceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
+                frontSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(upFaceCopy[MIDDLE_ROW][RIGHT_COLUMN].getColor(),
+                frontSquares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(upFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
+                frontSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+
+        assertEquals(frontFaceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
+                downSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(frontFaceCopy[MIDDLE_ROW][RIGHT_COLUMN].getColor(),
+                downSquares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(frontFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
+                downSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+
+        assertEquals(downFaceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
+                backSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+        assertEquals(downFaceCopy[MIDDLE_ROW][RIGHT_COLUMN].getColor(),
+                backSquares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+        assertEquals(downFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
+                backSquares[TOP_ROW][LEFT_COLUMN].getColor());
+
+        assertEquals(backFaceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                upSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(backFaceCopy[MIDDLE_ROW][LEFT_COLUMN].getColor(),
+                upSquares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(backFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                upSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+    }
+
+    @Test
+    public void rotateLeftFaceClockwise() {
+        cube.rotateLeftFaceClockwise();
+
+        assertEquals(upFaceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                frontSquares[TOP_ROW][LEFT_COLUMN].getColor());
+        assertEquals(upFaceCopy[MIDDLE_ROW][LEFT_COLUMN].getColor(),
+                frontSquares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+        assertEquals(upFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                frontSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+
+        assertEquals(frontFaceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                downSquares[TOP_ROW][LEFT_COLUMN].getColor());
+        assertEquals(frontFaceCopy[MIDDLE_ROW][LEFT_COLUMN].getColor(),
+                downSquares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+        assertEquals(frontFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                downSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+
+        assertEquals(downFaceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                backSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(downFaceCopy[MIDDLE_ROW][LEFT_COLUMN].getColor(),
+                backSquares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(downFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                backSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+
+        assertEquals(backFaceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
+                upSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+        assertEquals(backFaceCopy[MIDDLE_ROW][RIGHT_COLUMN].getColor(),
+                upSquares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+        assertEquals(backFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
+                upSquares[TOP_ROW][LEFT_COLUMN].getColor());
+    }
+
+    @Test
+    public void rotateLeftFaceCounterclockwise() {
+        cube.rotateLeftFaceCounterclockwise();
+
+        assertEquals(upFaceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                backSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(upFaceCopy[MIDDLE_ROW][LEFT_COLUMN].getColor(),
+                backSquares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(upFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                backSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+
+        assertEquals(backFaceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
+                downSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+        assertEquals(backFaceCopy[MIDDLE_ROW][RIGHT_COLUMN].getColor(),
+                downSquares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+        assertEquals(backFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
+                downSquares[TOP_ROW][LEFT_COLUMN].getColor());
+
+        assertEquals(downFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                frontSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+        assertEquals(downFaceCopy[MIDDLE_ROW][LEFT_COLUMN].getColor(),
+                frontSquares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+        assertEquals(downFaceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                frontSquares[TOP_ROW][LEFT_COLUMN].getColor());
+
+        assertEquals(frontFaceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                upSquares[TOP_ROW][LEFT_COLUMN].getColor());
+        assertEquals(frontFaceCopy[MIDDLE_ROW][LEFT_COLUMN].getColor(),
+                upSquares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+        assertEquals(frontFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                upSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
     }
 }
