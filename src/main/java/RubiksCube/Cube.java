@@ -416,8 +416,8 @@ public class Cube extends JComponent {
         upFace.setColumn(column, frontColumn);
         frontFace.setColumn(column, downColumn);
         if (faceRotation) {
-            setRowOrColFromAdjacentRowOrColInBackwardsOrder(downFace, column, backColumn);
-            setRowOrColFromAdjacentRowOrColInBackwardsOrder(backFace, backColumnInt, upColumn);
+            setColumnInBackwardsOrder(downFace, column, backColumn);
+            setColumnInBackwardsOrder(backFace, backColumnInt, upColumn);
         } else {
             downFace.setColumn(column, backColumn);
             backFace.setColumn(backColumnInt, upColumn);
@@ -475,9 +475,9 @@ public class Cube extends JComponent {
     private void rotateRingOfRowsAndColumnsClockwise(int upRow, int rightColumn, int downRow, int leftColumn) {
         Square[] temp = upFace.getRowDeepCopy(upRow);
 
-        setRowOrColFromAdjacentRowOrColInBackwardsOrder(upFace, upRow, leftFace.getColumn(leftColumn));
+        setRowInBackwardsOrder(upFace, upRow, leftFace.getColumn(leftColumn));
         leftFace.setColumn(leftColumn, downFace.getRow(downRow));
-        setRowOrColFromAdjacentRowOrColInBackwardsOrder(downFace, downRow, rightFace.getColumn(rightColumn));
+        setRowInBackwardsOrder(downFace, downRow, rightFace.getColumn(rightColumn));
         rightFace.setColumn(rightColumn, temp);
     }
 
@@ -485,22 +485,22 @@ public class Cube extends JComponent {
         Square[] temp = upFace.getRowDeepCopy(upRow);
 
         upFace.setRow(upRow, rightFace.getColumn(rightColumn));
-        setColumnFromAdjacentRow(rightFace, rightColumn, downFace.getRow(downRow));
+        setColumnInBackwardsOrder(rightFace, rightColumn, downFace.getRow(downRow));
         downFace.setRow(downRow, leftFace.getColumn(leftColumn));
-        setColumnFromAdjacentRow(leftFace, leftColumn, temp);
+        setColumnInBackwardsOrder(leftFace, leftColumn, temp);
     }
 
-    private void setRowOrColFromAdjacentRowOrColInBackwardsOrder(Face face, int rowOrCol, Square[] newRowOrColSquareArr) {
-        face.setRow(rowOrCol,
-                newRowOrColSquareArr[CubeValues.BOTTOM_ROW.getValue()],
-                newRowOrColSquareArr[CubeValues.MIDDLE_ROW.getValue()],
-                newRowOrColSquareArr[CubeValues.TOP_ROW.getValue()]);
+    private void setRowInBackwardsOrder(Face face, int row, Square[] newRowOrColArr) {
+        face.setRow(row,
+                newRowOrColArr[CubeValues.BOTTOM_ROW.getValue()],
+                newRowOrColArr[CubeValues.MIDDLE_ROW.getValue()],
+                newRowOrColArr[CubeValues.TOP_ROW.getValue()]);
     }
 
-    private void setColumnFromAdjacentRow(Face colFace, int col, Square[] row) {
-        colFace.setColumn(col,
-                row[CubeValues.RIGHT_COLUMN.getValue()],
-                row[CubeValues.MIDDLE_ROW.getValue()],
-                row[CubeValues.LEFT_COLUMN.getValue()]);
+    private void setColumnInBackwardsOrder(Face face, int col, Square[] newRowOrColArr) {
+        face.setColumn(col,
+                newRowOrColArr[CubeValues.RIGHT_COLUMN.getValue()],
+                newRowOrColArr[CubeValues.MIDDLE_ROW.getValue()],
+                newRowOrColArr[CubeValues.LEFT_COLUMN.getValue()]);
     }
 }
