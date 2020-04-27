@@ -661,6 +661,18 @@ public class CubeTest {
         assertFaceClockwiseRotation(downFaceCopy, downSquares);
     }
 
+    @Test
+    public void turnCubeLeft() {
+        cube.turnCubeLeft();
+
+        assertFaceEquals(frontFaceCopy, leftSquares);
+        assertFaceEquals(leftFaceCopy, backSquares);
+        assertFaceEquals(backFaceCopy, rightSquares);
+        assertFaceEquals(rightFaceCopy, frontSquares);
+        assertFaceClockwiseRotation(upFaceCopy, upSquares);
+        assertFaceCounterclockwiseRotation(downFaceCopy, downSquares);
+    }
+
     private void assertFaceEquals(Square[][] faceCopy, Square[][] squares) {
         for (int row = 0; row < faceCopy.length; row++) {
             for (int col = 0; col < faceCopy[0].length; col++) {
