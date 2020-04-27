@@ -2,10 +2,6 @@ package RubiksCube;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.awt.image.Kernel;
-import java.rmi.dgc.Lease;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CubeTest {
@@ -474,5 +470,71 @@ public class CubeTest {
                 frontSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
         assertEquals(rightFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
                 frontSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+    }
+
+    @Test
+    public void sliceMiddleLayerClockwise() {
+        cube.sliceMiddleLayerClockwise();
+
+        assertEquals(upFaceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                frontSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(upFaceCopy[MIDDLE_ROW][MIDDLE_COLUMN].getColor(),
+                frontSquares[MIDDLE_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(upFaceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                frontSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+
+        assertEquals(frontFaceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                downSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(frontFaceCopy[MIDDLE_ROW][MIDDLE_COLUMN].getColor(),
+                downSquares[MIDDLE_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(frontFaceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                downSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+
+        assertEquals(downFaceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                backSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(downFaceCopy[MIDDLE_ROW][MIDDLE_COLUMN].getColor(),
+                backSquares[MIDDLE_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(downFaceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                backSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
+
+        assertEquals(backFaceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                upSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(backFaceCopy[MIDDLE_ROW][MIDDLE_COLUMN].getColor(),
+                upSquares[MIDDLE_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(backFaceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                upSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+    }
+
+    @Test
+    public void sliceMiddleLayerCounterclockwise() {
+        cube.sliceMiddleLayerCounterclockwise();
+
+        assertEquals(upFaceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                backSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(upFaceCopy[MIDDLE_ROW][MIDDLE_COLUMN].getColor(),
+                backSquares[MIDDLE_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(upFaceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                backSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
+
+        assertEquals(backFaceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                downSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(backFaceCopy[MIDDLE_ROW][MIDDLE_COLUMN].getColor(),
+                downSquares[MIDDLE_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(backFaceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                downSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+
+        assertEquals(downFaceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                frontSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(downFaceCopy[MIDDLE_ROW][MIDDLE_COLUMN].getColor(),
+                frontSquares[MIDDLE_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(downFaceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                frontSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+
+        assertEquals(frontFaceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                upSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(frontFaceCopy[MIDDLE_ROW][MIDDLE_COLUMN].getColor(),
+                upSquares[MIDDLE_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(frontFaceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                upSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
     }
 }
