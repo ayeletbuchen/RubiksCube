@@ -12,7 +12,6 @@ public class Cube extends JComponent {
     private final Face frontFace;
     private final Face backFace;
     private final Face downFace;
-
     private Random random;
     private final int NUM_POSSIBLE_ROTATIONS = 18;
     PublishSubject<Move> subject;
@@ -93,14 +92,12 @@ public class Cube extends JComponent {
 
     public void rotateBackFaceClockwise() {
         backFace.rotateClockwise();
-        // ring rotation is not clockwise from perspective of back face
         rotateRingOfRowsAndColumns(false, CubeValues.TOP_ROW.getValue());
         subject.onNext(Move.B);
     }
 
     public void rotateBackFaceCounterclockwise() {
         backFace.rotateCounterclockwise();
-        // ring rotation is clockwise from perspective of back face
         rotateRingOfRowsAndColumns(true, CubeValues.TOP_ROW.getValue());
         subject.onNext(Move.B_PRIME);
     }
@@ -192,7 +189,7 @@ public class Cube extends JComponent {
         sliceStandingLayerClockwise();
     }
 
-    public void turnCubeLeft() {
+    public void turnCubeRight() {
         upFace.rotateCounterclockwise();
         Square[][] frontFaceCopy = frontFace.deepCopy();
 
@@ -205,7 +202,7 @@ public class Cube extends JComponent {
         subject.onNext(Move.Y_PRIME);
     }
 
-    public void turnCubeRight() {
+    public void turnCubeLeft() {
         upFace.rotateClockwise();
         Square[][] frontFaceCopy = frontFace.deepCopy();
 
@@ -270,8 +267,8 @@ public class Cube extends JComponent {
     }
 
     public void doubleHorizontalCubeTurn() {
-        turnCubeRight();
-        turnCubeRight();
+        turnCubeLeft();
+        turnCubeLeft();
     }
 
     public void doubleVerticalCubeTurn() {

@@ -191,13 +191,13 @@ public class RotationsPanel extends JPanel {
     }
 
     private void addLeftTurnButton() {
-        leftTurnButton = new JButton(Move.Y_PRIME.getSymbol());
+        leftTurnButton = new JButton(Move.Y.getSymbol());
         leftTurnButton.addActionListener(e -> cube.turnCubeLeft());
         add(leftTurnButton);
     }
 
     private void addRightTurnButton() {
-        rightTurnButton = new JButton(Move.Y.getSymbol());
+        rightTurnButton = new JButton(Move.Y_PRIME.getSymbol());
         rightTurnButton.addActionListener(e -> cube.turnCubeRight());
         add(rightTurnButton);
     }
