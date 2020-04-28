@@ -699,7 +699,14 @@ public class CubeTest {
 
     @Test
     public void turnCubeUp() {
+        cube.turnCubeUp();
 
+        assertFaceEqualsAfterTurnCubeUp(upFaceCopy, backSquares);
+        assertFaceEqualsAfterTurnCubeUp(backFaceCopy, downSquares);
+        assertFaceEquals(downFaceCopy, frontSquares);
+        assertFaceEquals(frontFaceCopy, upSquares);
+        assertFaceClockwiseRotation(rightFaceCopy, rightSquares);
+        assertFaceCounterclockwiseRotation(leftFaceCopy, leftSquares);
     }
 
     @Test
@@ -827,5 +834,28 @@ public class CubeTest {
                 squares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
         assertEquals(faceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
                 squares[TOP_ROW][RIGHT_COLUMN].getColor());
+    }
+
+    private void assertFaceEqualsAfterTurnCubeUp(Square[][] faceCopy, Square[][] squares) {
+        assertEquals(faceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                squares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(faceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(faceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
+                squares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+
+        assertEquals(faceCopy[MIDDLE_ROW][LEFT_COLUMN].getColor(),
+                squares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(faceCopy[MIDDLE_ROW][MIDDLE_COLUMN].getColor(),
+                squares[MIDDLE_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(faceCopy[MIDDLE_ROW][RIGHT_COLUMN].getColor(),
+                squares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+
+        assertEquals(faceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                squares[TOP_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(faceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                squares[TOP_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(faceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
+                squares[TOP_ROW][LEFT_COLUMN].getColor());
     }
 }

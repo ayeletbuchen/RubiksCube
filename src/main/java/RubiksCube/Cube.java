@@ -217,9 +217,10 @@ public class Cube extends JComponent {
 
     public void turnCubeUp() {
         Square[][] frontFaceCopy = frontFace.deepCopy();
+
         frontFace.setFace(downFace);
-        downFace.setFace(backFace);
-        backFace.setFace(upFace);
+        setFaceAfterTurnCubeUp(backFace, downFace);
+        setFaceAfterTurnCubeUp(upFace, backFace);
         upFace.setFace(frontFaceCopy);
 
         rightFace.rotateClockwise();
@@ -517,5 +518,15 @@ public class Cube extends JComponent {
                 fromFace[CubeValues.MIDDLE_ROW.getValue()]);
         setColumnInBackwardsOrder(toFace, CubeValues.RIGHT_COLUMN.getValue(),
                 fromFace[CubeValues.BOTTOM_ROW.getValue()]);
+    }
+
+    private void setFaceAfterTurnCubeUp(Face fromFace, Face toFace) {
+        setFaceAfterTurnCubeUp(fromFace.squares, toFace);
+    }
+
+    private void setFaceAfterTurnCubeUp(Square[][] fromFace, Face toFace) {
+        setRowInBackwardsOrder(toFace, CubeValues.BOTTOM_ROW.getValue(), fromFace[CubeValues.TOP_ROW.getValue()]);
+        setRowInBackwardsOrder(toFace, CubeValues.MIDDLE_ROW.getValue(), fromFace[CubeValues.MIDDLE_ROW.getValue()]);
+        setRowInBackwardsOrder(toFace, CubeValues.TOP_ROW.getValue(), fromFace[CubeValues.BOTTOM_ROW.getValue()]);
     }
 }
