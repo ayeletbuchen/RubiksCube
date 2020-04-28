@@ -242,10 +242,10 @@ public class Cube extends JComponent {
     public void turnCubeClockwiseAlongZAxis() {
         Square[][] upFaceCopy = upFace.deepCopy();
 
-        setFaceInZClockwiseRotation(leftFace, upFace);
-        setFaceInZClockwiseRotation(downFace, leftFace);
-        setFaceInZClockwiseRotation(rightFace, downFace);
-        setFaceInZClockwiseRotation(upFaceCopy, rightFace);
+        setFaceZClockwiseRotation(leftFace, upFace);
+        setFaceZClockwiseRotation(downFace, leftFace);
+        setFaceZClockwiseRotation(rightFace, downFace);
+        setFaceZClockwiseRotation(upFaceCopy, rightFace);
 
         frontFace.rotateClockwise();
         backFace.rotateCounterclockwise();
@@ -256,10 +256,10 @@ public class Cube extends JComponent {
     public void turnCubeCounterclockwiseAlongZAxis() {
         Square[][] upFaceCopy = upFace.deepCopy();
 
-        upFace.setFace(rightFace);
-        rightFace.setFace(downFace);
-        downFace.setFace(leftFace);
-        leftFace.setFace(upFaceCopy);
+        setFaceZCounterclockwiseRotation(rightFace, upFace);
+        setFaceZCounterclockwiseRotation(downFace, rightFace);
+        setFaceZCounterclockwiseRotation(leftFace, downFace);
+        setFaceZCounterclockwiseRotation(upFaceCopy, leftFace);
 
         frontFace.rotateCounterclockwise();
         backFace.rotateClockwise();
@@ -496,13 +496,26 @@ public class Cube extends JComponent {
                 newRowOrColArr[CubeValues.LEFT_COLUMN.getValue()]);
     }
 
-    private void setFaceInZClockwiseRotation(Face fromFace, Face toFace) {
-        setFaceInZClockwiseRotation(fromFace.squares, toFace);
+    private void setFaceZClockwiseRotation(Face fromFace, Face toFace) {
+        setFaceZClockwiseRotation(fromFace.squares, toFace);
     }
 
-    private void setFaceInZClockwiseRotation(Square[][] fromFace, Face toFace) {
+    private void setFaceZClockwiseRotation(Square[][] fromFace, Face toFace) {
         toFace.setColumn(CubeValues.RIGHT_COLUMN.getValue(), fromFace[CubeValues.TOP_ROW.getValue()]);
         toFace.setColumn(CubeValues.MIDDLE_COLUMN.getValue(), fromFace[CubeValues.MIDDLE_ROW.getValue()]);
         toFace.setColumn(CubeValues.LEFT_COLUMN.getValue(), fromFace[CubeValues.BOTTOM_ROW.getValue()]);
+    }
+
+    private void setFaceZCounterclockwiseRotation(Face fromFace, Face toFace) {
+        setFaceZCounterclockwiseRotation(fromFace.squares, toFace);
+    }
+
+    private void setFaceZCounterclockwiseRotation(Square[][] fromFace, Face toFace) {
+        setColumnInBackwardsOrder(toFace, CubeValues.LEFT_COLUMN.getValue(),
+                fromFace[CubeValues.TOP_ROW.getValue()]);
+        setColumnInBackwardsOrder(toFace, CubeValues.MIDDLE_COLUMN.getValue(),
+                fromFace[CubeValues.MIDDLE_ROW.getValue()]);
+        setColumnInBackwardsOrder(toFace, CubeValues.RIGHT_COLUMN.getValue(),
+                fromFace[CubeValues.BOTTOM_ROW.getValue()]);
     }
 }
