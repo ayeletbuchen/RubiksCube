@@ -242,10 +242,10 @@ public class Cube extends JComponent {
     public void turnCubeClockwiseAlongZAxis() {
         Square[][] upFaceCopy = upFace.deepCopy();
 
-        upFace.setFace(leftFace);
-        leftFace.setFace(downFace);
-        downFace.setFace(rightFace);
-        rightFace.setFace(upFaceCopy);
+        setFaceInZClockwiseRotation(leftFace, upFace);
+        setFaceInZClockwiseRotation(downFace, leftFace);
+        setFaceInZClockwiseRotation(rightFace, downFace);
+        setFaceInZClockwiseRotation(upFaceCopy, rightFace);
 
         frontFace.rotateClockwise();
         backFace.rotateCounterclockwise();
@@ -494,5 +494,15 @@ public class Cube extends JComponent {
                 newRowOrColArr[CubeValues.RIGHT_COLUMN.getValue()],
                 newRowOrColArr[CubeValues.MIDDLE_ROW.getValue()],
                 newRowOrColArr[CubeValues.LEFT_COLUMN.getValue()]);
+    }
+
+    private void setFaceInZClockwiseRotation(Face fromFace, Face toFace) {
+        setFaceInZClockwiseRotation(fromFace.squares, toFace);
+    }
+
+    private void setFaceInZClockwiseRotation(Square[][] fromFace, Face toFace) {
+        toFace.setColumn(CubeValues.RIGHT_COLUMN.getValue(), fromFace[CubeValues.TOP_ROW.getValue()]);
+        toFace.setColumn(CubeValues.MIDDLE_COLUMN.getValue(), fromFace[CubeValues.MIDDLE_ROW.getValue()]);
+        toFace.setColumn(CubeValues.LEFT_COLUMN.getValue(), fromFace[CubeValues.BOTTOM_ROW.getValue()]);
     }
 }
