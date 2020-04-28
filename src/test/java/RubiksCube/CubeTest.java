@@ -86,6 +86,8 @@ public class CubeTest {
                 upSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
         assertEquals(leftFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
                 upSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+
+        assertFaceClockwiseRotation(frontFaceCopy, frontSquares);
     }
 
     @Test
@@ -119,6 +121,8 @@ public class CubeTest {
                 downSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
         assertEquals(leftFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
                 downSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+
+        assertFaceCounterclockwiseRotation(frontFaceCopy, frontSquares);
     }
 
     @Test
@@ -152,6 +156,8 @@ public class CubeTest {
                 rightSquares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
         assertEquals(downFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
                 rightSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+
+        assertFaceClockwiseRotation(backFaceCopy, backSquares);
     }
 
     @Test
@@ -185,6 +191,8 @@ public class CubeTest {
                 upSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
         assertEquals(leftFaceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
                 upSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+
+        assertFaceCounterclockwiseRotation(backFaceCopy, backSquares);
     }
 
     @Test
@@ -218,6 +226,8 @@ public class CubeTest {
                 upSquares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
         assertEquals(frontFaceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
                 upSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+
+        assertFaceClockwiseRotation(rightFaceCopy, rightSquares);
     }
 
     @Test
@@ -251,6 +261,8 @@ public class CubeTest {
                 upSquares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
         assertEquals(backFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
                 upSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+
+        assertFaceCounterclockwiseRotation(rightFaceCopy, rightSquares);
     }
 
     @Test
@@ -284,6 +296,8 @@ public class CubeTest {
                 upSquares[MIDDLE_ROW][LEFT_COLUMN].getColor());
         assertEquals(backFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
                 upSquares[TOP_ROW][LEFT_COLUMN].getColor());
+
+        assertFaceClockwiseRotation(leftFaceCopy, leftSquares);
     }
 
     @Test
@@ -317,6 +331,8 @@ public class CubeTest {
                 upSquares[MIDDLE_ROW][LEFT_COLUMN].getColor());
         assertEquals(frontFaceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
                 upSquares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+
+        assertFaceCounterclockwiseRotation(leftFaceCopy, leftSquares);
     }
 
     @Test
@@ -350,6 +366,8 @@ public class CubeTest {
                 frontSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
         assertEquals(rightFaceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
                 frontSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+
+        assertFaceClockwiseRotation(upFaceCopy, upSquares);
     }
 
     @Test
@@ -383,6 +401,8 @@ public class CubeTest {
                 leftSquares[TOP_ROW][MIDDLE_COLUMN].getColor());
         assertEquals(backFaceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
                 leftSquares[TOP_ROW][RIGHT_COLUMN].getColor());
+
+        assertFaceCounterclockwiseRotation(upFaceCopy, upSquares);
     }
 
     @Test
@@ -416,6 +436,8 @@ public class CubeTest {
                 frontSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
         assertEquals(leftFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
                 frontSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+
+        assertFaceClockwiseRotation(downFaceCopy, downSquares);
     }
 
     @Test
@@ -449,6 +471,8 @@ public class CubeTest {
                 frontSquares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
         assertEquals(rightFaceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
                 frontSquares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+
+        assertFaceCounterclockwiseRotation(downFaceCopy, downSquares);
     }
 
     @Test
