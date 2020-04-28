@@ -711,7 +711,14 @@ public class CubeTest {
 
     @Test
     public void turnCubeDown() {
+        cube.turnCubeDown();
 
+        assertFaceEquals(upFaceCopy, frontSquares);
+        assertFaceEquals(frontFaceCopy, downSquares);
+        assertFaceEqualsAfterTurnCubeDown(backFaceCopy, upSquares);
+        assertFaceEqualsAfterTurnCubeDown(downFaceCopy, backSquares);
+        assertFaceClockwiseRotation(leftFaceCopy, leftSquares);
+        assertFaceCounterclockwiseRotation(rightFaceCopy, rightSquares);
     }
 
     @Test
@@ -837,6 +844,29 @@ public class CubeTest {
     }
 
     private void assertFaceEqualsAfterTurnCubeUp(Square[][] faceCopy, Square[][] squares) {
+        assertEquals(faceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
+                squares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(faceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
+                squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(faceCopy[TOP_ROW][RIGHT_COLUMN].getColor(),
+                squares[BOTTOM_ROW][LEFT_COLUMN].getColor());
+
+        assertEquals(faceCopy[MIDDLE_ROW][LEFT_COLUMN].getColor(),
+                squares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(faceCopy[MIDDLE_ROW][MIDDLE_COLUMN].getColor(),
+                squares[MIDDLE_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(faceCopy[MIDDLE_ROW][RIGHT_COLUMN].getColor(),
+                squares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+
+        assertEquals(faceCopy[BOTTOM_ROW][LEFT_COLUMN].getColor(),
+                squares[TOP_ROW][RIGHT_COLUMN].getColor());
+        assertEquals(faceCopy[BOTTOM_ROW][MIDDLE_COLUMN].getColor(),
+                squares[TOP_ROW][MIDDLE_COLUMN].getColor());
+        assertEquals(faceCopy[BOTTOM_ROW][RIGHT_COLUMN].getColor(),
+                squares[TOP_ROW][LEFT_COLUMN].getColor());
+    }
+
+    private void assertFaceEqualsAfterTurnCubeDown(Square[][] faceCopy, Square[][] squares) {
         assertEquals(faceCopy[TOP_ROW][LEFT_COLUMN].getColor(),
                 squares[BOTTOM_ROW][RIGHT_COLUMN].getColor());
         assertEquals(faceCopy[TOP_ROW][MIDDLE_COLUMN].getColor(),
