@@ -48,7 +48,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     public void onNext(Move move) {
         if (move.equals(Move.SHUFFLE)) {
             userSolving = false;
-            // solve();
+            solve();
             // while (!computerMoveStack.isEmpty()) {
             //     userMoveStack.push(computerMoveStack.pop());
             // }
@@ -58,8 +58,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
             computerMoveStack.clear();
         } else if (!userSolving) {
             computerMoveStack.push(move);
-        }
-        else if (!userMoveStack.isEmpty()) {
+        } else if (!userMoveStack.isEmpty()) {
             Move nextMove = userMoveStack.peek();
             if (move.equals(nextMove)) {
                 userMoveStack.pop();
@@ -282,7 +281,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace(Color adjacentEdgeColor) {
-        if (adjacentEdgeColor.equals(CubeColors.LEFT_FACE_COLOR)) {
+        if (adjacentEdgeColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
             cube.rotateDownFaceClockwise();
             cube.doubleRotateLeftFace();
         } else if (adjacentEdgeColor.equals(CubeColors.FRONT_FACE_COLOR.getColor())) {
