@@ -166,80 +166,108 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteEdgeSquaresFromMiddleLayerToUpFace() {
-        boolean movedPositionedSquare;
+        boolean leftSquarePositioned = upFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR);
+        boolean rightSquarePositioned = upFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR);
+        boolean topSquarePositioned = upFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR);
+        boolean bottomSquarePositioned = upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR);
+
 
         if (frontFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            movedPositionedSquare = upFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR);
-            cube.rotateLeftFaceClockwise();
-            cube.rotateDownFaceClockwise();
-            if (movedPositionedSquare) {
-                cube.rotateLeftFaceCounterclockwise();
-            }
-            moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace();
+            moveWhiteSquareFromFrontFaceMiddleRowLeftColumnToUpFace(leftSquarePositioned);
         }
         if (frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            movedPositionedSquare = upFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR);
-            cube.rotateRightFaceCounterclockwise();
-            cube.rotateDownFaceClockwise();
-            if (movedPositionedSquare) {
-                cube.rotateRightFaceClockwise();
-            }
-            moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace();
+            moveWhiteSquareFromFrontFaceMiddleRowRightColumnToUpFace(rightSquarePositioned);
         }
         if (leftFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            movedPositionedSquare = upFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR);
-            cube.rotateBackFaceClockwise();
-            cube.rotateDownFaceClockwise();
-            if (movedPositionedSquare) {
-                cube.rotateBackFaceCounterclockwise();
-            }
-            moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace();
+            moveWhiteSquareFromLeftFaceMiddleRowLeftColumnToUpFace(topSquarePositioned);
         }
         if (leftFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            movedPositionedSquare = upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR);
-            cube.rotateFrontFaceCounterclockwise();
-            cube.rotateDownFaceClockwise();
-            if (movedPositionedSquare) {
-                cube.rotateFrontFaceClockwise();
-            }
-            moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace();
+            moveWhiteSquareFromLeftFaceMiddleRowRightColumnToUpFace(bottomSquarePositioned);
         }
         if (rightFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            movedPositionedSquare = upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR);
-            cube.rotateFrontFaceClockwise();
-            cube.rotateDownFaceClockwise();
-            if (movedPositionedSquare) {
-                cube.rotateFrontFaceCounterclockwise();
-            }
-            moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace();
+            moveWhiteSquareFromRightFaceMiddleRowLeftColumnToUpFace(bottomSquarePositioned);
         }
         if (rightFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            movedPositionedSquare = upFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR);
-            cube.rotateBackFaceCounterclockwise();
-            cube.rotateDownFaceClockwise();
-            if (movedPositionedSquare) {
-                cube.rotateBackFaceClockwise();
-            }
-            moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace();
+            moveWhiteSquareFromRightFaceMiddleRowRightColumnToUpFace(topSquarePositioned);
         }
         if (backFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            movedPositionedSquare = upFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR);
-            cube.rotateRightFaceClockwise();
-            cube.rotateDownFaceClockwise();
-            if (movedPositionedSquare) {
-                cube.rotateRightFaceCounterclockwise();
-            }
-            moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace();
+            moveWhiteSquareFromBackFaceMiddleRowLeftColumnToUpFace(rightSquarePositioned);
         }
         if (backFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            movedPositionedSquare = upFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR);
-            cube.rotateLeftFaceCounterclockwise();
-            cube.rotateDownFaceClockwise();
-            if (movedPositionedSquare) {
-                cube.rotateLeftFaceClockwise();
-            }
-            moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace();
+            moveWhiteSquareFromBackFaceMiddleRowRightColumnToUpFace(leftSquarePositioned);
         }
+    }
+
+    private void moveWhiteSquareFromFrontFaceMiddleRowLeftColumnToUpFace(boolean leftSquarePositioned) {
+        cube.rotateLeftFaceClockwise();
+        cube.rotateDownFaceClockwise();
+        if (leftSquarePositioned) {
+            cube.rotateLeftFaceCounterclockwise();
+        }
+        moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace();
+    }
+
+    private void moveWhiteSquareFromFrontFaceMiddleRowRightColumnToUpFace(boolean rightSquarePositioned) {
+        cube.rotateRightFaceCounterclockwise();
+        cube.rotateDownFaceClockwise();
+        if (rightSquarePositioned) {
+            cube.rotateRightFaceClockwise();
+        }
+        moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace();
+    }
+
+    private void moveWhiteSquareFromLeftFaceMiddleRowLeftColumnToUpFace(boolean topSquarePositioned) {
+        cube.rotateBackFaceClockwise();
+        cube.rotateDownFaceClockwise();
+        if (topSquarePositioned) {
+            cube.rotateBackFaceCounterclockwise();
+        }
+        moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace();
+    }
+
+    private void moveWhiteSquareFromLeftFaceMiddleRowRightColumnToUpFace(boolean bottomSquarePositioned) {
+        cube.rotateFrontFaceCounterclockwise();
+        cube.rotateDownFaceClockwise();
+        if (bottomSquarePositioned) {
+            cube.rotateFrontFaceClockwise();
+        }
+        moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace();
+    }
+
+    private void moveWhiteSquareFromRightFaceMiddleRowLeftColumnToUpFace(boolean bottomSquarePositioned) {
+        cube.rotateFrontFaceClockwise();
+        cube.rotateDownFaceClockwise();
+        if (bottomSquarePositioned) {
+            cube.rotateFrontFaceCounterclockwise();
+        }
+        moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace();
+    }
+
+    private void moveWhiteSquareFromRightFaceMiddleRowRightColumnToUpFace(boolean topSquarePositioned) {
+        cube.rotateBackFaceCounterclockwise();
+        cube.rotateDownFaceClockwise();
+        if (topSquarePositioned) {
+            cube.rotateBackFaceClockwise();
+        }
+        moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace();
+    }
+
+    private void moveWhiteSquareFromBackFaceMiddleRowLeftColumnToUpFace(boolean rightSquarePositioned) {
+        cube.rotateRightFaceClockwise();
+        cube.rotateDownFaceClockwise();
+        if (rightSquarePositioned) {
+            cube.rotateRightFaceCounterclockwise();
+        }
+        moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace();
+    }
+
+    private void moveWhiteSquareFromBackFaceMiddleRowRightColumnToUpFace(boolean leftSquarePositioned) {
+        cube.rotateLeftFaceCounterclockwise();
+        cube.rotateDownFaceClockwise();
+        if (leftSquarePositioned) {
+            cube.rotateLeftFaceClockwise();
+        }
+        moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace();
     }
 
     private void moveWhiteSquareFromFrontFaceBottomRowMiddleColumnToUpFace() {
