@@ -123,84 +123,220 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 //                || !upFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()].getColor()
 //                .equals(CubeColors.UP_FACE_COLOR.getColor())) {
             moveWhiteEdgeSquaresFromDownFaceToUpFace();
-
+            moveWhiteEdgeSquaresFromBottomLayerToUpFace();
 //        }
     }
 
     private void moveWhiteEdgeSquaresFromDownFaceToUpFace() {
         if (downFace.squares[CubeValues.TOP_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()].getColor()
                 .equals(CubeColors.UP_FACE_COLOR.getColor())) {
-            System.out.println("white edge piece on down[top][middle]");
-            moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace(adjacentEdgesMap
-                    .get(downFace.squares[CubeValues.TOP_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()])
-                    .getColor());
-        } if (downFace.squares[CubeValues.MIDDLE_ROW.getValue()][CubeValues.LEFT_COLUMN.getValue()].getColor()
+            moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace();
+        }
+        if (downFace.squares[CubeValues.MIDDLE_ROW.getValue()][CubeValues.LEFT_COLUMN.getValue()].getColor()
                 .equals(CubeColors.UP_FACE_COLOR.getColor())) {
-            System.out.println("white edge piece on down[middle][left]");
-            moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace(adjacentEdgesMap
-                    .get(downFace.squares[CubeValues.MIDDLE_ROW.getValue()][CubeValues.LEFT_COLUMN.getValue()])
-                    .getColor());
-        } if (downFace.squares[CubeValues.MIDDLE_ROW.getValue()][CubeValues.RIGHT_COLUMN.getValue()].getColor()
+            moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace();
+        }
+        if (downFace.squares[CubeValues.MIDDLE_ROW.getValue()][CubeValues.RIGHT_COLUMN.getValue()].getColor()
                 .equals(CubeColors.UP_FACE_COLOR.getColor())) {
-            System.out.println("white edge piece on down[middle][right]");
-            moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace(adjacentEdgesMap
+            moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace();
+        }
+        if (downFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()].getColor()
+                .equals(CubeColors.UP_FACE_COLOR.getColor())) {
+            moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace();
+        }
+    }
+
+    private void moveWhiteEdgeSquaresFromBottomLayerToUpFace() {
+        if (frontFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()].getColor()
+                .equals(CubeColors.UP_FACE_COLOR.getColor())) {
+            moveWhiteSquareFromFrontFaceBottomRowMiddleColumnToUpFace();
+        }
+        if (leftFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()].getColor()
+                .equals(CubeColors.UP_FACE_COLOR.getColor())) {
+            moveWhiteSquareFromLeftFaceBottomRowMiddleColumnToUpFace();
+        }
+        if (backFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()].getColor()
+                .equals(CubeColors.UP_FACE_COLOR.getColor())) {
+            moveWhiteSquareFromBackFaceBottomRowMiddleColumnToUpFace();
+        }
+        if (rightFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()].getColor()
+                .equals(CubeColors.UP_FACE_COLOR.getColor())) {
+            moveWhiteSquareFromRightFaceBottomRowMiddleColumnToUpFace();
+        }
+    }
+
+    private void moveWhiteSquareFromFrontFaceBottomRowMiddleColumnToUpFace() {
+        Color adjacentColor = adjacentEdgesMap
+                .get(frontFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()])
+                .getColor();
+
+        if (adjacentColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceCounterclockwise();
+            moveWhiteSquareFromBottomLayerToUpFace(leftFace);
+        }
+        else if (adjacentColor.equals(CubeColors.RIGHT_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceClockwise();
+            moveWhiteSquareFromBottomLayerToUpFace(rightFace);
+        }
+        else if (adjacentColor.equals(CubeColors.BACK_FACE_COLOR.getColor())) {
+            cube.doubleRotateDownFace();
+            moveWhiteSquareFromBottomLayerToUpFace(backFace);
+        }
+        else {
+            moveWhiteSquareFromBottomLayerToUpFace(frontFace);
+        }
+    }
+
+    private void moveWhiteSquareFromLeftFaceBottomRowMiddleColumnToUpFace() {
+        Color adjacentColor = adjacentEdgesMap
+                .get(leftFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()])
+                .getColor();
+
+        if (adjacentColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
+            moveWhiteSquareFromBottomLayerToUpFace(leftFace);
+        }
+        else if (adjacentColor.equals(CubeColors.RIGHT_FACE_COLOR.getColor())) {
+            cube.doubleRotateDownFace();
+            moveWhiteSquareFromBottomLayerToUpFace(rightFace);
+        }
+        else if (adjacentColor.equals(CubeColors.BACK_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceCounterclockwise();
+            moveWhiteSquareFromBottomLayerToUpFace(backFace);
+        }
+        else {
+            cube.rotateDownFaceClockwise();
+            moveWhiteSquareFromBottomLayerToUpFace(frontFace);
+        }
+    }
+
+    private void moveWhiteSquareFromBackFaceBottomRowMiddleColumnToUpFace() {
+        Color adjacentColor = adjacentEdgesMap
+                .get(backFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()])
+                .getColor();
+
+        if (adjacentColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceClockwise();
+            moveWhiteSquareFromBottomLayerToUpFace(leftFace);
+        }
+        else if (adjacentColor.equals(CubeColors.RIGHT_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceCounterclockwise();
+            moveWhiteSquareFromBottomLayerToUpFace(rightFace);
+        }
+        else if (adjacentColor.equals(CubeColors.BACK_FACE_COLOR.getColor())) {
+            moveWhiteSquareFromBottomLayerToUpFace(backFace);
+        }
+        else {
+            cube.doubleRotateDownFace();
+            moveWhiteSquareFromBottomLayerToUpFace(frontFace);
+        }
+    }
+
+    private void moveWhiteSquareFromRightFaceBottomRowMiddleColumnToUpFace() {
+        Color adjacentColor = adjacentEdgesMap
+                .get(rightFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()])
+                .getColor();
+
+        if (adjacentColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
+            cube.doubleRotateDownFace();
+            moveWhiteSquareFromBottomLayerToUpFace(leftFace);
+        }
+        else if (adjacentColor.equals(CubeColors.RIGHT_FACE_COLOR.getColor())) {
+            moveWhiteSquareFromBottomLayerToUpFace(rightFace);
+        }
+        else if (adjacentColor.equals(CubeColors.BACK_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceClockwise();
+            moveWhiteSquareFromBottomLayerToUpFace(backFace);
+        }
+        else {
+            cube.rotateDownFaceCounterclockwise();
+            moveWhiteSquareFromBottomLayerToUpFace(frontFace);
+        }
+    }
+
+    private void moveWhiteSquareFromBottomLayerToUpFace(Face originalFace) {
+        cube.rotateDownFaceCounterclockwise();
+
+        if (originalFace.equals(leftFace)) {
+            cube.rotateBackFaceCounterclockwise();
+            cube.rotateLeftFaceClockwise();
+            cube.rotateBackFaceClockwise();
+        } else if (originalFace.equals(frontFace)) {
+            cube.rotateLeftFaceCounterclockwise();
+            cube.rotateFrontFaceClockwise();
+            cube.rotateLeftFaceClockwise();
+        } else if (originalFace.equals(rightFace)) {
+            cube.rotateFrontFaceCounterclockwise();
+            cube.rotateRightFaceClockwise();
+            cube.rotateFrontFaceClockwise();
+        } else if (originalFace.equals(backFace)) {
+            cube.rotateRightFaceCounterclockwise();
+            cube.rotateBackFaceClockwise();
+            cube.rotateRightFaceClockwise();
+        }
+    }
+
+    private void moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace() {
+        Color adjacentEdgeColor = adjacentEdgesMap
+                .get(downFace.squares[CubeValues.TOP_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()])
+                .getColor();
+
+        if (adjacentEdgeColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceCounterclockwise();
+            cube.doubleRotateLeftFace();
+        } else if (adjacentEdgeColor.equals(CubeColors.FRONT_FACE_COLOR.getColor())) {
+            cube.doubleRotateFrontFace();
+        } else if (adjacentEdgeColor.equals(CubeColors.RIGHT_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceClockwise();
+            cube.doubleRotateRightFace();
+        } else if (adjacentEdgeColor.equals(CubeColors.BACK_FACE_COLOR.getColor())) {
+            cube.doubleRotateDownFace();
+            cube.doubleRotateBackFace();
+        }
+    }
+
+    private void moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace() {
+        Color adjacentEdgeColor = adjacentEdgesMap
+                .get(downFace.squares[CubeValues.MIDDLE_ROW.getValue()][CubeValues.LEFT_COLUMN.getValue()])
+                .getColor();
+
+        if (adjacentEdgeColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
+            cube.doubleRotateLeftFace();
+        } else if (adjacentEdgeColor.equals(CubeColors.FRONT_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceClockwise();
+            cube.doubleRotateFrontFace();
+        } else if (adjacentEdgeColor.equals(CubeColors.RIGHT_FACE_COLOR.getColor())) {
+            cube.doubleRotateDownFace();
+            cube.doubleRotateRightFace();
+        } else if (adjacentEdgeColor.equals(CubeColors.BACK_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceCounterclockwise();
+            cube.doubleRotateBackFace();
+        }
+    }
+
+    private void moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace() {
+        Color adjacentEdgeColor = adjacentEdgesMap
                 .get(downFace.squares[CubeValues.MIDDLE_ROW.getValue()][CubeValues.RIGHT_COLUMN.getValue()])
-                .getColor());
-        } if (downFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()].getColor()
-                .equals(CubeColors.UP_FACE_COLOR.getColor())) {
-            System.out.println("white edge piece on down[bottom][middle]");
-            moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace(adjacentEdgesMap
+                .getColor();
+
+        if (adjacentEdgeColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
+            cube.doubleRotateDownFace();
+            cube.doubleRotateLeftFace();
+        } else if (adjacentEdgeColor.equals(CubeColors.FRONT_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceCounterclockwise();
+            cube.doubleRotateFrontFace();
+        } else if (adjacentEdgeColor.equals(CubeColors.RIGHT_FACE_COLOR.getColor())) {
+            cube.doubleRotateRightFace();
+        } else if (adjacentEdgeColor.equals(CubeColors.BACK_FACE_COLOR.getColor())) {
+            cube.rotateDownFaceClockwise();
+            cube.doubleRotateBackFace();
+        }
+    }
+
+    private void moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace() {
+        Color adjacentEdgeColor = adjacentEdgesMap
                 .get(downFace.squares[CubeValues.BOTTOM_ROW.getValue()][CubeValues.MIDDLE_COLUMN.getValue()])
-                .getColor());
-        }
-    }
+                .getColor();
 
-    private void moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace(Color adjacentEdgeColor) {
-        if (adjacentEdgeColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
-            cube.rotateDownFaceCounterclockwise();
-            cube.doubleRotateLeftFace();
-        } else if (adjacentEdgeColor.equals(CubeColors.FRONT_FACE_COLOR.getColor())) {
-            cube.doubleRotateFrontFace();
-        } else if (adjacentEdgeColor.equals(CubeColors.RIGHT_FACE_COLOR.getColor())) {
-            cube.rotateDownFaceClockwise();
-            cube.doubleRotateRightFace();
-        } else if (adjacentEdgeColor.equals(CubeColors.BACK_FACE_COLOR.getColor())) {
-            cube.doubleRotateDownFace();
-            cube.doubleRotateBackFace();
-        }
-    }
-
-    private void moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace(Color adjacentEdgeColor) {
-        if (adjacentEdgeColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
-            cube.doubleRotateLeftFace();
-        } else if (adjacentEdgeColor.equals(CubeColors.FRONT_FACE_COLOR.getColor())) {
-            cube.rotateDownFaceClockwise();
-            cube.doubleRotateFrontFace();
-        } else if (adjacentEdgeColor.equals(CubeColors.RIGHT_FACE_COLOR.getColor())) {
-            cube.doubleRotateDownFace();
-            cube.doubleRotateRightFace();
-        } else if (adjacentEdgeColor.equals(CubeColors.BACK_FACE_COLOR.getColor())) {
-            cube.rotateDownFaceCounterclockwise();
-            cube.doubleRotateBackFace();
-        }
-    }
-
-    private void moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace(Color adjacentEdgeColor) {
-        if (adjacentEdgeColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
-            cube.doubleRotateDownFace();
-            cube.doubleRotateLeftFace();
-        } else if (adjacentEdgeColor.equals(CubeColors.FRONT_FACE_COLOR.getColor())) {
-            cube.rotateDownFaceCounterclockwise();
-            cube.doubleRotateFrontFace();
-        } else if (adjacentEdgeColor.equals(CubeColors.RIGHT_FACE_COLOR.getColor())) {
-            cube.doubleRotateRightFace();
-        } else if (adjacentEdgeColor.equals(CubeColors.BACK_FACE_COLOR.getColor())) {
-            cube.rotateDownFaceClockwise();
-            cube.doubleRotateBackFace();
-        }
-    }
-
-    private void moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace(Color adjacentEdgeColor) {
         if (adjacentEdgeColor.equals(CubeColors.LEFT_FACE_COLOR.getColor())) {
             cube.rotateDownFaceClockwise();
             cube.doubleRotateLeftFace();

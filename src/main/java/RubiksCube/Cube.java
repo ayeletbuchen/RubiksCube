@@ -33,6 +33,7 @@ public class Cube extends JComponent {
         rightFace.setLocation(frontFace.getX() + FrameValues.FACE_WIDTH, leftFace.getY());
         backFace.setLocation(rightFace.getX() + FrameValues.FACE_WIDTH, leftFace.getY());
         downFace.setLocation(frontFace.getX(), frontFace.getY() + FrameValues.FACE_WIDTH);
+        // downFace.getGraphics().fillPolygon();
 
         add(upFace);
         add(leftFace);
