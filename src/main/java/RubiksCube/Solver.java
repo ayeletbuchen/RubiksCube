@@ -1,7 +1,6 @@
 package RubiksCube;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 import io.reactivex.Observer;
@@ -20,7 +19,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     private Stack<Move> computerMoveStack;
     private Stack<Move> userMoveStack;
     private HashMap<Square, Square> adjacentEdgesMap;
-    private HashMap<Square, ArrayList<Square>> adjacentCornersMap;
+    private HashMap<Square, Square[]> adjacentCornersMap;
     private final int TOP_ROW = CubeValues.TOP_ROW.getValue();
     private final int MIDDLE_ROW = CubeValues.MIDDLE_ROW.getValue();
     private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
@@ -49,6 +48,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         userMoveStack = new Stack<>();
         setCounterMoves();
         setAdjacentEdgesMap();
+        setAdjacentCornersMap();
     }
 
     @Override
@@ -102,6 +102,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     private void solveTopLayer() {
         moveWhiteCenterSquareToUpFace();
         createWhiteCross();
+        // putWhiteCornersInPlace();
     }
 
     private void moveWhiteCenterSquareToUpFace() {
@@ -135,6 +136,19 @@ public class Solver extends Stack<Move> implements Observer<Move> {
             moveWhiteEdgeSquaresFromMiddleLayerToUpFace();
             moveWhiteEdgeSquaresFromTopLayerToUpFace();
         }
+    }
+
+    private void putWhiteCornersInPlace() {
+        cube.doubleVerticalCubeTurn();
+        orientFrontLeftCorner();
+        // orientFrontRightCorner();
+        // orientBackLeftCorner();
+        // orientBackRightCorner();
+    }
+
+    private void orientFrontLeftCorner() {
+        cube.turnCubeLeft();
+        // while(!upFace.squares[BOTTOM_ROW][LEFT_COLUMN].getColor().equals(upF))
     }
 
     private void moveWhiteEdgeSquaresFromDownFaceToUpFace() {
@@ -542,15 +556,61 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         adjacentEdgesMap.put(backFace.squares[MIDDLE_ROW][LEFT_COLUMN], rightFace.squares[MIDDLE_ROW][RIGHT_COLUMN]);
     }
 
-//
-//
-//    corners
-//    down top left pairs with front bottom left and left face bottom right;
-//    down top right = front bottom right = right bottom left;
-//    down bottom left = left bottom left = back bottom right;
-//    down bottom right = right bottom right = back bottom left
-//    up top left = left top left = back top right;
-//    up top right = right top right = back top left;
-//    up bottom left = left top right = front top left;
-//    up bottom right = right top left = front top right;
+    private void setAdjacentCornersMap() {
+        adjacentCornersMap.put(downFace.squares[TOP_ROW][LEFT_COLUMN],
+                new Square[] {frontFace.squares[BOTTOM_ROW][LEFT_COLUMN], leftFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
+        adjacentCornersMap.put(frontFace.squares[BOTTOM_ROW][LEFT_COLUMN],
+                new Square[] {downFace.squares[TOP_ROW][LEFT_COLUMN], leftFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
+        adjacentCornersMap.put(leftFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
+                new Square[] {frontFace.squares[BOTTOM_ROW][LEFT_COLUMN], downFace.squares[TOP_ROW][LEFT_COLUMN]});
+
+        adjacentCornersMap.put(downFace.squares[TOP_ROW][RIGHT_COLUMN],
+                new Square[] {frontFace.squares[BOTTOM_ROW][RIGHT_COLUMN], rightFace.squares[BOTTOM_ROW][LEFT_COLUMN]});
+        adjacentCornersMap.put(frontFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
+                new Square[] {downFace.squares[TOP_ROW][RIGHT_COLUMN], rightFace.squares[BOTTOM_ROW][LEFT_COLUMN]});
+        adjacentCornersMap.put(rightFace.squares[BOTTOM_ROW][LEFT_COLUMN],
+                new Square[] {downFace.squares[TOP_ROW][RIGHT_COLUMN], frontFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
+
+        adjacentCornersMap.put(downFace.squares[BOTTOM_ROW][LEFT_COLUMN],
+                new Square[] {leftFace.squares[BOTTOM_ROW][LEFT_COLUMN], backFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
+        adjacentCornersMap.put(leftFace.squares[BOTTOM_ROW][LEFT_COLUMN],
+                new Square[] {downFace.squares[BOTTOM_ROW][LEFT_COLUMN], backFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
+        adjacentCornersMap.put(backFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
+                new Square[] {downFace.squares[BOTTOM_ROW][LEFT_COLUMN], leftFace.squares[BOTTOM_ROW][LEFT_COLUMN]});
+
+        adjacentCornersMap.put(downFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
+                new Square[] {rightFace.squares[BOTTOM_ROW][RIGHT_COLUMN], backFace.squares[BOTTOM_ROW][LEFT_COLUMN]});
+        adjacentCornersMap.put(rightFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
+                new Square[] {downFace.squares[BOTTOM_ROW][RIGHT_COLUMN], backFace.squares[BOTTOM_ROW][LEFT_COLUMN]});
+        adjacentCornersMap.put(backFace.squares[BOTTOM_ROW][LEFT_COLUMN],
+                new Square[] {downFace.squares[BOTTOM_ROW][RIGHT_COLUMN], rightFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
+
+        adjacentCornersMap.put(upFace.squares[TOP_ROW][LEFT_COLUMN],
+                new Square[] {leftFace.squares[TOP_ROW][LEFT_COLUMN], backFace.squares[TOP_ROW][RIGHT_COLUMN]});
+        adjacentCornersMap.put(leftFace.squares[TOP_ROW][LEFT_COLUMN],
+                new Square[] {upFace.squares[TOP_ROW][LEFT_COLUMN], backFace.squares[TOP_ROW][RIGHT_COLUMN]});
+        adjacentCornersMap.put(backFace.squares[TOP_ROW][RIGHT_COLUMN],
+                new Square[] {upFace.squares[TOP_ROW][LEFT_COLUMN], leftFace.squares[TOP_ROW][LEFT_COLUMN]});
+
+        adjacentCornersMap.put(upFace.squares[TOP_ROW][RIGHT_COLUMN],
+                new Square[] {rightFace.squares[TOP_ROW][RIGHT_COLUMN], backFace.squares[TOP_ROW][LEFT_COLUMN]});
+        adjacentCornersMap.put(rightFace.squares[TOP_ROW][RIGHT_COLUMN],
+                new Square[] {upFace.squares[TOP_ROW][RIGHT_COLUMN], backFace.squares[TOP_ROW][LEFT_COLUMN]});
+        adjacentCornersMap.put(backFace.squares[TOP_ROW][LEFT_COLUMN],
+                new Square[] {upFace.squares[TOP_ROW][RIGHT_COLUMN], rightFace.squares[TOP_ROW][RIGHT_COLUMN]});
+
+        adjacentCornersMap.put(upFace.squares[BOTTOM_ROW][LEFT_COLUMN],
+                new Square[] {leftFace.squares[TOP_ROW][RIGHT_COLUMN], frontFace.squares[TOP_ROW][LEFT_COLUMN]});
+        adjacentCornersMap.put(leftFace.squares[TOP_ROW][RIGHT_COLUMN],
+                new Square[] {upFace.squares[BOTTOM_ROW][LEFT_COLUMN], frontFace.squares[TOP_ROW][LEFT_COLUMN]});
+        adjacentCornersMap.put(frontFace.squares[TOP_ROW][LEFT_COLUMN],
+                new Square[] {upFace.squares[BOTTOM_ROW][LEFT_COLUMN], leftFace.squares[TOP_ROW][RIGHT_COLUMN]});
+
+        adjacentCornersMap.put(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
+                new Square[] {rightFace.squares[TOP_ROW][LEFT_COLUMN], frontFace.squares[TOP_ROW][RIGHT_COLUMN]});
+        adjacentCornersMap.put(rightFace.squares[TOP_ROW][LEFT_COLUMN],
+                new Square[] {upFace.squares[BOTTOM_ROW][RIGHT_COLUMN], frontFace.squares[TOP_ROW][RIGHT_COLUMN]});
+        adjacentCornersMap.put(frontFace.squares[TOP_ROW][RIGHT_COLUMN],
+                new Square[] {upFace.squares[BOTTOM_ROW][RIGHT_COLUMN], rightFace.squares[TOP_ROW][LEFT_COLUMN]});
+    }
 }
