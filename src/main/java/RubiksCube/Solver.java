@@ -130,14 +130,12 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 
     private void putWhiteCornersInPlace() {
         while(!whiteCornersAreOriented()) {
-            System.out.println("putWhiteCornersInPlace()");
             moveWhiteCornersInWrongPosition();
             moveWhiteCornersFromDownFace();
         }
     }
 
     private void moveWhiteCornersInWrongPosition() {
-        System.out.println("moveWhiteCornersInWrongPosition");
         fixUpFaceTopLeftCorner();
         fixUpFaceTopRightCorner();
         fixUpFaceBottomLeftCorner();
@@ -145,7 +143,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void fixUpFaceTopLeftCorner() {
-        System.out.println("fixUpFaceTopLeftCorner");
         Square square = upFace.squares[TOP_ROW][LEFT_COLUMN];
         Square[] corner = cornersMap.get(square);
 
@@ -167,7 +164,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void fixUpFaceTopRightCorner() {
-        System.out.println("fixUpFaceTopRightCorner");
         Square square = upFace.squares[TOP_ROW][RIGHT_COLUMN];
         Square[] corner = cornersMap.get(square);
 
@@ -189,7 +185,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void fixUpFaceBottomLeftCorner() {
-        System.out.println("fixUpFaceBottomLeftCorner");
         Square square = upFace.squares[BOTTOM_ROW][LEFT_COLUMN];
         Square[] corner = cornersMap.get(square);
 
@@ -211,7 +206,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void fixUpFaceBottomRightCorner() {
-        System.out.println("fixUpFaceBottomRightCorner");
         Square square = upFace.squares[BOTTOM_ROW][RIGHT_COLUMN];
         Square[] corner = cornersMap.get(square);
 
@@ -231,8 +225,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteCornersFromDownFace() {
-        System.out.println("moveWhiteCornersFromDownFace");
-
         if (isColorCorner(downFace.squares[TOP_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
             orientWhiteCornerFromDownFace(TOP_ROW, LEFT_COLUMN);
         }
@@ -249,7 +241,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 
     private void orientWhiteCornerFromDownFace(int downFaceRow, int downFaceCol) {
         Square square = downFace.squares[downFaceRow][downFaceCol];
-        System.out.println("orientWhiteCornerFromDownFace");
+
         if (isColorCorner(square, FRONT_FACE_COLOR)) {
             if (isColorCorner(square, LEFT_FACE_COLOR)) {
                 orientUpFaceBottomLeftCorner(downFaceRow, downFaceCol);
@@ -266,7 +258,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void orientUpFaceBottomLeftCorner(int downFaceRow, int downFaceCol) {
-        System.out.println("orientUpFaceBottomLeftCorner");
         if (downFaceRow == TOP_ROW) {
             if (downFaceCol == RIGHT_COLUMN) {
                 cube.rotateDownFaceCounterclockwise();
@@ -285,7 +276,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void orientUpFaceBottomRightCorner(int downFaceRow, int downFaceCol) {
-        System.out.println("orientUpFaceCorner");
         if (downFaceRow == TOP_ROW) {
             if (downFaceCol == LEFT_COLUMN) {
                 cube.rotateDownFaceClockwise();
@@ -302,7 +292,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void orientUpFaceTopLeftCorner(int downFaceRow, int downFaceCol) {
-        System.out.println("orientUpFaceTopLeftCorner");
         if (downFaceRow == TOP_ROW) {
             if (downFaceCol == LEFT_COLUMN) {
                 cube.rotateDownFaceCounterclockwise();
@@ -319,7 +308,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void orientUpFaceTopRightCorner(int downFaceRow, int downFaceCol) {
-        System.out.println("orientUpFaceTopRightCorner");
         if (downFaceRow == TOP_ROW) {
             if (downFaceCol == LEFT_COLUMN) {
                 cube.doubleRotateDownFace();
@@ -339,7 +327,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         while(!(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
                 && frontFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(frontFaceColor)
                 && rightFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(rightFaceColor))) {
-            System.out.println("orientUpFaceCorner");
             cube.rotateRightFaceCounterclockwise();
             cube.rotateDownFaceCounterclockwise();
             cube.rotateRightFaceClockwise();
