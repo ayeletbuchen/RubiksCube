@@ -1,7 +1,6 @@
 package RubiksCube;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Stack;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -18,8 +17,8 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     private boolean userSolving;
     private Stack<Move> computerMoveStack;
     private Stack<Move> userMoveStack;
-    private HashMap<Square, Square> adjacentEdgesMap;
-    private HashMap<Square, Square[]> adjacentCornersMap;
+    private EdgesMap edgesMap;
+    private CornersMap cornersMap;
     private final int TOP_ROW = CubeValues.TOP_ROW.getValue();
     private final int MIDDLE_ROW = CubeValues.MIDDLE_ROW.getValue();
     private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
@@ -42,13 +41,11 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         backFace = cube.getBackFace();
         downFace = cube.getDownFace();
         userSolving = true;
-        adjacentEdgesMap = new HashMap<>();
-        adjacentCornersMap = new HashMap<>();
+        edgesMap = new EdgesMap(upFace, leftFace, frontFace, rightFace, backFace, downFace);
+        cornersMap = new CornersMap(upFace, leftFace, frontFace, rightFace, backFace, downFace);
         computerMoveStack = new Stack<>();
         userMoveStack = new Stack<>();
-        setCounterMoves();
-        setAdjacentEdgesMap();
-        setAdjacentCornersMap();
+        Move.setCounterMoves();
     }
 
     @Override
@@ -122,14 +119,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void createWhiteCross() {
-        while (!upFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)
-                || !upFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                || !upFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                || !upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)
-                || !leftFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(LEFT_FACE_COLOR)
-                || !frontFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(FRONT_FACE_COLOR)
-                || !rightFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(RIGHT_FACE_COLOR)
-                || !backFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(BACK_FACE_COLOR)) {
+        while (!whiteEdgesAreOriented()) {
             orientUpFaceWhiteEdges();
             moveWhiteEdgeSquaresFromDownFaceToUpFace();
             moveAllWhiteEdgeSquaresFromBottomLayerToUpFace();
@@ -139,36 +129,16 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void putWhiteCornersInPlace() {
-        Square upFaceTopLeftSquare = upFace.squares[TOP_ROW][LEFT_COLUMN];
-        Square upFaceTopRightSquare = upFace.squares[TOP_ROW][RIGHT_COLUMN];
-        Square upFaceBottomLeftSquare = upFace.squares[BOTTOM_ROW][LEFT_COLUMN];
-        Square upFaceBottomRightSquare = upFace.squares[BOTTOM_ROW][RIGHT_COLUMN];
-        Square[] upFaceTopLeftCorner = adjacentCornersMap.get(upFaceTopLeftSquare);
-        Square[] upFaceTopRightCorner = adjacentCornersMap.get(upFaceTopRightSquare);
-        Square[] upFaceBottomLeftCorner = adjacentCornersMap.get(upFaceBottomLeftSquare);
-        Square[] upFaceBottomRightCorner = adjacentCornersMap.get(upFaceBottomRightSquare);
-
         Square downFaceTopLeftSquare = downFace.squares[TOP_ROW][LEFT_COLUMN];
         Square downFaceTopRightSquare = downFace.squares[TOP_ROW][RIGHT_COLUMN];
         Square downFaceBottomLeftSquare = downFace.squares[BOTTOM_ROW][LEFT_COLUMN];
         Square downFaceBottomRightSquare = downFace.squares[BOTTOM_ROW][RIGHT_COLUMN];
-        Square[] downFaceTopLeftCorner = adjacentCornersMap.get(downFaceTopLeftSquare);
-        Square[] downFaceTopRightCorner = adjacentCornersMap.get(downFaceTopRightSquare);
-        Square[] downFaceBottomLeftCorner = adjacentCornersMap.get(downFaceBottomLeftSquare);
-        Square[] downFaceBottomRightCorner = adjacentCornersMap.get(downFaceBottomRightSquare);
+        Square[] downFaceTopLeftCorner = cornersMap.get(downFaceTopLeftSquare);
+        Square[] downFaceTopRightCorner = cornersMap.get(downFaceTopRightSquare);
+        Square[] downFaceBottomLeftCorner = cornersMap.get(downFaceBottomLeftSquare);
+        Square[] downFaceBottomRightCorner = cornersMap.get(downFaceBottomRightSquare);
 
-        while(!(upFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && leftFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(LEFT_FACE_COLOR)
-                && backFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(BACK_FACE_COLOR))
-            || !(upFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && rightFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(RIGHT_FACE_COLOR)
-                && backFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(BACK_FACE_COLOR))
-            || !(upFace.squares[BOTTOM_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && frontFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(FRONT_FACE_COLOR)
-                && leftFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(LEFT_FACE_COLOR))
-            || !(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && frontFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(FRONT_FACE_COLOR)
-                && rightFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(RIGHT_FACE_COLOR))) {
+        while(!whiteCornersAreOriented()) {
             System.out.println("putWhiteCornersInPlace()");
 
             // TODO orient white corner pieces that are on white layer but in wrong position
@@ -485,7 +455,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteSquareFromFrontFaceBottomRowMiddleColumnToUpFace() {
-        Color adjacentColor = adjacentEdgesMap.get(frontFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
+        Color adjacentColor = edgesMap.get(frontFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
 
         if (adjacentColor.equals(LEFT_FACE_COLOR)) {
             cube.rotateDownFaceCounterclockwise();
@@ -505,7 +475,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteSquareFromLeftFaceBottomRowMiddleColumnToUpFace() {
-        Color adjacentColor = adjacentEdgesMap
+        Color adjacentColor = edgesMap
                 .get(leftFace.squares[BOTTOM_ROW][MIDDLE_COLUMN])
                 .getColor();
 
@@ -527,7 +497,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteSquareFromBackFaceBottomRowMiddleColumnToUpFace() {
-        Color adjacentColor = adjacentEdgesMap.get(backFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
+        Color adjacentColor = edgesMap.get(backFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
 
         if (adjacentColor.equals(LEFT_FACE_COLOR)) {
             cube.rotateDownFaceClockwise();
@@ -547,7 +517,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteSquareFromRightFaceBottomRowMiddleColumnToUpFace() {
-        Color adjacentColor = adjacentEdgesMap.get(rightFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
+        Color adjacentColor = edgesMap.get(rightFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
 
         if (adjacentColor.equals(LEFT_FACE_COLOR)) {
             cube.doubleRotateDownFace();
@@ -589,7 +559,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace() {
-        Color adjacentEdgeColor = adjacentEdgesMap.get(downFace.squares[TOP_ROW][MIDDLE_COLUMN]).getColor();
+        Color adjacentEdgeColor = edgesMap.get(downFace.squares[TOP_ROW][MIDDLE_COLUMN]).getColor();
 
         if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
             cube.rotateDownFaceCounterclockwise();
@@ -606,7 +576,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace() {
-        Color adjacentEdgeColor = adjacentEdgesMap.get(downFace.squares[MIDDLE_ROW][LEFT_COLUMN]).getColor();
+        Color adjacentEdgeColor = edgesMap.get(downFace.squares[MIDDLE_ROW][LEFT_COLUMN]).getColor();
 
         if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
             cube.doubleRotateLeftFace();
@@ -623,7 +593,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace() {
-        Color adjacentEdgeColor = adjacentEdgesMap.get(downFace.squares[MIDDLE_ROW][RIGHT_COLUMN]).getColor();
+        Color adjacentEdgeColor = edgesMap.get(downFace.squares[MIDDLE_ROW][RIGHT_COLUMN]).getColor();
 
         if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
             cube.doubleRotateDownFace();
@@ -640,7 +610,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace() {
-        Color adjacentEdgeColor = adjacentEdgesMap.get(downFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
+        Color adjacentEdgeColor = edgesMap.get(downFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
 
         if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
             cube.rotateDownFaceClockwise();
@@ -656,117 +626,32 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         }
     }
 
-    private void setCounterMoves() {
-        Move.U.setCounterMove(Move.U_PRIME);
-        Move.L.setCounterMove(Move.L_PRIME);
-        Move.F.setCounterMove(Move.F_PRIME);
-        Move.R.setCounterMove(Move.R_PRIME);
-        Move.B.setCounterMove(Move.B_PRIME);
-        Move.D.setCounterMove(Move.D_PRIME);
-        Move.U_PRIME.setCounterMove(Move.U);
-        Move.L_PRIME.setCounterMove(Move.L);
-        Move.F_PRIME.setCounterMove(Move.F);
-        Move.R_PRIME.setCounterMove(Move.R);
-        Move.B_PRIME.setCounterMove(Move.B);
-        Move.D_PRIME.setCounterMove(Move.D);
-        Move.M.setCounterMove(Move.M_PRIME);
-        Move.E.setCounterMove(Move.E_PRIME);
-        Move.S.setCounterMove(Move.S_PRIME);
-        Move.M_PRIME.setCounterMove(Move.M);
-        Move.E_PRIME.setCounterMove(Move.E);
-        Move.S_PRIME.setCounterMove(Move.S);
-        Move.Y_PRIME.setCounterMove(Move.Y);
-        Move.Y.setCounterMove(Move.Y_PRIME);
-        Move.X.setCounterMove(Move.X_PRIME);
-        Move.X_PRIME.setCounterMove(Move.X);
-        Move.Z.setCounterMove(Move.Z_PRIME);
-        Move.Z_PRIME.setCounterMove(Move.Z);
-        Move.SHUFFLE.setCounterMove(Move.RESET);
-        Move.RESET.setCounterMove(Move.SHUFFLE);
+    private boolean whiteEdgesAreOriented() {
+        return upFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)
+                && upFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)
+                && upFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
+                && upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)
+                && leftFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(LEFT_FACE_COLOR)
+                && frontFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(FRONT_FACE_COLOR)
+                && rightFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(RIGHT_FACE_COLOR)
+                && backFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(BACK_FACE_COLOR);
     }
 
-    private void setAdjacentEdgesMap() {
-        adjacentEdgesMap.put(downFace.squares[TOP_ROW][MIDDLE_COLUMN], frontFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(frontFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], downFace.squares[TOP_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(leftFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], downFace.squares[MIDDLE_ROW][LEFT_COLUMN]);
-        adjacentEdgesMap.put(downFace.squares[MIDDLE_ROW][LEFT_COLUMN], leftFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(rightFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], downFace.squares[MIDDLE_ROW][RIGHT_COLUMN]);
-        adjacentEdgesMap.put(downFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(backFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], downFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(downFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], backFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(leftFace.squares[TOP_ROW][MIDDLE_COLUMN], upFace.squares[MIDDLE_ROW][LEFT_COLUMN]);
-        adjacentEdgesMap.put(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], leftFace.squares[TOP_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(frontFace.squares[TOP_ROW][MIDDLE_COLUMN], upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], frontFace.squares[TOP_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(rightFace.squares[TOP_ROW][MIDDLE_COLUMN], upFace.squares[MIDDLE_ROW][RIGHT_COLUMN]);
-        adjacentEdgesMap.put(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightFace.squares[TOP_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(backFace.squares[TOP_ROW][MIDDLE_COLUMN], upFace.squares[TOP_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(upFace.squares[TOP_ROW][MIDDLE_COLUMN], backFace.squares[TOP_ROW][MIDDLE_COLUMN]);
-        adjacentEdgesMap.put(leftFace.squares[MIDDLE_ROW][LEFT_COLUMN], backFace.squares[MIDDLE_ROW][RIGHT_COLUMN]);
-        adjacentEdgesMap.put(backFace.squares[MIDDLE_ROW][RIGHT_COLUMN], leftFace.squares[MIDDLE_ROW][LEFT_COLUMN]);
-        adjacentEdgesMap.put(leftFace.squares[MIDDLE_ROW][RIGHT_COLUMN], frontFace.squares[MIDDLE_ROW][LEFT_COLUMN]);
-        adjacentEdgesMap.put(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN], leftFace.squares[MIDDLE_ROW][RIGHT_COLUMN]);
-        adjacentEdgesMap.put(frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightFace.squares[MIDDLE_ROW][LEFT_COLUMN]);
-        adjacentEdgesMap.put(rightFace.squares[MIDDLE_ROW][LEFT_COLUMN], frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN]);
-        adjacentEdgesMap.put(rightFace.squares[MIDDLE_ROW][RIGHT_COLUMN], backFace.squares[MIDDLE_ROW][LEFT_COLUMN]);
-        adjacentEdgesMap.put(backFace.squares[MIDDLE_ROW][LEFT_COLUMN], rightFace.squares[MIDDLE_ROW][RIGHT_COLUMN]);
-    }
+    private boolean whiteCornersAreOriented() {
+        return upFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)
+                && leftFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(LEFT_FACE_COLOR)
+                && backFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(BACK_FACE_COLOR)
 
-    private void setAdjacentCornersMap() {
-        adjacentCornersMap.put(downFace.squares[TOP_ROW][LEFT_COLUMN],
-                new Square[] {frontFace.squares[BOTTOM_ROW][LEFT_COLUMN], leftFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
-        adjacentCornersMap.put(frontFace.squares[BOTTOM_ROW][LEFT_COLUMN],
-                new Square[] {downFace.squares[TOP_ROW][LEFT_COLUMN], leftFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
-        adjacentCornersMap.put(leftFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
-                new Square[] {frontFace.squares[BOTTOM_ROW][LEFT_COLUMN], downFace.squares[TOP_ROW][LEFT_COLUMN]});
+                && upFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
+                && rightFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(RIGHT_FACE_COLOR)
+                && backFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(BACK_FACE_COLOR)
 
-        adjacentCornersMap.put(downFace.squares[TOP_ROW][RIGHT_COLUMN],
-                new Square[] {frontFace.squares[BOTTOM_ROW][RIGHT_COLUMN], rightFace.squares[BOTTOM_ROW][LEFT_COLUMN]});
-        adjacentCornersMap.put(frontFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
-                new Square[] {downFace.squares[TOP_ROW][RIGHT_COLUMN], rightFace.squares[BOTTOM_ROW][LEFT_COLUMN]});
-        adjacentCornersMap.put(rightFace.squares[BOTTOM_ROW][LEFT_COLUMN],
-                new Square[] {downFace.squares[TOP_ROW][RIGHT_COLUMN], frontFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
+                && upFace.squares[BOTTOM_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)
+                && frontFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(FRONT_FACE_COLOR)
+                && leftFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(LEFT_FACE_COLOR)
 
-        adjacentCornersMap.put(downFace.squares[BOTTOM_ROW][LEFT_COLUMN],
-                new Square[] {leftFace.squares[BOTTOM_ROW][LEFT_COLUMN], backFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
-        adjacentCornersMap.put(leftFace.squares[BOTTOM_ROW][LEFT_COLUMN],
-                new Square[] {downFace.squares[BOTTOM_ROW][LEFT_COLUMN], backFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
-        adjacentCornersMap.put(backFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
-                new Square[] {downFace.squares[BOTTOM_ROW][LEFT_COLUMN], leftFace.squares[BOTTOM_ROW][LEFT_COLUMN]});
-
-        adjacentCornersMap.put(downFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
-                new Square[] {rightFace.squares[BOTTOM_ROW][RIGHT_COLUMN], backFace.squares[BOTTOM_ROW][LEFT_COLUMN]});
-        adjacentCornersMap.put(rightFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
-                new Square[] {downFace.squares[BOTTOM_ROW][RIGHT_COLUMN], backFace.squares[BOTTOM_ROW][LEFT_COLUMN]});
-        adjacentCornersMap.put(backFace.squares[BOTTOM_ROW][LEFT_COLUMN],
-                new Square[] {downFace.squares[BOTTOM_ROW][RIGHT_COLUMN], rightFace.squares[BOTTOM_ROW][RIGHT_COLUMN]});
-
-        adjacentCornersMap.put(upFace.squares[TOP_ROW][LEFT_COLUMN],
-                new Square[] {leftFace.squares[TOP_ROW][LEFT_COLUMN], backFace.squares[TOP_ROW][RIGHT_COLUMN]});
-        adjacentCornersMap.put(leftFace.squares[TOP_ROW][LEFT_COLUMN],
-                new Square[] {upFace.squares[TOP_ROW][LEFT_COLUMN], backFace.squares[TOP_ROW][RIGHT_COLUMN]});
-        adjacentCornersMap.put(backFace.squares[TOP_ROW][RIGHT_COLUMN],
-                new Square[] {upFace.squares[TOP_ROW][LEFT_COLUMN], leftFace.squares[TOP_ROW][LEFT_COLUMN]});
-
-        adjacentCornersMap.put(upFace.squares[TOP_ROW][RIGHT_COLUMN],
-                new Square[] {rightFace.squares[TOP_ROW][RIGHT_COLUMN], backFace.squares[TOP_ROW][LEFT_COLUMN]});
-        adjacentCornersMap.put(rightFace.squares[TOP_ROW][RIGHT_COLUMN],
-                new Square[] {upFace.squares[TOP_ROW][RIGHT_COLUMN], backFace.squares[TOP_ROW][LEFT_COLUMN]});
-        adjacentCornersMap.put(backFace.squares[TOP_ROW][LEFT_COLUMN],
-                new Square[] {upFace.squares[TOP_ROW][RIGHT_COLUMN], rightFace.squares[TOP_ROW][RIGHT_COLUMN]});
-
-        adjacentCornersMap.put(upFace.squares[BOTTOM_ROW][LEFT_COLUMN],
-                new Square[] {leftFace.squares[TOP_ROW][RIGHT_COLUMN], frontFace.squares[TOP_ROW][LEFT_COLUMN]});
-        adjacentCornersMap.put(leftFace.squares[TOP_ROW][RIGHT_COLUMN],
-                new Square[] {upFace.squares[BOTTOM_ROW][LEFT_COLUMN], frontFace.squares[TOP_ROW][LEFT_COLUMN]});
-        adjacentCornersMap.put(frontFace.squares[TOP_ROW][LEFT_COLUMN],
-                new Square[] {upFace.squares[BOTTOM_ROW][LEFT_COLUMN], leftFace.squares[TOP_ROW][RIGHT_COLUMN]});
-
-        adjacentCornersMap.put(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN],
-                new Square[] {rightFace.squares[TOP_ROW][LEFT_COLUMN], frontFace.squares[TOP_ROW][RIGHT_COLUMN]});
-        adjacentCornersMap.put(rightFace.squares[TOP_ROW][LEFT_COLUMN],
-                new Square[] {upFace.squares[BOTTOM_ROW][RIGHT_COLUMN], frontFace.squares[TOP_ROW][RIGHT_COLUMN]});
-        adjacentCornersMap.put(frontFace.squares[TOP_ROW][RIGHT_COLUMN],
-                new Square[] {upFace.squares[BOTTOM_ROW][RIGHT_COLUMN], rightFace.squares[TOP_ROW][LEFT_COLUMN]});
+                && upFace.squares[BOTTOM_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
+                && frontFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(FRONT_FACE_COLOR)
+                && rightFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(RIGHT_FACE_COLOR);
     }
 }

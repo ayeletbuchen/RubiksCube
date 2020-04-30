@@ -50,7 +50,36 @@ public enum Move {
         return counterMove;
     }
 
-    public void setCounterMove(Move counterMove) {
+    private void setCounterMove(Move counterMove) {
         this.counterMove = counterMove;
+    }
+
+    public static void setCounterMoves() {
+        Move.U.setCounterMove(Move.U_PRIME);
+        Move.L.setCounterMove(Move.L_PRIME);
+        Move.F.setCounterMove(Move.F_PRIME);
+        Move.R.setCounterMove(Move.R_PRIME);
+        Move.B.setCounterMove(Move.B_PRIME);
+        Move.D.setCounterMove(Move.D_PRIME);
+        Move.U_PRIME.setCounterMove(Move.U);
+        Move.L_PRIME.setCounterMove(Move.L);
+        Move.F_PRIME.setCounterMove(Move.F);
+        Move.R_PRIME.setCounterMove(Move.R);
+        Move.B_PRIME.setCounterMove(Move.B);
+        Move.D_PRIME.setCounterMove(Move.D);
+        Move.M.setCounterMove(Move.M_PRIME);
+        Move.E.setCounterMove(Move.E_PRIME);
+        Move.S.setCounterMove(Move.S_PRIME);
+        Move.M_PRIME.setCounterMove(Move.M);
+        Move.E_PRIME.setCounterMove(Move.E);
+        Move.S_PRIME.setCounterMove(Move.S);
+        Move.Y_PRIME.setCounterMove(Move.Y);
+        Move.Y.setCounterMove(Move.Y_PRIME);
+        Move.X.setCounterMove(Move.X_PRIME);
+        Move.X_PRIME.setCounterMove(Move.X);
+        Move.Z.setCounterMove(Move.Z_PRIME);
+        Move.Z_PRIME.setCounterMove(Move.Z);
+        Move.SHUFFLE.setCounterMove(Move.RESET);
+        Move.RESET.setCounterMove(Move.SHUFFLE);
     }
 }

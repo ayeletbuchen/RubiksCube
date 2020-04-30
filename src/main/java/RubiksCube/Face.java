@@ -6,7 +6,7 @@ import java.awt.*;
 public class Face extends JPanel {
 
     Square[][] squares;
-    private final Color originalColor;
+    private final Color ORIGINAL_COLOR;
     private final int SIZE = CubeValues.DIMENSION.getValue();
     private final int LEFT_COLUMN = CubeValues.LEFT_COLUMN.getValue();
     private final int MIDDLE_COLUMN = CubeValues.MIDDLE_COLUMN.getValue();
@@ -17,7 +17,7 @@ public class Face extends JPanel {
     private final int MARGIN = FrameValues.FACE_MARGIN;
 
     public Face(Color color) {
-        originalColor = color;
+        ORIGINAL_COLOR = color;
         setLayout(new GridLayout(SIZE, SIZE, MARGIN, MARGIN));
         setSize(FrameValues.FACE_WIDTH, FrameValues.FACE_WIDTH);
         setBackground(Color.BLACK);
@@ -141,7 +141,7 @@ public class Face extends JPanel {
     public void reset() {
         for (int row = 0; row < squares.length; row++) {
             for (int col = 0; col < squares[row].length; col++) {
-                squares[row][col].setColor(originalColor);
+                squares[row][col].setColor(ORIGINAL_COLOR);
             }
         }
     }
