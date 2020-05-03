@@ -573,22 +573,22 @@ public class Solver extends Stack<Move> implements Observer<Move> {
             cube.rotateBackFaceClockwise();
             cube.rotateDownFaceClockwise();
             cube.rotateBackFaceCounterclockwise();
-            orientWhiteCornerFromDownFace(TOP_ROW, LEFT_COLUMN);
+            orientWhiteCornerFromDownFace(downFace.squares[TOP_ROW][LEFT_COLUMN]);
         } else if (square.equals(upFace.squares[TOP_ROW][RIGHT_COLUMN])) {
             cube.rotateBackFaceCounterclockwise();
             cube.rotateDownFaceCounterclockwise();
             cube.rotateBackFaceClockwise();
-            orientWhiteCornerFromDownFace(TOP_ROW, RIGHT_COLUMN);
+            orientWhiteCornerFromDownFace(downFace.squares[TOP_ROW][RIGHT_COLUMN]);
         } else if (square.equals(upFace.squares[BOTTOM_ROW][LEFT_COLUMN])) {
             cube.rotateLeftFaceClockwise();
             cube.rotateDownFaceClockwise();
             cube.rotateLeftFaceCounterclockwise();
-            orientWhiteCornerFromDownFace(TOP_ROW, RIGHT_COLUMN);
+            orientWhiteCornerFromDownFace(downFace.squares[TOP_ROW][RIGHT_COLUMN]);
         } else if (square.equals(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN])) {
             cube.rotateRightFaceCounterclockwise();
             cube.rotateDownFaceCounterclockwise();
             cube.rotateRightFaceClockwise();
-            orientWhiteCornerFromDownFace(TOP_ROW, LEFT_COLUMN);
+            orientWhiteCornerFromDownFace(downFace.squares[TOP_ROW][LEFT_COLUMN]);
         }
     }
     //</editor-fold>
@@ -596,48 +596,42 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //<editor-fold desc="Move white corners from down face">
     private void moveWhiteCornersFromDownFace() {
         if (cornerHasColor(downFace.squares[TOP_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
-            orientWhiteCornerFromDownFace(TOP_ROW, LEFT_COLUMN);
+            orientWhiteCornerFromDownFace(downFace.squares[TOP_ROW][LEFT_COLUMN]);
         }
         if (cornerHasColor(downFace.squares[TOP_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
-            orientWhiteCornerFromDownFace(TOP_ROW, RIGHT_COLUMN);
+            orientWhiteCornerFromDownFace(downFace.squares[TOP_ROW][RIGHT_COLUMN]);
         }
         if (cornerHasColor(downFace.squares[BOTTOM_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
-            orientWhiteCornerFromDownFace(BOTTOM_ROW, LEFT_COLUMN);
+            orientWhiteCornerFromDownFace(downFace.squares[BOTTOM_ROW][LEFT_COLUMN]);
         }
         if (cornerHasColor(downFace.squares[BOTTOM_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
-            orientWhiteCornerFromDownFace(BOTTOM_ROW, RIGHT_COLUMN);
+            orientWhiteCornerFromDownFace(downFace.squares[BOTTOM_ROW][RIGHT_COLUMN]);
         }
     }
 
-    private void orientWhiteCornerFromDownFace(int downFaceRow, int downFaceCol) {
-        Square square = downFace.squares[downFaceRow][downFaceCol];
-
+    private void orientWhiteCornerFromDownFace(Square square) {
         if (cornerHasColor(square, FRONT_FACE_COLOR)) {
             if (cornerHasColor(square, LEFT_FACE_COLOR)) {
-                orientUpFaceBottomLeftCorner(downFaceRow, downFaceCol);
+                orientUpFaceBottomLeftCorner(square);
             } else {
-                orientUpFaceBottomRightCorner(downFaceRow, downFaceCol);
+                orientUpFaceBottomRightCorner(square);
             }
         } else if (cornerHasColor(square, BACK_FACE_COLOR)) {
             if (cornerHasColor(square, LEFT_FACE_COLOR)) {
-                orientUpFaceTopLeftCorner(downFaceRow, downFaceCol);
+                orientUpFaceTopLeftCorner(square);
             } else {
-                orientUpFaceTopRightCorner(downFaceRow, downFaceCol);
+                orientUpFaceTopRightCorner(square);
             }
         }
     }
 
-    private void orientUpFaceBottomLeftCorner(int downFaceRow, int downFaceCol) {
-        if (downFaceRow == TOP_ROW) {
-            if (downFaceCol == RIGHT_COLUMN) {
-                cube.rotateDownFaceCounterclockwise();
-            }
-        } else if (downFaceRow == BOTTOM_ROW) {
-            if (downFaceCol == LEFT_COLUMN) {
-                cube.rotateDownFaceClockwise();
-            } else {
-                cube.doubleRotateDownFace();
-            }
+    private void orientUpFaceBottomLeftCorner(Square square) {
+        if (square.equals(downFace.squares[TOP_ROW][RIGHT_COLUMN])) {
+            cube.rotateDownFaceCounterclockwise();
+        } else if (square.equals(downFace.squares[BOTTOM_ROW][LEFT_COLUMN])) {
+            cube.rotateDownFaceClockwise();
+        } else if (square.equals(downFace.squares[BOTTOM_ROW][RIGHT_COLUMN])) {
+            cube.doubleRotateDownFace();
         }
 
         cube.turnCubeRight();
@@ -645,30 +639,24 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         cube.turnCubeLeft();
     }
 
-    private void orientUpFaceBottomRightCorner(int downFaceRow, int downFaceCol) {
-        if (downFaceRow == TOP_ROW) {
-            if (downFaceCol == LEFT_COLUMN) {
-                cube.rotateDownFaceClockwise();
-            }
-        } else if (downFaceRow == BOTTOM_ROW) {
-            if (downFaceCol == LEFT_COLUMN) {
-                cube.doubleRotateDownFace();
-            } else {
-                cube.rotateDownFaceCounterclockwise();
-            }
+    private void orientUpFaceBottomRightCorner(Square square) {
+        if (square.equals(downFace.squares[TOP_ROW][LEFT_COLUMN])) {
+            cube.rotateDownFaceClockwise();
+        } else if (square.equals(downFace.squares[BOTTOM_ROW][LEFT_COLUMN])) {
+            cube.doubleRotateDownFace();
+        } else if (square.equals(downFace.squares[BOTTOM_ROW][RIGHT_COLUMN])) {
+            cube.rotateDownFaceCounterclockwise();
         }
 
         orientUpFaceCorner(FRONT_FACE_COLOR, RIGHT_FACE_COLOR);
     }
 
-    private void orientUpFaceTopLeftCorner(int downFaceRow, int downFaceCol) {
-        if (downFaceRow == TOP_ROW) {
-            if (downFaceCol == LEFT_COLUMN) {
-                cube.rotateDownFaceCounterclockwise();
-            } else {
-                cube.doubleRotateDownFace();
-            }
-        } else if (downFaceRow == BOTTOM_ROW && downFaceCol == RIGHT_COLUMN) {
+    private void orientUpFaceTopLeftCorner(Square square) {
+        if (square.equals(downFace.squares[TOP_ROW][LEFT_COLUMN])) {
+            cube.rotateDownFaceCounterclockwise();
+        } else if (square.equals(downFace.squares[TOP_ROW][RIGHT_COLUMN])) {
+            cube.doubleRotateDownFace();
+        } else if (square.equals(downFace.squares[BOTTOM_ROW][RIGHT_COLUMN])) {
             cube.rotateDownFaceClockwise();
         }
 
@@ -677,14 +665,12 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         cube.doubleHorizontalCubeTurn();
     }
 
-    private void orientUpFaceTopRightCorner(int downFaceRow, int downFaceCol) {
-        if (downFaceRow == TOP_ROW) {
-            if (downFaceCol == LEFT_COLUMN) {
-                cube.doubleRotateDownFace();
-            } else {
-                cube.rotateDownFaceClockwise();
-            }
-        } else if (downFaceRow == BOTTOM_ROW && downFaceCol == LEFT_COLUMN) {
+    private void orientUpFaceTopRightCorner(Square square) {
+        if (square.equals(downFace.squares[TOP_ROW][LEFT_COLUMN])) {
+            cube.doubleRotateDownFace();
+        } else if (square.equals(downFace.squares[TOP_ROW][RIGHT_COLUMN])) {
+            cube.rotateDownFaceClockwise();
+        } else if (square.equals(downFace.squares[BOTTOM_ROW][LEFT_COLUMN])) {
             cube.rotateDownFaceCounterclockwise();
         }
 
