@@ -94,30 +94,35 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 
     public void solve() {
         solveTopLayer();
+        solveMiddleLayer();
     }
 
+    //<editor-fold desc="Solve top layer">
     private void solveTopLayer() {
         moveWhiteCenterSquareToUpFace();
         createWhiteCross();
         putWhiteCornersInPlace();
     }
 
+    //<editor-fold desc="Position white center square">
     private void moveWhiteCenterSquareToUpFace() {
-        if (!upFace.squares[MIDDLE_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            if (leftFace.squares[MIDDLE_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+        if (!isOriginalColor(upFace.squares[MIDDLE_ROW][MIDDLE_COLUMN])) {
+            if (squareIsColor(leftFace.squares[MIDDLE_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
                 cube.turnCubeClockwiseAlongZAxis();
-            } else if (frontFace.squares[MIDDLE_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+            } else if (squareIsColor(frontFace.squares[MIDDLE_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
                 cube.turnCubeUp();
-            } else if (rightFace.squares[MIDDLE_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+            } else if (squareIsColor(rightFace.squares[MIDDLE_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
                 cube.turnCubeCounterclockwiseAlongZAxis();
-            } else if (backFace.squares[MIDDLE_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+            } else if (squareIsColor(backFace.squares[MIDDLE_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
                 cube.turnCubeDown();
             } else {
                 cube.doubleVerticalCubeTurn();
             }
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Create white cross">
     private void createWhiteCross() {
         while (!whiteEdgesAreOriented()) {
             orientUpFaceWhiteEdges();
@@ -128,289 +133,276 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         }
     }
 
-    private void putWhiteCornersInPlace() {
-        while(!whiteCornersAreOriented()) {
-            moveWhiteCornersInWrongPosition();
-            moveWhiteCornersFromDownFace();
-        }
+    private boolean whiteEdgesAreOriented() {
+        return isOriginalColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN])
+                && isOriginalColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN])
+                && isOriginalColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN])
+                && isOriginalColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN])
+                && isOriginalColor(leftFace.squares[TOP_ROW][MIDDLE_COLUMN])
+                && isOriginalColor(frontFace.squares[TOP_ROW][MIDDLE_COLUMN])
+                && isOriginalColor(rightFace.squares[TOP_ROW][MIDDLE_COLUMN])
+                && isOriginalColor(backFace.squares[TOP_ROW][MIDDLE_COLUMN]);
     }
 
-    private void moveWhiteCornersInWrongPosition() {
-        fixUpFaceCorner(upFace.squares[TOP_ROW][LEFT_COLUMN]);
-        fixUpFaceCorner(upFace.squares[TOP_ROW][RIGHT_COLUMN]);
-        fixUpFaceCorner(upFace.squares[BOTTOM_ROW][LEFT_COLUMN]);
-        fixUpFaceCorner(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN]);
-    }
-
-    private void fixUpFaceCorner(Square square) {
-        Square[] corner = cornersMap.get(square);
-
-        if (isColorCorner(square, UP_FACE_COLOR)) {
-            if (cornerInCorrectPosition(square, square.getORIGINAL_COLOR(),
-                    corner[0].getORIGINAL_COLOR(), corner[1].getORIGINAL_COLOR())) {
-                if (!cornerInCorrectOrientation(square)) {
-                    reorientUpFaceCorner(square);
-                }
-            } else {
-                repositionUpFaceCorner(square);
-            }
+    //<editor-fold desc="Orient up face white edges">
+    private void orientUpFaceWhiteEdges() {
+        if (isOriginalColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN])
+                && !isOriginalColor(backFace.squares[TOP_ROW][MIDDLE_COLUMN])) {
+            cube.doubleRotateBackFace();
+            moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace();
         }
-    }
-
-    private void reorientUpFaceCorner(Square square) {
-        if (square.equals(upFace.squares[TOP_ROW][LEFT_COLUMN])) {
-            cube.doubleHorizontalCubeTurn();
-            orientUpFaceCorner(BACK_FACE_COLOR, LEFT_FACE_COLOR);
-            cube.doubleHorizontalCubeTurn();
-        } else if (square.equals(upFace.squares[TOP_ROW][RIGHT_COLUMN])) {
-            cube.turnCubeLeft();
-            orientUpFaceCorner(RIGHT_FACE_COLOR, BACK_FACE_COLOR);
-            cube.turnCubeRight();
-        } else if (square.equals(upFace.squares[BOTTOM_ROW][LEFT_COLUMN])) {
-            cube.turnCubeRight();
-            orientUpFaceCorner(LEFT_FACE_COLOR, FRONT_FACE_COLOR);
-            cube.turnCubeLeft();
-        } else if (square.equals(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN])) {
-            orientUpFaceCorner(FRONT_FACE_COLOR, RIGHT_FACE_COLOR);
-        }
-    }
-
-    private void repositionUpFaceCorner(Square square) {
-        if (square.equals(upFace.squares[TOP_ROW][LEFT_COLUMN])) {
-            cube.rotateBackFaceClockwise();
-            cube.rotateDownFaceClockwise();
-            cube.rotateBackFaceCounterclockwise();
-            orientWhiteCornerFromDownFace(TOP_ROW, LEFT_COLUMN);
-        } else if (square.equals(upFace.squares[TOP_ROW][RIGHT_COLUMN])) {
-            cube.rotateBackFaceCounterclockwise();
-            cube.rotateDownFaceCounterclockwise();
-            cube.rotateBackFaceClockwise();
-            orientWhiteCornerFromDownFace(TOP_ROW, RIGHT_COLUMN);
-        } else if (square.equals(upFace.squares[BOTTOM_ROW][LEFT_COLUMN])) {
-            cube.rotateLeftFaceClockwise();
-            cube.rotateDownFaceClockwise();
-            cube.rotateLeftFaceCounterclockwise();
-            orientWhiteCornerFromDownFace(TOP_ROW, RIGHT_COLUMN);
-        } else if (square.equals(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN])) {
-            cube.rotateRightFaceCounterclockwise();
-            cube.rotateDownFaceCounterclockwise();
-            cube.rotateRightFaceClockwise();
-            orientWhiteCornerFromDownFace(TOP_ROW, LEFT_COLUMN);
-        }
-    }
-
-    private void moveWhiteCornersFromDownFace() {
-        if (isColorCorner(downFace.squares[TOP_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
-            orientWhiteCornerFromDownFace(TOP_ROW, LEFT_COLUMN);
-        }
-        if (isColorCorner(downFace.squares[TOP_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
-            orientWhiteCornerFromDownFace(TOP_ROW, RIGHT_COLUMN);
-        }
-        if (isColorCorner(downFace.squares[BOTTOM_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
-            orientWhiteCornerFromDownFace(BOTTOM_ROW, LEFT_COLUMN);
-        }
-        if (isColorCorner(downFace.squares[BOTTOM_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
-            orientWhiteCornerFromDownFace(BOTTOM_ROW, RIGHT_COLUMN);
-        }
-    }
-
-    private void orientWhiteCornerFromDownFace(int downFaceRow, int downFaceCol) {
-        Square square = downFace.squares[downFaceRow][downFaceCol];
-
-        if (isColorCorner(square, FRONT_FACE_COLOR)) {
-            if (isColorCorner(square, LEFT_FACE_COLOR)) {
-                orientUpFaceBottomLeftCorner(downFaceRow, downFaceCol);
-            } else {
-                orientUpFaceBottomRightCorner(downFaceRow, downFaceCol);
-            }
-        } else if (isColorCorner(square, BACK_FACE_COLOR)) {
-            if (isColorCorner(square, LEFT_FACE_COLOR)) {
-                orientUpFaceTopLeftCorner(downFaceRow, downFaceCol);
-            } else {
-                orientUpFaceTopRightCorner(downFaceRow, downFaceCol);
-            }
-        }
-    }
-
-    private void orientUpFaceBottomLeftCorner(int downFaceRow, int downFaceCol) {
-        if (downFaceRow == TOP_ROW) {
-            if (downFaceCol == RIGHT_COLUMN) {
-                cube.rotateDownFaceCounterclockwise();
-            }
-        } else if (downFaceRow == BOTTOM_ROW) {
-            if (downFaceCol == LEFT_COLUMN) {
-                cube.rotateDownFaceClockwise();
-            } else {
-                cube.doubleRotateDownFace();
-            }
-        }
-
-        cube.turnCubeRight();
-        orientUpFaceCorner(LEFT_FACE_COLOR, FRONT_FACE_COLOR);
-        cube.turnCubeLeft();
-    }
-
-    private void orientUpFaceBottomRightCorner(int downFaceRow, int downFaceCol) {
-        if (downFaceRow == TOP_ROW) {
-            if (downFaceCol == LEFT_COLUMN) {
-                cube.rotateDownFaceClockwise();
-            }
-        } else if (downFaceRow == BOTTOM_ROW) {
-            if (downFaceCol == LEFT_COLUMN) {
-                cube.doubleRotateDownFace();
-            } else {
-                cube.rotateDownFaceCounterclockwise();
-            }
-        }
-
-        orientUpFaceCorner(FRONT_FACE_COLOR, RIGHT_FACE_COLOR);
-    }
-
-    private void orientUpFaceTopLeftCorner(int downFaceRow, int downFaceCol) {
-        if (downFaceRow == TOP_ROW) {
-            if (downFaceCol == LEFT_COLUMN) {
-                cube.rotateDownFaceCounterclockwise();
-            } else {
-                cube.doubleRotateDownFace();
-            }
-        } else if (downFaceRow == BOTTOM_ROW && downFaceCol == RIGHT_COLUMN) {
-            cube.rotateDownFaceClockwise();
-        }
-
-        cube.doubleHorizontalCubeTurn();
-        orientUpFaceCorner(BACK_FACE_COLOR, LEFT_FACE_COLOR);
-        cube.doubleHorizontalCubeTurn();
-    }
-
-    private void orientUpFaceTopRightCorner(int downFaceRow, int downFaceCol) {
-        if (downFaceRow == TOP_ROW) {
-            if (downFaceCol == LEFT_COLUMN) {
-                cube.doubleRotateDownFace();
-            } else {
-                cube.rotateDownFaceClockwise();
-            }
-        } else if (downFaceRow == BOTTOM_ROW && downFaceCol == LEFT_COLUMN) {
-            cube.rotateDownFaceCounterclockwise();
-        }
-
-        cube.turnCubeLeft();
-        orientUpFaceCorner(RIGHT_FACE_COLOR, BACK_FACE_COLOR);
-        cube.turnCubeRight();
-    }
-
-    private void orientUpFaceCorner(Color frontFaceColor, Color rightFaceColor) {
-        while(!(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && frontFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(frontFaceColor)
-                && rightFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(rightFaceColor))) {
-            cube.rotateRightFaceCounterclockwise();
-            cube.rotateDownFaceCounterclockwise();
-            cube.rotateRightFaceClockwise();
-            cube.rotateDownFaceClockwise();
-        }
-    }
-
-    private void moveWhiteEdgeSquaresFromDownFaceToUpFace() {
-        if (downFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace();
-        }
-        if (downFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+        if (isOriginalColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN])
+                && !isOriginalColor(leftFace.squares[TOP_ROW][MIDDLE_COLUMN])) {
+            cube.doubleRotateLeftFace();
             moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace();
         }
-        if (downFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+        if (isOriginalColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN])
+                && !isOriginalColor(rightFace.squares[TOP_ROW][MIDDLE_COLUMN])) {
+            cube.doubleRotateRightFace();
             moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace();
         }
-        if (downFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+        if (isOriginalColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN])
+                && !isOriginalColor(frontFace.squares[TOP_ROW][MIDDLE_COLUMN])) {
+            cube.doubleRotateFrontFace();
+            moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace();
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Move white edge squares from down face">
+    private void moveWhiteEdgeSquaresFromDownFaceToUpFace() {
+        if (squareIsColor(downFace.squares[TOP_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace();
+        }
+        if (squareIsColor(downFace.squares[MIDDLE_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace();
+        }
+        if (squareIsColor(downFace.squares[MIDDLE_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace();
+        }
+        if (squareIsColor(downFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
             moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace();
         }
     }
 
+    private void moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace() {
+        Color adjacentEdgeColor = getAdjacentEdgeColor(downFace.squares[TOP_ROW][MIDDLE_COLUMN]);
+
+        if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
+            cube.rotateDownFaceCounterclockwise();
+            cube.doubleRotateLeftFace();
+        } else if (adjacentEdgeColor.equals(FRONT_FACE_COLOR)) {
+            cube.doubleRotateFrontFace();
+        } else if (adjacentEdgeColor.equals(RIGHT_FACE_COLOR)) {
+            cube.rotateDownFaceClockwise();
+            cube.doubleRotateRightFace();
+        } else if (adjacentEdgeColor.equals(BACK_FACE_COLOR)) {
+            cube.doubleRotateDownFace();
+            cube.doubleRotateBackFace();
+        }
+    }
+
+    private void moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace() {
+        Color adjacentEdgeColor = getAdjacentEdgeColor(downFace.squares[MIDDLE_ROW][LEFT_COLUMN]);
+
+        if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
+            cube.doubleRotateLeftFace();
+        } else if (adjacentEdgeColor.equals(FRONT_FACE_COLOR)) {
+            cube.rotateDownFaceClockwise();
+            cube.doubleRotateFrontFace();
+        } else if (adjacentEdgeColor.equals(RIGHT_FACE_COLOR)) {
+            cube.doubleRotateDownFace();
+            cube.doubleRotateRightFace();
+        } else if (adjacentEdgeColor.equals(BACK_FACE_COLOR)) {
+            cube.rotateDownFaceCounterclockwise();
+            cube.doubleRotateBackFace();
+        }
+    }
+
+    private void moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace() {
+        Color adjacentEdgeColor = getAdjacentEdgeColor(downFace.squares[MIDDLE_ROW][RIGHT_COLUMN]);
+
+        if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
+            cube.doubleRotateDownFace();
+            cube.doubleRotateLeftFace();
+        } else if (adjacentEdgeColor.equals(FRONT_FACE_COLOR)) {
+            cube.rotateDownFaceCounterclockwise();
+            cube.doubleRotateFrontFace();
+        } else if (adjacentEdgeColor.equals(RIGHT_FACE_COLOR)) {
+            cube.doubleRotateRightFace();
+        } else if (adjacentEdgeColor.equals(BACK_FACE_COLOR)) {
+            cube.rotateDownFaceClockwise();
+            cube.doubleRotateBackFace();
+        }
+    }
+
+    private void moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace() {
+        Color adjacentEdgeColor = getAdjacentEdgeColor(downFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
+
+        if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
+            cube.rotateDownFaceClockwise();
+            cube.doubleRotateLeftFace();
+        } else if (adjacentEdgeColor.equals(FRONT_FACE_COLOR)) {
+            cube.doubleRotateDownFace();
+            cube.doubleRotateFrontFace();
+        } else if (adjacentEdgeColor.equals(RIGHT_FACE_COLOR)) {
+            cube.rotateDownFaceCounterclockwise();
+            cube.doubleRotateRightFace();
+        } else if (adjacentEdgeColor.equals(BACK_FACE_COLOR)) {
+            cube.doubleRotateBackFace();
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Move white edge square from bottom layer">
     private void moveAllWhiteEdgeSquaresFromBottomLayerToUpFace() {
-        if (frontFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+        if (squareIsColor(frontFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
             moveWhiteSquareFromFrontFaceBottomRowMiddleColumnToUpFace();
         }
-        if (leftFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+        if (squareIsColor(leftFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
             moveWhiteSquareFromLeftFaceBottomRowMiddleColumnToUpFace();
         }
-        if (backFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+        if (squareIsColor(backFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
             moveWhiteSquareFromBackFaceBottomRowMiddleColumnToUpFace();
         }
-        if (rightFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
+        if (squareIsColor(rightFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
             moveWhiteSquareFromRightFaceBottomRowMiddleColumnToUpFace();
         }
     }
 
-    private void moveWhiteEdgeSquaresFromMiddleLayerToUpFace() {
-        boolean leftSquarePositioned = upFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR);
-        boolean rightSquarePositioned = upFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR);
-        boolean topSquarePositioned = upFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR);
-        boolean bottomSquarePositioned = upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR);
+    private void moveWhiteSquareFromFrontFaceBottomRowMiddleColumnToUpFace() {
+        Color adjacentColor = getAdjacentEdgeColor(frontFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
 
-
-        if (frontFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            moveWhiteSquareFromFrontFaceMiddleRowLeftColumnToUpFace(leftSquarePositioned);
-        }
-        if (frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            moveWhiteSquareFromFrontFaceMiddleRowRightColumnToUpFace(rightSquarePositioned);
-        }
-        if (leftFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            moveWhiteSquareFromLeftFaceMiddleRowLeftColumnToUpFace(topSquarePositioned);
-        }
-        if (leftFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            moveWhiteSquareFromLeftFaceMiddleRowRightColumnToUpFace(bottomSquarePositioned);
-        }
-        if (rightFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            moveWhiteSquareFromRightFaceMiddleRowLeftColumnToUpFace(bottomSquarePositioned);
-        }
-        if (rightFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            moveWhiteSquareFromRightFaceMiddleRowRightColumnToUpFace(topSquarePositioned);
-        }
-        if (backFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            moveWhiteSquareFromBackFaceMiddleRowLeftColumnToUpFace(rightSquarePositioned);
-        }
-        if (backFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            moveWhiteSquareFromBackFaceMiddleRowRightColumnToUpFace(leftSquarePositioned);
-        }
-    }
-
-    private void moveWhiteEdgeSquaresFromTopLayerToUpFace() {
-        if (leftFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            cube.doubleRotateLeftFace();
+        if (adjacentColor.equals(LEFT_FACE_COLOR)) {
+            cube.rotateDownFaceCounterclockwise();
             moveWhiteEdgeSquareFromBottomLayerToUpFace(leftFace);
         }
-        if (frontFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            cube.doubleRotateFrontFace();
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(frontFace);
-        }
-        if (rightFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            cube.doubleRotateRightFace();
+        else if (adjacentColor.equals(RIGHT_FACE_COLOR)) {
+            cube.rotateDownFaceClockwise();
             moveWhiteEdgeSquareFromBottomLayerToUpFace(rightFace);
         }
-        if (backFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)) {
-            cube.doubleRotateBackFace();
+        else if (adjacentColor.equals(BACK_FACE_COLOR)) {
+            cube.doubleRotateDownFace();
             moveWhiteEdgeSquareFromBottomLayerToUpFace(backFace);
+        }
+        else {
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(frontFace);
         }
     }
 
-    private void orientUpFaceWhiteEdges() {
-        if (upFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && !backFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(BACK_FACE_COLOR)) {
-            cube.doubleRotateBackFace();
-            moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace();
+    private void moveWhiteSquareFromLeftFaceBottomRowMiddleColumnToUpFace() {
+        Color adjacentColor = getAdjacentEdgeColor(leftFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
+
+        if (adjacentColor.equals(LEFT_FACE_COLOR)) {
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(leftFace);
         }
-        if (upFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && !leftFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(LEFT_FACE_COLOR)) {
-            cube.doubleRotateLeftFace();
-            moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace();
+        else if (adjacentColor.equals(RIGHT_FACE_COLOR)) {
+            cube.doubleRotateDownFace();
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(rightFace);
         }
-        if (upFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && !rightFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(RIGHT_FACE_COLOR)) {
-            cube.doubleRotateRightFace();
-            moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace();
+        else if (adjacentColor.equals(BACK_FACE_COLOR)) {
+            cube.rotateDownFaceCounterclockwise();
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(backFace);
         }
-        if (upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && !frontFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(FRONT_FACE_COLOR)) {
-            cube.doubleRotateFrontFace();
-            moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace();
+        else {
+            cube.rotateDownFaceClockwise();
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(frontFace);
+        }
+    }
+
+    private void moveWhiteSquareFromBackFaceBottomRowMiddleColumnToUpFace() {
+        Color adjacentColor = getAdjacentEdgeColor(backFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
+
+        if (adjacentColor.equals(LEFT_FACE_COLOR)) {
+            cube.rotateDownFaceClockwise();
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(leftFace);
+        }
+        else if (adjacentColor.equals(RIGHT_FACE_COLOR)) {
+            cube.rotateDownFaceCounterclockwise();
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(rightFace);
+        }
+        else if (adjacentColor.equals(BACK_FACE_COLOR)) {
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(backFace);
+        }
+        else {
+            cube.doubleRotateDownFace();
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(frontFace);
+        }
+    }
+
+    private void moveWhiteSquareFromRightFaceBottomRowMiddleColumnToUpFace() {
+        Color adjacentColor = getAdjacentEdgeColor(rightFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
+
+        if (adjacentColor.equals(LEFT_FACE_COLOR)) {
+            cube.doubleRotateDownFace();
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(leftFace);
+        }
+        else if (adjacentColor.equals(RIGHT_FACE_COLOR)) {
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(rightFace);
+        }
+        else if (adjacentColor.equals(BACK_FACE_COLOR)) {
+            cube.rotateDownFaceClockwise();
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(backFace);
+        }
+        else {
+            cube.rotateDownFaceCounterclockwise();
+            moveWhiteEdgeSquareFromBottomLayerToUpFace(frontFace);
+        }
+    }
+
+    private void moveWhiteEdgeSquareFromBottomLayerToUpFace(Face originalFace) {
+        cube.rotateDownFaceCounterclockwise();
+
+        if (originalFace.equals(leftFace)) {
+            cube.rotateBackFaceCounterclockwise();
+            cube.rotateLeftFaceClockwise();
+            cube.rotateBackFaceClockwise();
+        } else if (originalFace.equals(frontFace)) {
+            cube.rotateLeftFaceCounterclockwise();
+            cube.rotateFrontFaceClockwise();
+            cube.rotateLeftFaceClockwise();
+        } else if (originalFace.equals(rightFace)) {
+            cube.rotateFrontFaceCounterclockwise();
+            cube.rotateRightFaceClockwise();
+            cube.rotateFrontFaceClockwise();
+        } else if (originalFace.equals(backFace)) {
+            cube.rotateRightFaceCounterclockwise();
+            cube.rotateBackFaceClockwise();
+            cube.rotateRightFaceClockwise();
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Move white edge squares from middle layer">
+    private void moveWhiteEdgeSquaresFromMiddleLayerToUpFace() {
+        boolean leftSquarePositioned = isOriginalColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN]);
+        boolean rightSquarePositioned = isOriginalColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN]);
+        boolean topSquarePositioned = isOriginalColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN]);
+        boolean bottomSquarePositioned = isOriginalColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
+
+        if (squareIsColor(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromFrontFaceMiddleRowLeftColumnToUpFace(leftSquarePositioned);
+        }
+        if (squareIsColor(frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromFrontFaceMiddleRowRightColumnToUpFace(rightSquarePositioned);
+        }
+        if (squareIsColor(leftFace.squares[MIDDLE_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromLeftFaceMiddleRowLeftColumnToUpFace(topSquarePositioned);
+        }
+        if (squareIsColor(leftFace.squares[MIDDLE_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromLeftFaceMiddleRowRightColumnToUpFace(bottomSquarePositioned);
+        }
+        if (squareIsColor(rightFace.squares[MIDDLE_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromRightFaceMiddleRowLeftColumnToUpFace(bottomSquarePositioned);
+        }
+        if (squareIsColor(rightFace.squares[MIDDLE_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromRightFaceMiddleRowRightColumnToUpFace(topSquarePositioned);
+        }
+        if (squareIsColor(backFace.squares[MIDDLE_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromBackFaceMiddleRowLeftColumnToUpFace(rightSquarePositioned);
+        }
+        if (squareIsColor(backFace.squares[MIDDLE_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
+            moveWhiteSquareFromBackFaceMiddleRowRightColumnToUpFace(leftSquarePositioned);
         }
     }
 
@@ -485,237 +477,293 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         }
         moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace();
     }
+    //</editor-fold>
 
-    private void moveWhiteSquareFromFrontFaceBottomRowMiddleColumnToUpFace() {
-        Color adjacentColor = edgesMap.get(frontFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
-
-        if (adjacentColor.equals(LEFT_FACE_COLOR)) {
-            cube.rotateDownFaceCounterclockwise();
+    //<editor-fold desc="Move white edge squares from top layer">
+    private void moveWhiteEdgeSquaresFromTopLayerToUpFace() {
+        if (squareIsColor(leftFace.squares[TOP_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
+            cube.doubleRotateLeftFace();
             moveWhiteEdgeSquareFromBottomLayerToUpFace(leftFace);
         }
-        else if (adjacentColor.equals(RIGHT_FACE_COLOR)) {
-            cube.rotateDownFaceClockwise();
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(rightFace);
-        }
-        else if (adjacentColor.equals(BACK_FACE_COLOR)) {
-            cube.doubleRotateDownFace();
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(backFace);
-        }
-        else {
+        if (squareIsColor(frontFace.squares[TOP_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
+            cube.doubleRotateFrontFace();
             moveWhiteEdgeSquareFromBottomLayerToUpFace(frontFace);
         }
-    }
-
-    private void moveWhiteSquareFromLeftFaceBottomRowMiddleColumnToUpFace() {
-        Color adjacentColor = edgesMap.get(leftFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
-
-        if (adjacentColor.equals(LEFT_FACE_COLOR)) {
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(leftFace);
-        }
-        else if (adjacentColor.equals(RIGHT_FACE_COLOR)) {
-            cube.doubleRotateDownFace();
+        if (squareIsColor(rightFace.squares[TOP_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
+            cube.doubleRotateRightFace();
             moveWhiteEdgeSquareFromBottomLayerToUpFace(rightFace);
         }
-        else if (adjacentColor.equals(BACK_FACE_COLOR)) {
-            cube.rotateDownFaceCounterclockwise();
+        if (squareIsColor(backFace.squares[TOP_ROW][MIDDLE_COLUMN], UP_FACE_COLOR)) {
+            cube.doubleRotateBackFace();
             moveWhiteEdgeSquareFromBottomLayerToUpFace(backFace);
         }
-        else {
-            cube.rotateDownFaceClockwise();
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(frontFace);
-        }
     }
+    //</editor-fold>
+    //</editor-fold>
 
-    private void moveWhiteSquareFromBackFaceBottomRowMiddleColumnToUpFace() {
-        Color adjacentColor = edgesMap.get(backFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
-
-        if (adjacentColor.equals(LEFT_FACE_COLOR)) {
-            cube.rotateDownFaceClockwise();
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(leftFace);
+    //<editor-fold desc="Put white corners in place">
+    private void putWhiteCornersInPlace() {
+        while(!whiteCornersAreOriented()) {
+            moveWhiteCornersInWrongPosition();
+            moveWhiteCornersFromDownFace();
         }
-        else if (adjacentColor.equals(RIGHT_FACE_COLOR)) {
-            cube.rotateDownFaceCounterclockwise();
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(rightFace);
-        }
-        else if (adjacentColor.equals(BACK_FACE_COLOR)) {
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(backFace);
-        }
-        else {
-            cube.doubleRotateDownFace();
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(frontFace);
-        }
-    }
-
-    private void moveWhiteSquareFromRightFaceBottomRowMiddleColumnToUpFace() {
-        Color adjacentColor = edgesMap.get(rightFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
-
-        if (adjacentColor.equals(LEFT_FACE_COLOR)) {
-            cube.doubleRotateDownFace();
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(leftFace);
-        }
-        else if (adjacentColor.equals(RIGHT_FACE_COLOR)) {
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(rightFace);
-        }
-        else if (adjacentColor.equals(BACK_FACE_COLOR)) {
-            cube.rotateDownFaceClockwise();
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(backFace);
-        }
-        else {
-            cube.rotateDownFaceCounterclockwise();
-            moveWhiteEdgeSquareFromBottomLayerToUpFace(frontFace);
-        }
-    }
-
-    private void moveWhiteEdgeSquareFromBottomLayerToUpFace(Face originalFace) {
-        cube.rotateDownFaceCounterclockwise();
-
-        if (originalFace.equals(leftFace)) {
-            cube.rotateBackFaceCounterclockwise();
-            cube.rotateLeftFaceClockwise();
-            cube.rotateBackFaceClockwise();
-        } else if (originalFace.equals(frontFace)) {
-            cube.rotateLeftFaceCounterclockwise();
-            cube.rotateFrontFaceClockwise();
-            cube.rotateLeftFaceClockwise();
-        } else if (originalFace.equals(rightFace)) {
-            cube.rotateFrontFaceCounterclockwise();
-            cube.rotateRightFaceClockwise();
-            cube.rotateFrontFaceClockwise();
-        } else if (originalFace.equals(backFace)) {
-            cube.rotateRightFaceCounterclockwise();
-            cube.rotateBackFaceClockwise();
-            cube.rotateRightFaceClockwise();
-        }
-    }
-
-    private void moveWhiteSquareFromDownFaceTopRowMiddleColumnToUpFace() {
-        Color adjacentEdgeColor = edgesMap.get(downFace.squares[TOP_ROW][MIDDLE_COLUMN]).getColor();
-
-        if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
-            cube.rotateDownFaceCounterclockwise();
-            cube.doubleRotateLeftFace();
-        } else if (adjacentEdgeColor.equals(FRONT_FACE_COLOR)) {
-            cube.doubleRotateFrontFace();
-        } else if (adjacentEdgeColor.equals(RIGHT_FACE_COLOR)) {
-            cube.rotateDownFaceClockwise();
-            cube.doubleRotateRightFace();
-        } else if (adjacentEdgeColor.equals(BACK_FACE_COLOR)) {
-            cube.doubleRotateDownFace();
-            cube.doubleRotateBackFace();
-        }
-    }
-
-    private void moveWhiteSquareFromDownFaceMiddleRowLeftColumnToUpFace() {
-        Color adjacentEdgeColor = edgesMap.get(downFace.squares[MIDDLE_ROW][LEFT_COLUMN]).getColor();
-
-        if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
-            cube.doubleRotateLeftFace();
-        } else if (adjacentEdgeColor.equals(FRONT_FACE_COLOR)) {
-            cube.rotateDownFaceClockwise();
-            cube.doubleRotateFrontFace();
-        } else if (adjacentEdgeColor.equals(RIGHT_FACE_COLOR)) {
-            cube.doubleRotateDownFace();
-            cube.doubleRotateRightFace();
-        } else if (adjacentEdgeColor.equals(BACK_FACE_COLOR)) {
-            cube.rotateDownFaceCounterclockwise();
-            cube.doubleRotateBackFace();
-        }
-    }
-
-    private void moveWhiteSquareFromDownFaceMiddleRowRightColumnToUpFace() {
-        Color adjacentEdgeColor = edgesMap.get(downFace.squares[MIDDLE_ROW][RIGHT_COLUMN]).getColor();
-
-        if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
-            cube.doubleRotateDownFace();
-            cube.doubleRotateLeftFace();
-        } else if (adjacentEdgeColor.equals(FRONT_FACE_COLOR)) {
-            cube.rotateDownFaceCounterclockwise();
-            cube.doubleRotateFrontFace();
-        } else if (adjacentEdgeColor.equals(RIGHT_FACE_COLOR)) {
-            cube.doubleRotateRightFace();
-        } else if (adjacentEdgeColor.equals(BACK_FACE_COLOR)) {
-            cube.rotateDownFaceClockwise();
-            cube.doubleRotateBackFace();
-        }
-    }
-
-    private void moveWhiteSquareFromDownFaceBottomRowMiddleColumnToUpFace() {
-        Color adjacentEdgeColor = edgesMap.get(downFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]).getColor();
-
-        if (adjacentEdgeColor.equals(LEFT_FACE_COLOR)) {
-            cube.rotateDownFaceClockwise();
-            cube.doubleRotateLeftFace();
-        } else if (adjacentEdgeColor.equals(FRONT_FACE_COLOR)) {
-            cube.doubleRotateDownFace();
-            cube.doubleRotateFrontFace();
-        } else if (adjacentEdgeColor.equals(RIGHT_FACE_COLOR)) {
-            cube.rotateDownFaceCounterclockwise();
-            cube.doubleRotateRightFace();
-        } else if (adjacentEdgeColor.equals(BACK_FACE_COLOR)) {
-            cube.doubleRotateBackFace();
-        }
-    }
-
-    private boolean whiteEdgesAreOriented() {
-        return upFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && upFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && upFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && leftFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(LEFT_FACE_COLOR)
-                && frontFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(FRONT_FACE_COLOR)
-                && rightFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(RIGHT_FACE_COLOR)
-                && backFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor().equals(BACK_FACE_COLOR);
     }
 
     private boolean whiteCornersAreOriented() {
-        return upFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && leftFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(LEFT_FACE_COLOR)
-                && backFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(BACK_FACE_COLOR)
+        return isOriginalColor(upFace.squares[TOP_ROW][LEFT_COLUMN])
+                && isOriginalColor(leftFace.squares[TOP_ROW][LEFT_COLUMN])
+                && isOriginalColor(backFace.squares[TOP_ROW][RIGHT_COLUMN])
 
-                && upFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && rightFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(RIGHT_FACE_COLOR)
-                && backFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(BACK_FACE_COLOR)
+                && isOriginalColor(upFace.squares[TOP_ROW][RIGHT_COLUMN])
+                && isOriginalColor(rightFace.squares[TOP_ROW][RIGHT_COLUMN])
+                && isOriginalColor(backFace.squares[TOP_ROW][LEFT_COLUMN])
 
-                && upFace.squares[BOTTOM_ROW][LEFT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && frontFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(FRONT_FACE_COLOR)
-                && leftFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(LEFT_FACE_COLOR)
+                && isOriginalColor(upFace.squares[BOTTOM_ROW][LEFT_COLUMN])
+                && isOriginalColor(frontFace.squares[TOP_ROW][LEFT_COLUMN])
+                && isOriginalColor(leftFace.squares[TOP_ROW][RIGHT_COLUMN])
 
-                && upFace.squares[BOTTOM_ROW][RIGHT_COLUMN].getColor().equals(UP_FACE_COLOR)
-                && frontFace.squares[TOP_ROW][RIGHT_COLUMN].getColor().equals(FRONT_FACE_COLOR)
-                && rightFace.squares[TOP_ROW][LEFT_COLUMN].getColor().equals(RIGHT_FACE_COLOR);
+                && isOriginalColor(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN])
+                && isOriginalColor(frontFace.squares[TOP_ROW][RIGHT_COLUMN])
+                && isOriginalColor(rightFace.squares[TOP_ROW][LEFT_COLUMN]);
     }
 
-    private boolean isColorCorner(Square square, Color color) {
+    //<editor-fold desc="Move white corners in wrong position">
+    private void moveWhiteCornersInWrongPosition() {
+        fixUpFaceCorner(upFace.squares[TOP_ROW][LEFT_COLUMN]);
+        fixUpFaceCorner(upFace.squares[TOP_ROW][RIGHT_COLUMN]);
+        fixUpFaceCorner(upFace.squares[BOTTOM_ROW][LEFT_COLUMN]);
+        fixUpFaceCorner(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN]);
+    }
+
+    private void fixUpFaceCorner(Square square) {
         Square[] corner = cornersMap.get(square);
 
-        return square.getColor().equals(color)
-                || corner[0].getColor().equals(color)
-                || corner[1].getColor().equals(color);
+        if (cornerHasColor(square, UP_FACE_COLOR)) {
+            if (cornerInCorrectPosition(square, square.getORIGINAL_COLOR(),
+                    corner[0].getORIGINAL_COLOR(), corner[1].getORIGINAL_COLOR())) {
+                if (!cornerInCorrectOrientation(square)) {
+                    reorientUpFaceCorner(square);
+                }
+            } else {
+                repositionUpFaceCorner(square);
+            }
+        }
     }
 
+    private void reorientUpFaceCorner(Square square) {
+        if (square.equals(upFace.squares[TOP_ROW][LEFT_COLUMN])) {
+            cube.doubleHorizontalCubeTurn();
+            orientUpFaceCorner(BACK_FACE_COLOR, LEFT_FACE_COLOR);
+            cube.doubleHorizontalCubeTurn();
+        } else if (square.equals(upFace.squares[TOP_ROW][RIGHT_COLUMN])) {
+            cube.turnCubeLeft();
+            orientUpFaceCorner(RIGHT_FACE_COLOR, BACK_FACE_COLOR);
+            cube.turnCubeRight();
+        } else if (square.equals(upFace.squares[BOTTOM_ROW][LEFT_COLUMN])) {
+            cube.turnCubeRight();
+            orientUpFaceCorner(LEFT_FACE_COLOR, FRONT_FACE_COLOR);
+            cube.turnCubeLeft();
+        } else if (square.equals(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN])) {
+            orientUpFaceCorner(FRONT_FACE_COLOR, RIGHT_FACE_COLOR);
+        }
+    }
+
+    private void repositionUpFaceCorner(Square square) {
+        if (square.equals(upFace.squares[TOP_ROW][LEFT_COLUMN])) {
+            cube.rotateBackFaceClockwise();
+            cube.rotateDownFaceClockwise();
+            cube.rotateBackFaceCounterclockwise();
+            orientWhiteCornerFromDownFace(TOP_ROW, LEFT_COLUMN);
+        } else if (square.equals(upFace.squares[TOP_ROW][RIGHT_COLUMN])) {
+            cube.rotateBackFaceCounterclockwise();
+            cube.rotateDownFaceCounterclockwise();
+            cube.rotateBackFaceClockwise();
+            orientWhiteCornerFromDownFace(TOP_ROW, RIGHT_COLUMN);
+        } else if (square.equals(upFace.squares[BOTTOM_ROW][LEFT_COLUMN])) {
+            cube.rotateLeftFaceClockwise();
+            cube.rotateDownFaceClockwise();
+            cube.rotateLeftFaceCounterclockwise();
+            orientWhiteCornerFromDownFace(TOP_ROW, RIGHT_COLUMN);
+        } else if (square.equals(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN])) {
+            cube.rotateRightFaceCounterclockwise();
+            cube.rotateDownFaceCounterclockwise();
+            cube.rotateRightFaceClockwise();
+            orientWhiteCornerFromDownFace(TOP_ROW, LEFT_COLUMN);
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Move white corners from down face">
+    private void moveWhiteCornersFromDownFace() {
+        if (cornerHasColor(downFace.squares[TOP_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
+            orientWhiteCornerFromDownFace(TOP_ROW, LEFT_COLUMN);
+        }
+        if (cornerHasColor(downFace.squares[TOP_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
+            orientWhiteCornerFromDownFace(TOP_ROW, RIGHT_COLUMN);
+        }
+        if (cornerHasColor(downFace.squares[BOTTOM_ROW][LEFT_COLUMN], UP_FACE_COLOR)) {
+            orientWhiteCornerFromDownFace(BOTTOM_ROW, LEFT_COLUMN);
+        }
+        if (cornerHasColor(downFace.squares[BOTTOM_ROW][RIGHT_COLUMN], UP_FACE_COLOR)) {
+            orientWhiteCornerFromDownFace(BOTTOM_ROW, RIGHT_COLUMN);
+        }
+    }
+
+    private void orientWhiteCornerFromDownFace(int downFaceRow, int downFaceCol) {
+        Square square = downFace.squares[downFaceRow][downFaceCol];
+
+        if (cornerHasColor(square, FRONT_FACE_COLOR)) {
+            if (cornerHasColor(square, LEFT_FACE_COLOR)) {
+                orientUpFaceBottomLeftCorner(downFaceRow, downFaceCol);
+            } else {
+                orientUpFaceBottomRightCorner(downFaceRow, downFaceCol);
+            }
+        } else if (cornerHasColor(square, BACK_FACE_COLOR)) {
+            if (cornerHasColor(square, LEFT_FACE_COLOR)) {
+                orientUpFaceTopLeftCorner(downFaceRow, downFaceCol);
+            } else {
+                orientUpFaceTopRightCorner(downFaceRow, downFaceCol);
+            }
+        }
+    }
+
+    private void orientUpFaceBottomLeftCorner(int downFaceRow, int downFaceCol) {
+        if (downFaceRow == TOP_ROW) {
+            if (downFaceCol == RIGHT_COLUMN) {
+                cube.rotateDownFaceCounterclockwise();
+            }
+        } else if (downFaceRow == BOTTOM_ROW) {
+            if (downFaceCol == LEFT_COLUMN) {
+                cube.rotateDownFaceClockwise();
+            } else {
+                cube.doubleRotateDownFace();
+            }
+        }
+
+        cube.turnCubeRight();
+        orientUpFaceCorner(LEFT_FACE_COLOR, FRONT_FACE_COLOR);
+        cube.turnCubeLeft();
+    }
+
+    private void orientUpFaceBottomRightCorner(int downFaceRow, int downFaceCol) {
+        if (downFaceRow == TOP_ROW) {
+            if (downFaceCol == LEFT_COLUMN) {
+                cube.rotateDownFaceClockwise();
+            }
+        } else if (downFaceRow == BOTTOM_ROW) {
+            if (downFaceCol == LEFT_COLUMN) {
+                cube.doubleRotateDownFace();
+            } else {
+                cube.rotateDownFaceCounterclockwise();
+            }
+        }
+
+        orientUpFaceCorner(FRONT_FACE_COLOR, RIGHT_FACE_COLOR);
+    }
+
+    private void orientUpFaceTopLeftCorner(int downFaceRow, int downFaceCol) {
+        if (downFaceRow == TOP_ROW) {
+            if (downFaceCol == LEFT_COLUMN) {
+                cube.rotateDownFaceCounterclockwise();
+            } else {
+                cube.doubleRotateDownFace();
+            }
+        } else if (downFaceRow == BOTTOM_ROW && downFaceCol == RIGHT_COLUMN) {
+            cube.rotateDownFaceClockwise();
+        }
+
+        cube.doubleHorizontalCubeTurn();
+        orientUpFaceCorner(BACK_FACE_COLOR, LEFT_FACE_COLOR);
+        cube.doubleHorizontalCubeTurn();
+    }
+
+    private void orientUpFaceTopRightCorner(int downFaceRow, int downFaceCol) {
+        if (downFaceRow == TOP_ROW) {
+            if (downFaceCol == LEFT_COLUMN) {
+                cube.doubleRotateDownFace();
+            } else {
+                cube.rotateDownFaceClockwise();
+            }
+        } else if (downFaceRow == BOTTOM_ROW && downFaceCol == LEFT_COLUMN) {
+            cube.rotateDownFaceCounterclockwise();
+        }
+
+        cube.turnCubeLeft();
+        orientUpFaceCorner(RIGHT_FACE_COLOR, BACK_FACE_COLOR);
+        cube.turnCubeRight();
+    }
+
+    private void orientUpFaceCorner(Color frontFaceColor, Color rightFaceColor) {
+        while(!upFaceBottomRightCornerIsOriented(frontFaceColor, rightFaceColor)) {
+            cube.rotateRightFaceCounterclockwise();
+            cube.rotateDownFaceCounterclockwise();
+            cube.rotateRightFaceClockwise();
+            cube.rotateDownFaceClockwise();
+        }
+    }
+
+    private boolean upFaceBottomRightCornerIsOriented(Color frontFaceColor, Color rightFaceColor) {
+        return isOriginalColor(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN])
+                && squareIsColor(frontFace.squares[TOP_ROW][RIGHT_COLUMN], frontFaceColor)
+                && squareIsColor(rightFace.squares[TOP_ROW][LEFT_COLUMN], rightFaceColor);
+    }
+    //</editor-fold>
+    //</editor-fold>
+    //</editor-fold>
+
+    //<editor-fold desc="Solve middle layer">
+    private void solveMiddleLayer() {
+
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Corner booleans">
     private boolean cornerInCorrectPosition(Square square, Color color1, Color color2, Color color3) {
         boolean foundColor1 = false;
         boolean foundColor2 = false;
         boolean foundColor3 = false;
 
-        if (isColorCorner(square, color1)) {
+        if (cornerHasColor(square, color1)) {
             foundColor1 = true;
         }
-        if (isColorCorner(square, color2)) {
+        if (cornerHasColor(square, color2)) {
             foundColor1 = true;
         }
-        if (isColorCorner(square, color3)) {
+        if (cornerHasColor(square, color3)) {
             foundColor3 = true;
         }
 
         return foundColor1 && foundColor2 && foundColor3;
     }
 
+    private boolean cornerHasColor(Square square, Color color) {
+        Square[] corner = cornersMap.get(square);
+
+        return squareIsColor(square, color)
+                || squareIsColor(corner[0], color)
+                || squareIsColor(corner[1], color);
+    }
+
     private boolean cornerInCorrectOrientation(Square square) {
         Square[] corner = cornersMap.get(square);
 
-        return square.getColor().equals(square.getORIGINAL_COLOR())
-                && corner[0].getColor().equals(corner[0].getORIGINAL_COLOR())
-                && corner[1].getColor().equals(corner[1].getORIGINAL_COLOR());
+        return isOriginalColor(square)
+                && isOriginalColor(corner[0])
+                && isOriginalColor(corner[1]);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Square booleans">
+    private boolean isOriginalColor(Square square) {
+        return squareIsColor(square, square.getORIGINAL_COLOR());
+    }
+
+    private boolean squareIsColor(Square square, Color color) {
+        return square.getColor().equals(color);
+    }
+    //</editor-fold>
+
+    private Color getAdjacentEdgeColor(Square square) {
+        return edgesMap.get(square).getColor();
     }
 }
