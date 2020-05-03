@@ -7,6 +7,7 @@ import io.reactivex.disposables.Disposable;
 
 public class Solver extends Stack<Move> implements Observer<Move> {
 
+    //<editor-fold desc="Attributes">
     private Cube cube;
     private Face upFace;
     private Face leftFace;
@@ -31,7 +32,9 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     private final Color FRONT_FACE_COLOR = CubeColors.FRONT_FACE_COLOR.getColor();
     private final Color BACK_FACE_COLOR = CubeColors.BACK_FACE_COLOR.getColor();
     private final Color DOWN_FACE_COLOR = CubeColors.DOWN_FACE_COLOR.getColor();
+    //</editor-fold>
 
+    //<editor-fold desc="Constructor">
     public Solver(Cube cube) {
         this.cube = cube;
         upFace = cube.getUpFace();
@@ -47,7 +50,9 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         userMoveStack = new Stack<>();
         Move.setCounterMoves();
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Observer methods">
     @Override
     public void onSubscribe(Disposable disposable) {
 
@@ -91,7 +96,9 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     public void onComplete() {
 
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Solve">
     public void solve() {
         solveTopLayer();
         solveMiddleLayer();
@@ -702,6 +709,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 
     }
     //</editor-fold>
+    //</editor-fold>
 
     //<editor-fold desc="Corner booleans">
     private boolean cornerInCorrectPosition(Square square, Color color1, Color color2, Color color3) {
@@ -739,7 +747,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Square booleans">
+    //<editor-fold desc="Square characteristics">
     private boolean isOriginalColor(Square square) {
         return squareIsColor(square, square.getORIGINAL_COLOR());
     }
@@ -747,9 +755,9 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     private boolean squareIsColor(Square square, Color color) {
         return square.getColor().equals(color);
     }
-    //</editor-fold>
 
     private Color getAdjacentEdgeColor(Square square) {
         return edgesMap.get(square).getColor();
     }
+    //</editor-fold>
 }
