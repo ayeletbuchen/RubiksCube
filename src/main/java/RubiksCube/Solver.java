@@ -743,29 +743,23 @@ public class Solver extends Stack<Move> implements Observer<Move> {
                     cube.rotateUpFaceClockwise();
                     cube.turnCubeRight();
                     if (edgeIsColor(square, FRONT_FACE_COLOR)) {
-                        System.out.println("square is left color, edge is front color");
                         middleLayerLeftAlgorithm();
                     } else if (edgeIsColor(square, BACK_FACE_COLOR)) {
-                        System.out.println("square is left color, edge is back color");
                         middleLayerRightAlgorithm();
                     }
                     cube.turnCubeLeft();
                 } else if (squareIsColor(square, BACK_FACE_COLOR)) {
                     if (edgeIsColor(square, LEFT_FACE_COLOR)) {
-                        System.out.println("square is back color, edge is left color");
                         middleLayerLeftAlgorithm();
                     } else if (edgeIsColor(square, RIGHT_FACE_COLOR)) {
-                        System.out.println("square is back color, edge is right color");
                         middleLayerRightAlgorithm();
                     }
                 } else if (squareIsColor(square, RIGHT_FACE_COLOR)) {
                     cube.rotateUpFaceCounterclockwise();
                     cube.turnCubeLeft();
                     if (edgeIsColor(square, BACK_FACE_COLOR)) {
-                        System.out.println("square is right color, edge is back color");
                         middleLayerLeftAlgorithm();
                     } else if (edgeIsColor(square, FRONT_FACE_COLOR)) {
-                        System.out.println("square is right color, edge is front color");
                         middleLayerRightAlgorithm();
                     }
                     cube.turnCubeRight();
@@ -773,10 +767,8 @@ public class Solver extends Stack<Move> implements Observer<Move> {
                     cube.doubleRotateUpFace();
                     cube.doubleHorizontalCubeTurn();
                     if (edgeIsColor(square, RIGHT_FACE_COLOR)) {
-                        System.out.println("square is front color, edge is right color");
                         middleLayerLeftAlgorithm();
                     } else if (edgeIsColor(square, LEFT_FACE_COLOR)) {
-                        System.out.println("square is front color, edge is left color");
                         middleLayerRightAlgorithm();
                     }
                     cube.doubleHorizontalCubeTurn();
@@ -789,24 +781,10 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private boolean middleLayerSquaresOnTopLayer() {
-        if (!edgesHaveColor(frontFace.squares[TOP_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)) {
-            System.out.println("true a");
-            return true;
-        }
-        if (!edgesHaveColor(leftFace.squares[TOP_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)) {
-            System.out.println("true b");
-            return true;
-        }
-        if (!edgesHaveColor(rightFace.squares[TOP_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)) {
-            System.out.println("true c");
-            return true;
-        }
-        if (!edgesHaveColor(backFace.squares[TOP_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)) {
-            System.out.println("true d");
-            return true;
-        }
-        System.out.println("no it's false!");
-        return false;
+        return !edgesHaveColor(frontFace.squares[TOP_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)
+                || !edgesHaveColor(leftFace.squares[TOP_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)
+                || !edgesHaveColor(rightFace.squares[TOP_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)
+                || !edgesHaveColor(backFace.squares[TOP_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR);
     }
 
     private void moveMiddleLayerSquaresInWrongPosition() {
