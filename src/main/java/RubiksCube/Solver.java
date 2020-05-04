@@ -709,6 +709,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         orientMiddleLayerCenterSquares();
         cube.doubleVerticalCubeTurn();
         moveSquaresFromTopLayerToMiddleLayer();
+        moveMiddleLayerSquaresInWrongPosition();
     }
 
     //<editor-fold desc="Orient middle layer center squares">
@@ -726,12 +727,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //</editor-fold>
 
     private void moveSquaresFromTopLayerToMiddleLayer() {
-        // while (!middleLayerOriented()) {
             orientSquareFromTopToMiddleLayer();
-            // moveMiddleLayerSquaresInWrongPosition();
-//            }
-            // cube.turnCubeLeft();
-        // }
     }
 
     private void orientSquareFromTopToMiddleLayer() {
@@ -788,16 +784,66 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void moveMiddleLayerSquaresInWrongPosition() {
-        if (middleLayerSquareInWrongPosition(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN])) {
-            System.out.println("left in wrong position");
-            middleLayerLeftAlgorithm();
-            // return true;
-        } else if (middleLayerSquareInWrongPosition(frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN])) {
-            System.out.println("right in wrong position");
-            middleLayerRightAlgorithm();
-            // return true;
+        while (!middleLayerIsOriented()) {
+            if (!squareIsColor(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN], BACK_FACE_COLOR)
+                    || !edgeIsOriginalColor(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN])) {
+                middleLayerLeftAlgorithm();
+                orientSquareFromTopToMiddleLayer();
+            }
+            if (!squareIsColor(frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN], BACK_FACE_COLOR)
+                    || !edgeIsOriginalColor(frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN])) {
+                middleLayerRightAlgorithm();
+                orientSquareFromTopToMiddleLayer();
+            }
+            if (!isOriginalColor(leftFace.squares[MIDDLE_ROW][LEFT_COLUMN])
+                    || !edgeIsColor(leftFace.squares[MIDDLE_ROW][LEFT_COLUMN], FRONT_FACE_COLOR)) {
+                cube.turnCubeRight();
+                middleLayerLeftAlgorithm();
+                cube.turnCubeLeft();
+                cube.rotateUpFaceCounterclockwise();
+                orientSquareFromTopToMiddleLayer();
+            }
+            if (!isOriginalColor(leftFace.squares[MIDDLE_ROW][RIGHT_COLUMN])
+                    || !edgeIsColor(leftFace.squares[MIDDLE_ROW][RIGHT_COLUMN], BACK_FACE_COLOR)) {
+                cube.turnCubeRight();
+                middleLayerRightAlgorithm();
+                cube.turnCubeLeft();
+                cube.rotateUpFaceCounterclockwise();
+                orientSquareFromTopToMiddleLayer();
+            }
+            if (!isOriginalColor(rightFace.squares[MIDDLE_ROW][LEFT_COLUMN])
+                    || !edgeIsColor(rightFace.squares[MIDDLE_ROW][LEFT_COLUMN], BACK_FACE_COLOR)) {
+                cube.turnCubeLeft();
+                middleLayerLeftAlgorithm();
+                cube.turnCubeRight();
+                cube.rotateUpFaceClockwise();
+                orientSquareFromTopToMiddleLayer();
+            }
+            if (!isOriginalColor(rightFace.squares[MIDDLE_ROW][RIGHT_COLUMN])
+                    || !edgeIsColor(rightFace.squares[MIDDLE_ROW][RIGHT_COLUMN], FRONT_FACE_COLOR)) {
+                cube.turnCubeLeft();
+                middleLayerRightAlgorithm();
+                cube.turnCubeRight();
+                cube.rotateUpFaceClockwise();
+                orientSquareFromTopToMiddleLayer();
+            }
+            if (!squareIsColor(backFace.squares[MIDDLE_ROW][LEFT_COLUMN], FRONT_FACE_COLOR)
+                    || !edgeIsOriginalColor(backFace.squares[MIDDLE_ROW][LEFT_COLUMN])) {
+                cube.doubleHorizontalCubeTurn();
+                middleLayerLeftAlgorithm();
+                cube.doubleHorizontalCubeTurn();
+                cube.doubleRotateUpFace();
+                orientSquareFromTopToMiddleLayer();
+            }
+            if (!squareIsColor(backFace.squares[MIDDLE_ROW][RIGHT_COLUMN], FRONT_FACE_COLOR)
+                    || !edgeIsOriginalColor(backFace.squares[MIDDLE_ROW][RIGHT_COLUMN])) {
+                cube.doubleHorizontalCubeTurn();
+                middleLayerRightAlgorithm();
+                cube.doubleHorizontalCubeTurn();
+                cube.doubleRotateUpFace();
+                orientSquareFromTopToMiddleLayer();
+            }
         }
-        // return false;
     }
 
     private void  middleLayerRightAlgorithm() {
@@ -822,8 +868,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         cube.rotateFrontFaceCounterclockwise();
     }
 
-    private boolean middleLayerOriented() {
-        System.out.println("entered middleLayerOriented()");
+    private boolean middleLayerIsOriented() {
         return (squareIsColor(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN], BACK_FACE_COLOR)
                 && squareIsColor(frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN], BACK_FACE_COLOR)
 
@@ -836,10 +881,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
                 && squareIsColor(backFace.squares[MIDDLE_ROW][LEFT_COLUMN], FRONT_FACE_COLOR)
                 && squareIsColor(backFace.squares[MIDDLE_ROW][RIGHT_COLUMN], FRONT_FACE_COLOR)
         );
-    }
-
-    private boolean middleLayerSquareInWrongPosition(Square square) {
-        return !edgesHaveColor(square, DOWN_FACE_COLOR) && !edgesAreOriginalColors(square);
     }
     //</editor-fold>
     //</editor-fold>
@@ -895,6 +936,10 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 
     private boolean edgeIsColor(Square square, Color color) {
         return getAdjacentEdgeColor(square).equals(color);
+    }
+
+    private boolean edgeIsOriginalColor(Square square) {
+        return getAdjacentEdgeColor(square).equals(edgesMap.get(square).getORIGINAL_COLOR());
     }
 
     private Color getAdjacentEdgeColor(Square square) {
