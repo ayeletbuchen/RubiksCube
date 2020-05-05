@@ -133,7 +133,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //<editor-fold defaultstate="collapsed" desc="Create white cross">
     private void createWhiteCross() {
         while (!whiteEdgesAreOriented()) {
-            System.out.println("create white cross");
             orientUpFaceWhiteEdges();
             moveWhiteEdgeSquaresFromDownFaceToUpFace();
             moveAllWhiteEdgeSquaresFromBottomLayerToUpFace();
@@ -510,7 +509,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //<editor-fold defaultstate="collapsed" desc="Put white corners in place">
     private void putWhiteCornersInPlace() {
         while(!whiteCornersAreOriented()) {
-            System.out.println("put white corners in place");
             moveWhiteCornersInWrongPosition();
             moveWhiteCornersFromDownFace();
         }
@@ -688,7 +686,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 
     private void orientUpFaceCorner(Color frontFaceColor, Color rightFaceColor) {
         while(!upFaceBottomRightCornerIsOriented(frontFaceColor, rightFaceColor)) {
-            System.out.println("orient up face corner");
             cube.rotateRightFaceCounterclockwise();
             cube.rotateDownFaceCounterclockwise();
             cube.rotateRightFaceClockwise();
@@ -732,7 +729,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         Square square = frontFace.squares[TOP_ROW][MIDDLE_COLUMN];
 
         while (middleLayerSquaresOnTopLayer()) {
-            System.out.println("move squares from top layer to middle layer");
             if (!edgesHaveColor(square, DOWN_FACE_COLOR)) {
                 if (squareIsColor(square, LEFT_FACE_COLOR)) {
                     cube.rotateUpFaceClockwise();
@@ -786,7 +782,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //<editor-fold defaultstate="collapsed" desc="Move middle layer squares in wrong position">
     private void moveMiddleLayerSquaresInWrongPosition() {
         while (!middleLayerIsOriented()) {
-            System.out.println("move middle layer squares in wrong position");
             if (!squareIsColor(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN], BACK_FACE_COLOR)
                     || !edgeIsOriginalColor(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN])) {
                 middleLayerLeftAlgorithm();
@@ -905,18 +900,13 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 
     private void orientBottomSquaresOnUpFace() {
         if (squareIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)) {
-            System.out.println("up[top][middle]");
             if (!squareIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], DOWN_FACE_COLOR)) {
-                System.out.println("not already in valid l shape");
                 cube.rotateUpFaceCounterclockwise();
             }
         } else if (squareIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)) {
-            System.out.println("up[bottom][middle]");
             if (squareIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], DOWN_FACE_COLOR)) {
-                System.out.println("up[middle][left]");
                 cube.rotateUpFaceClockwise();
             } else {
-                System.out.println("up[middle][right]");
                 cube.doubleRotateUpFace();
             }
         } else {
@@ -926,19 +916,12 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void bottomCrossAlgorithm() {
-        System.out.println(upFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor());
-        System.out.println(upFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor());
-        System.out.println(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
-        System.out.println(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
-        // while (!crossExists(DOWN_FACE_COLOR)) {
-            System.out.println("bottom cross algorithm");
-            cube.rotateFrontFaceClockwise();
-            cube.rotateUpFaceClockwise();
-            cube.rotateRightFaceClockwise();
-            cube.rotateUpFaceCounterclockwise();
-            cube.rotateRightFaceCounterclockwise();
-            cube.rotateFrontFaceCounterclockwise();
-        // }
+        cube.rotateFrontFaceClockwise();
+        cube.rotateUpFaceClockwise();
+        cube.rotateRightFaceClockwise();
+        cube.rotateUpFaceCounterclockwise();
+        cube.rotateRightFaceCounterclockwise();
+        cube.rotateFrontFaceCounterclockwise();
     }
     //</editor-fold>
     //</editor-fold>
