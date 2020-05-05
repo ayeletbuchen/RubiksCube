@@ -102,6 +102,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     public void solve() {
         solveTopLayer();
         solveMiddleLayer();
+        solveBottomLayer();
     }
 
     //<editor-fold defaultstate-"collapsed" desc="Solve top layer">
@@ -132,6 +133,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //<editor-fold defaultstate="collapsed" desc="Create white cross">
     private void createWhiteCross() {
         while (!whiteEdgesAreOriented()) {
+            System.out.println("create white cross");
             orientUpFaceWhiteEdges();
             moveWhiteEdgeSquaresFromDownFaceToUpFace();
             moveAllWhiteEdgeSquaresFromBottomLayerToUpFace();
@@ -141,10 +143,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private boolean whiteEdgesAreOriented() {
-        return isOriginalColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN])
-                && isOriginalColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN])
-                && isOriginalColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN])
-                && isOriginalColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN])
+        return crossExists(UP_FACE_COLOR)
                 && isOriginalColor(leftFace.squares[TOP_ROW][MIDDLE_COLUMN])
                 && isOriginalColor(frontFace.squares[TOP_ROW][MIDDLE_COLUMN])
                 && isOriginalColor(rightFace.squares[TOP_ROW][MIDDLE_COLUMN])
@@ -511,6 +510,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //<editor-fold defaultstate="collapsed" desc="Put white corners in place">
     private void putWhiteCornersInPlace() {
         while(!whiteCornersAreOriented()) {
+            System.out.println("put white corners in place");
             moveWhiteCornersInWrongPosition();
             moveWhiteCornersFromDownFace();
         }
@@ -688,6 +688,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 
     private void orientUpFaceCorner(Color frontFaceColor, Color rightFaceColor) {
         while(!upFaceBottomRightCornerIsOriented(frontFaceColor, rightFaceColor)) {
+            System.out.println("orient up face corner");
             cube.rotateRightFaceCounterclockwise();
             cube.rotateDownFaceCounterclockwise();
             cube.rotateRightFaceClockwise();
@@ -731,6 +732,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         Square square = frontFace.squares[TOP_ROW][MIDDLE_COLUMN];
 
         while (middleLayerSquaresOnTopLayer()) {
+            System.out.println("move squares from top layer to middle layer");
             if (!edgesHaveColor(square, DOWN_FACE_COLOR)) {
                 if (squareIsColor(square, LEFT_FACE_COLOR)) {
                     cube.rotateUpFaceClockwise();
@@ -784,6 +786,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //<editor-fold defaultstate="collapsed" desc="Move middle layer squares in wrong position">
     private void moveMiddleLayerSquaresInWrongPosition() {
         while (!middleLayerIsOriented()) {
+            System.out.println("move middle layer squares in wrong position");
             if (!squareIsColor(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN], BACK_FACE_COLOR)
                     || !edgeIsOriginalColor(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN])) {
                 middleLayerLeftAlgorithm();
@@ -885,6 +888,59 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
     //</editor-fold>
     //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Solve bottom layer">
+    private void solveBottomLayer() {
+        createBottomCross();
+    }
+
+    private void createBottomCross() {
+        if (!crossExists(DOWN_FACE_COLOR)) {
+            orientBottomSquaresOnUpFace();
+            while (!crossExists(DOWN_FACE_COLOR)) {
+                bottomCrossAlgorithm();
+            }
+        }
+    }
+
+    private void orientBottomSquaresOnUpFace() {
+        if (squareIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)) {
+            System.out.println("up[top][middle]");
+            if (!squareIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], DOWN_FACE_COLOR)) {
+                System.out.println("not already in valid l shape");
+                cube.rotateUpFaceCounterclockwise();
+            }
+        } else if (squareIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], DOWN_FACE_COLOR)) {
+            System.out.println("up[bottom][middle]");
+            if (squareIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], DOWN_FACE_COLOR)) {
+                System.out.println("up[middle][left]");
+                cube.rotateUpFaceClockwise();
+            } else {
+                System.out.println("up[middle][right]");
+                cube.doubleRotateUpFace();
+            }
+        } else {
+            bottomCrossAlgorithm();
+            orientBottomSquaresOnUpFace();
+        }
+    }
+
+    private void bottomCrossAlgorithm() {
+        System.out.println(upFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor());
+        System.out.println(upFace.squares[MIDDLE_ROW][LEFT_COLUMN].getColor());
+        System.out.println(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN].getColor());
+        System.out.println(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN].getColor());
+        // while (!crossExists(DOWN_FACE_COLOR)) {
+            System.out.println("bottom cross algorithm");
+            cube.rotateFrontFaceClockwise();
+            cube.rotateUpFaceClockwise();
+            cube.rotateRightFaceClockwise();
+            cube.rotateUpFaceCounterclockwise();
+            cube.rotateRightFaceCounterclockwise();
+            cube.rotateFrontFaceCounterclockwise();
+        // }
+    }
+    //</editor-fold>
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Corner booleans">
@@ -952,4 +1008,11 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         return isOriginalColor(square) && isOriginalColor(edgesMap.get(square));
     }
     //</editor-fold>
+
+    private boolean crossExists(Color color) {
+        return squareIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], color)
+                && squareIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], color)
+                && squareIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], color)
+                && squareIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], color);
+    }
 }
