@@ -889,6 +889,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         createBottomCross();
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Create bottom cross">
     private void createBottomCross() {
         if (!crossExists(DOWN_FACE_COLOR)) {
             orientBottomSquaresOnUpFace();
@@ -925,7 +926,9 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
     //</editor-fold>
     //</editor-fold>
+    //</editor-fold>
 
+    //<editor-fold desc="Methods used throughout class">
     //<editor-fold defaultstate="collapsed" desc="Corner booleans">
     private boolean cornerInCorrectPosition(Square square, Color color1, Color color2, Color color3) {
         boolean foundColor1 = false;
@@ -998,4 +1001,5 @@ public class Solver extends Stack<Move> implements Observer<Move> {
                 && squareIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], color)
                 && squareIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], color);
     }
+    //</editor-fold>
 }
