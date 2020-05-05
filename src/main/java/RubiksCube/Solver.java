@@ -887,6 +887,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //<editor-fold defaultstate="collapsed" desc="Solve bottom layer">
     private void solveBottomLayer() {
         createBottomCross();
+        orientBottomCross();
     }
 
     //<editor-fold defaultstate="collapsed" desc="Create bottom cross">
@@ -923,6 +924,114 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         cube.rotateUpFaceCounterclockwise();
         cube.rotateRightFaceCounterclockwise();
         cube.rotateFrontFaceCounterclockwise();
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Orient bottom cross">
+    private void orientBottomCross() {
+        while (!bottomCrossExists()) {
+            System.out.println("orient bottom cross");
+            fixBottomCrossOrientation();
+            if (!bottomCrossExists()) {
+                cube.rotateUpFaceClockwise();
+                Color leftColor = leftFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor();
+                swapUpFaceOppositeEdges(leftColor);
+                swapUpFaceAdjacentEdges(leftColor);
+            }
+        }
+    }
+
+    private boolean bottomCrossExists() {
+        return crossExists(DOWN_FACE_COLOR)
+                && edgeIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], FRONT_FACE_COLOR)
+                && edgeIsOriginalColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN])
+                && edgeIsOriginalColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN])
+                && edgeIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], BACK_FACE_COLOR);
+    }
+
+    private void fixBottomCrossOrientation() {
+        System.out.println("fix bottom cross orientation");
+        Color frontColor = frontFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor();
+        Color leftColor = leftFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor();
+        Color rightColor = rightFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor();
+
+        if (frontColor.equals(FRONT_FACE_COLOR)
+                && leftColor.equals(RIGHT_FACE_COLOR)
+                && rightColor.equals(LEFT_FACE_COLOR)) {
+            cube.doubleRotateUpFace();
+            // return true;
+        }
+        if (frontColor.equals(LEFT_FACE_COLOR)
+                && leftColor.equals(FRONT_FACE_COLOR)
+                && rightColor.equals(BACK_FACE_COLOR)) {
+            cube.rotateUpFaceClockwise();
+            // return true;
+        }
+        if (frontColor.equals(RIGHT_FACE_COLOR)
+                && leftColor.equals(BACK_FACE_COLOR)
+                && rightColor.equals(FRONT_FACE_COLOR)) {
+            cube.rotateUpFaceCounterclockwise();
+            // return true;
+        }
+        if (frontColor.equals(BACK_FACE_COLOR)
+                && leftColor.equals(LEFT_FACE_COLOR)
+                && rightColor.equals(RIGHT_FACE_COLOR)) {
+            // return true;
+        }
+        // return false;
+    }
+
+    private void swapUpFaceAdjacentEdges(Color leftColor) {
+        System.out.println("swap up face adjacent edges");
+        Color frontColor;
+
+        if (leftColor.equals(LEFT_FACE_COLOR)) {
+            frontColor = FRONT_FACE_COLOR;
+        } else if (leftColor.equals(FRONT_FACE_COLOR)) {
+            frontColor = RIGHT_FACE_COLOR;
+        } else if (leftColor.equals(RIGHT_FACE_COLOR)) {
+            frontColor = BACK_FACE_COLOR;
+        } else {
+            frontColor = LEFT_FACE_COLOR;
+        }
+
+        if (edgeIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], frontColor)
+                && edgeIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], leftColor)) {
+            orientBottomCrossAlgorithm();
+        }
+    }
+
+    private void swapUpFaceOppositeEdges(Color leftColor) {
+        System.out.println("swap up face opposite edges");
+        Color rightColor;
+
+        if (leftColor.equals(LEFT_FACE_COLOR)) {
+            rightColor = RIGHT_FACE_COLOR;
+        } else if (leftColor.equals(FRONT_FACE_COLOR)) {
+            rightColor = BACK_FACE_COLOR;
+        } else if (leftColor.equals(RIGHT_FACE_COLOR)) {
+            rightColor = LEFT_FACE_COLOR;
+        } else {
+            rightColor = FRONT_FACE_COLOR;
+        }
+
+
+        if (edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightColor)
+                && edgeIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], leftColor)) {
+            orientBottomCrossAlgorithm();
+            orientBottomCrossAlgorithm();
+        }
+    }
+
+    private void orientBottomCrossAlgorithm() {
+        cube.rotateRightFaceClockwise();
+        cube.rotateUpFaceClockwise();
+        cube.rotateRightFaceCounterclockwise();
+        cube.rotateUpFaceClockwise();
+        cube.rotateRightFaceClockwise();
+        cube.doubleRotateUpFace();
+        cube.rotateRightFaceCounterclockwise();
+        cube.rotateUpFaceClockwise();
     }
     //</editor-fold>
     //</editor-fold>
