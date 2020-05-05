@@ -930,7 +930,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //<editor-fold defaultstate="collapsed" desc="Orient bottom cross">
     private void orientBottomCross() {
         while (!bottomCrossExists()) {
-            System.out.println("orient bottom cross");
             fixBottomCrossOrientation();
             if (!bottomCrossExists()) {
                 cube.rotateUpFaceClockwise();
@@ -950,7 +949,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void fixBottomCrossOrientation() {
-        System.out.println("fix bottom cross orientation");
         Color frontColor = frontFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor();
         Color leftColor = leftFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor();
         Color rightColor = rightFace.squares[TOP_ROW][MIDDLE_COLUMN].getColor();
@@ -959,30 +957,24 @@ public class Solver extends Stack<Move> implements Observer<Move> {
                 && leftColor.equals(RIGHT_FACE_COLOR)
                 && rightColor.equals(LEFT_FACE_COLOR)) {
             cube.doubleRotateUpFace();
-            // return true;
         }
         if (frontColor.equals(LEFT_FACE_COLOR)
                 && leftColor.equals(FRONT_FACE_COLOR)
                 && rightColor.equals(BACK_FACE_COLOR)) {
             cube.rotateUpFaceClockwise();
-            // return true;
         }
         if (frontColor.equals(RIGHT_FACE_COLOR)
                 && leftColor.equals(BACK_FACE_COLOR)
                 && rightColor.equals(FRONT_FACE_COLOR)) {
             cube.rotateUpFaceCounterclockwise();
-            // return true;
         }
         if (frontColor.equals(BACK_FACE_COLOR)
                 && leftColor.equals(LEFT_FACE_COLOR)
                 && rightColor.equals(RIGHT_FACE_COLOR)) {
-            // return true;
         }
-        // return false;
     }
 
     private void swapUpFaceAdjacentEdges(Color leftColor) {
-        System.out.println("swap up face adjacent edges");
         Color frontColor;
 
         if (leftColor.equals(LEFT_FACE_COLOR)) {
@@ -1002,7 +994,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     }
 
     private void swapUpFaceOppositeEdges(Color leftColor) {
-        System.out.println("swap up face opposite edges");
         Color rightColor;
 
         if (leftColor.equals(LEFT_FACE_COLOR)) {
