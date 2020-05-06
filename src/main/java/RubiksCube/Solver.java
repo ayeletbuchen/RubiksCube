@@ -32,6 +32,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     private final Color FRONT_FACE_COLOR = CubeColors.FRONT_FACE_COLOR.getColor();
     private final Color BACK_FACE_COLOR = CubeColors.BACK_FACE_COLOR.getColor();
     private final Color DOWN_FACE_COLOR = CubeColors.DOWN_FACE_COLOR.getColor();
+    Color upColor, leftColor, frontColor, rightColor, backColor;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructor">
@@ -888,7 +889,13 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     private void solveBottomLayer() {
         createBottomCross();
         orientBottomCross();
-        positionBottomCorners(LEFT_FACE_COLOR, BACK_FACE_COLOR, RIGHT_FACE_COLOR, FRONT_FACE_COLOR);
+        leftColor = LEFT_FACE_COLOR;
+        frontColor = BACK_FACE_COLOR;
+        rightColor = RIGHT_FACE_COLOR;
+        backColor = FRONT_FACE_COLOR;
+        upColor = DOWN_FACE_COLOR;
+        positionBottomCorners();
+        orientBottomCorners();
     }
 
     //<editor-fold defaultstate="collapsed" desc="Create bottom cross">
@@ -1028,7 +1035,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Position bottom corners">
-    private void positionBottomCorners(Color leftColor, Color frontColor, Color rightColor, Color backColor) {
+    private void positionBottomCorners() {
         if (cornerInCorrectPosition(upFace.squares[BOTTOM_ROW][LEFT_COLUMN], leftColor, frontColor)) {
             cube.turnCubeRight();
 
@@ -1048,13 +1055,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
             frontColor = backColor;
             backColor = temp;
         } else if (cornerInCorrectPosition(upFace.squares[TOP_ROW][RIGHT_COLUMN], rightColor, backColor)) {
-            cube.turnCubeLeft();
-
-            Color temp = leftColor;
-            leftColor = frontColor;
-            frontColor = rightColor;
-            rightColor = backColor;
-            backColor = temp;
+            turnCubeLeft();
         }
         if (cornerInCorrectPosition(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN], rightColor, frontColor)) {
             while (!allBottomCornersInCorrectPosition(leftColor, frontColor, rightColor, backColor)) {
@@ -1062,7 +1063,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
             }
         } else {
             positionBottomCornersAlgorithm();
-            positionBottomCorners(leftColor, frontColor, rightColor, backColor);
+            positionBottomCorners();
         }
     }
 
@@ -1096,6 +1097,50 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         cube.rotateRightFaceCounterclockwise();
         cube.rotateUpFaceCounterclockwise();
         cube.rotateLeftFaceClockwise();
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Orient bottom corners">
+    private void orientBottomCorners() {
+        while (!upCornersAreOriented(upColor, leftColor, frontColor, rightColor, backColor)) {
+            Square square = upFace.squares[BOTTOM_ROW][RIGHT_COLUMN];
+            Color frontOrientedColor, rightOrientedColor;
+
+            if (cornerHasColor(square, LEFT_FACE_COLOR)) {
+                if (cornerHasColor(square, BACK_FACE_COLOR)) {
+                    frontOrientedColor = LEFT_FACE_COLOR;
+                    rightOrientedColor = BACK_FACE_COLOR;
+                } else {
+                    frontOrientedColor = FRONT_FACE_COLOR;
+                    rightOrientedColor = LEFT_FACE_COLOR;
+                }
+            } else {
+                if (cornerHasColor(square, BACK_FACE_COLOR)) {
+                    frontOrientedColor = BACK_FACE_COLOR;
+                    rightOrientedColor = RIGHT_FACE_COLOR;
+                } else {
+                    frontOrientedColor = RIGHT_FACE_COLOR;
+                    rightOrientedColor = FRONT_FACE_COLOR;
+                }
+            }
+            while (!cornerIsOriented(frontOrientedColor, rightOrientedColor)) {
+                orientUpFaceCornerAlgorithm();
+            }
+            cube.rotateUpFaceClockwise();
+        }
+    }
+
+    private boolean cornerIsOriented(Color frontColor, Color rightColor) {
+        return squareIsColor(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN], DOWN_FACE_COLOR)
+                && squareIsColor(frontFace.squares[TOP_ROW][RIGHT_COLUMN], frontColor)
+                && squareIsColor(rightFace.squares[TOP_ROW][LEFT_COLUMN], rightColor);
+    }
+
+    private void orientUpFaceCornerAlgorithm() {
+        cube.rotateRightFaceCounterclockwise();
+        cube.rotateDownFaceCounterclockwise();
+        cube.rotateRightFaceClockwise();
+        cube.rotateDownFaceClockwise();
     }
     //</editor-fold>
     //</editor-fold>
@@ -1173,6 +1218,34 @@ public class Solver extends Stack<Move> implements Observer<Move> {
                 && squareIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], color)
                 && squareIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], color)
                 && squareIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], color);
+    }
+
+    private boolean upCornersAreOriented(Color upColor, Color leftColor, Color frontColor, Color rightColor, Color backColor) {
+        return squareIsColor(upFace.squares[TOP_ROW][LEFT_COLUMN], upColor)
+                && squareIsColor(leftFace.squares[TOP_ROW][LEFT_COLUMN], leftColor)
+                && squareIsColor(backFace.squares[TOP_ROW][RIGHT_COLUMN], backColor)
+
+                && squareIsColor(upFace.squares[TOP_ROW][RIGHT_COLUMN], upColor)
+                && squareIsColor(rightFace.squares[TOP_ROW][RIGHT_COLUMN], rightColor)
+                && squareIsColor(backFace.squares[TOP_ROW][LEFT_COLUMN], backColor)
+
+                && squareIsColor(upFace.squares[BOTTOM_ROW][LEFT_COLUMN], upColor)
+                && squareIsColor(leftFace.squares[TOP_ROW][RIGHT_COLUMN], leftColor)
+                && squareIsColor(frontFace.squares[TOP_ROW][LEFT_COLUMN], frontColor)
+
+                && squareIsColor(upFace.squares[BOTTOM_ROW][RIGHT_COLUMN], upColor)
+                && squareIsColor(rightFace.squares[TOP_ROW][LEFT_COLUMN], rightColor)
+                && squareIsColor(frontFace.squares[TOP_ROW][RIGHT_COLUMN], frontColor);
+    }
+
+    private void turnCubeLeft() {
+        cube.turnCubeLeft();
+
+        Color temp = leftColor;
+        leftColor = frontColor;
+        frontColor = rightColor;
+        rightColor = backColor;
+        backColor = temp;
     }
     //</editor-fold>
 }
