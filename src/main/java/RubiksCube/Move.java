@@ -26,8 +26,7 @@ public enum Move {
     X_PRIME("Turn cube downwards", "Turn cube downwards"),
     Z("Turn cube clockwise along Z axis", "Z axis clockwise turn"),
     Z_PRIME("Turn cube counterclockwise along Z axis", "Z axis counterclockwise turn"),
-    SHUFFLE("Shuffle cube", "Shuffle"),
-    RESET("Reset cube", "Reset");
+    SHUFFLE("Shuffle cube", "Shuffle");
 
     private String prompt;
     private String symbol;
@@ -79,7 +78,5 @@ public enum Move {
         Move.X_PRIME.setCounterMove(Move.X);
         Move.Z.setCounterMove(Move.Z_PRIME);
         Move.Z_PRIME.setCounterMove(Move.Z);
-        Move.SHUFFLE.setCounterMove(Move.RESET);
-        Move.RESET.setCounterMove(Move.SHUFFLE);
     }
 }

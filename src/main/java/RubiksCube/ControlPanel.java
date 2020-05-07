@@ -13,9 +13,6 @@ public class ControlPanel extends JPanel {
         this.solver = solver;
         setLayout(new BorderLayout());
         add(new RotationsPanel(cube), BorderLayout.CENTER);
-        // ShuffleBar shuffleBar = new ShuffleBar(cube);
-        // shuffleBar.solveButton.addActionListener(e -> solver.solve());
-        // add(shuffleBar, BorderLayout.SOUTH);
-        add(new ShuffleBar(cube), BorderLayout.SOUTH);
+        add(new ShuffleBar(cube, solver), BorderLayout.SOUTH);
     }
 }

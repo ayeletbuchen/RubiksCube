@@ -12,7 +12,7 @@ public class CubeFrame extends JFrame {
         JPanel root = new JPanel(new BorderLayout());
 
         Cube cube = new Cube();
-        Solver solver = new Solver(cube);
+        Solver solver = new Solver(cube, true);
         cube.subject.subscribe(solver);
         ControlPanel controlPanel = new ControlPanel(cube, solver);
 

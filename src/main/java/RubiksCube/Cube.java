@@ -43,6 +43,83 @@ public class Cube extends JComponent {
         add(downFace);
     }
 
+    public void doMove(Move move) {
+        switch (move) {
+            case U:
+                rotateUpFaceClockwise();
+                break;
+            case L:
+                rotateLeftFaceClockwise();
+                break;
+            case F:
+                rotateFrontFaceClockwise();
+                break;
+            case R:
+                rotateRightFaceClockwise();
+                break;
+            case B:
+                rotateBackFaceClockwise();
+                break;
+            case D:
+                rotateDownFaceClockwise();
+                break;
+            case U_PRIME:
+                rotateUpFaceCounterclockwise();
+                break;
+            case L_PRIME:
+                rotateLeftFaceCounterclockwise();
+                break;
+            case F_PRIME:
+                rotateFrontFaceCounterclockwise();
+                break;
+            case R_PRIME:
+                rotateRightFaceCounterclockwise();
+                break;
+            case B_PRIME:
+                rotateBackFaceCounterclockwise();
+                break;
+            case D_PRIME:
+                rotateDownFaceCounterclockwise();
+                break;
+            case M:
+                sliceMiddleLayerClockwise();
+                break;
+            case E:
+                sliceEquatorialLayerClockwise();
+                break;
+            case S:
+                sliceStandingLayerClockwise();
+                break;
+            case M_PRIME:
+                sliceMiddleLayerCounterclockwise();
+                break;
+            case E_PRIME:
+                sliceEquatorialLayerCounterclockwise();
+                break;
+            case S_PRIME:
+                sliceStandingLayerCounterclockwise();
+                break;
+            case X:
+                turnCubeUp();
+                break;
+            case Y:
+                turnCubeLeft();
+                break;
+            case Z:
+                turnCubeClockwiseAlongZAxis();
+                break;
+            case X_PRIME:
+                turnCubeDown();
+                break;
+            case Y_PRIME:
+                turnCubeRight();
+                break;
+            case Z_PRIME:
+                turnCubeCounterclockwiseAlongZAxis();
+                break;
+        }
+    }
+
     public void rotateUpFaceClockwise() {
         upFace.rotateClockwise();
         rotateHorizontalRingCounterclockwise(CubeValues.TOP_ROW.getValue());
@@ -285,7 +362,9 @@ public class Cube extends JComponent {
     }
 
     public void shuffle() {
-        for (int rotation = 0; rotation < 10; rotation++) {
+        subject.onNext(Move.SHUFFLE);
+        reset();
+        for (int rotation = 0; rotation < CubeValues.NUM_SHUFFLE_STEPS.getValue(); rotation++) {
             int method = random.nextInt(NUM_POSSIBLE_ROTATIONS);
             switch(method) {
                 case 0:
@@ -344,7 +423,6 @@ public class Cube extends JComponent {
                     break;
             }
         }
-        subject.onNext(Move.SHUFFLE);
     }
 
     public void reset() {
@@ -354,7 +432,6 @@ public class Cube extends JComponent {
         rightFace.reset();
         backFace.reset();
         downFace.reset();
-        subject.onNext(Move.RESET);
     }
 
     protected Face getUpFace() {

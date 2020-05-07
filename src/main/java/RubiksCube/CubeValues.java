@@ -7,7 +7,8 @@ public enum CubeValues {
     LEFT_COLUMN(0),
     MIDDLE_COLUMN(1),
     RIGHT_COLUMN(2),
-    DIMENSION(3);
+    DIMENSION(3),
+    NUM_SHUFFLE_STEPS(10);
 
     private int value;
 
