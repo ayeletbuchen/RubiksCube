@@ -3,28 +3,20 @@ package RubiksCube;
 import javax.swing.*;
 import java.awt.*;
 
-public class Face extends JPanel {
+public class Face extends JPanel implements FrameValues, CubeValues {
 
     Square[][] squares;
     private final Color ORIGINAL_COLOR;
-    private final int SIZE = CubeValues.DIMENSION.getValue();
-    private final int LEFT_COLUMN = CubeValues.LEFT_COLUMN.getValue();
-    private final int MIDDLE_COLUMN = CubeValues.MIDDLE_COLUMN.getValue();
-    private final int RIGHT_COLUMN = CubeValues.RIGHT_COLUMN.getValue();
-    private final int TOP_ROW = CubeValues.TOP_ROW.getValue();
-    private final int MIDDLE_ROW = CubeValues.MIDDLE_ROW.getValue();
-    private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
-    private final int MARGIN = FrameValues.FACE_MARGIN;
 
     public Face(Color color) {
         ORIGINAL_COLOR = color;
-        setLayout(new GridLayout(SIZE, SIZE, MARGIN, MARGIN));
+        setLayout(new GridLayout(DIMENSION, DIMENSION, FACE_MARGIN, FACE_MARGIN));
         setSize(FrameValues.FACE_WIDTH, FrameValues.FACE_WIDTH);
         setBackground(Color.BLACK);
 
-        squares = new Square[SIZE][SIZE];
-        for (int row = 0; row < SIZE; row++) {
-            for (int col = 0; col < SIZE; col++) {
+        squares = new Square[DIMENSION][DIMENSION];
+        for (int row = 0; row < DIMENSION; row++) {
+            for (int col = 0; col < DIMENSION; col++) {
                 squares[row][col] = new Square(color);
                 add(squares[row][col]);
             }
@@ -101,34 +93,34 @@ public class Face extends JPanel {
     }
 
     public Square[] getColumn(int column) {
-        Square[] arrColumn = new Square[SIZE];
+        Square[] arrColumn = new Square[DIMENSION];
 
-        for (int row = TOP_ROW; row < SIZE; row++) {
+        for (int row = TOP_ROW; row < DIMENSION; row++) {
             arrColumn[row] = squares[row][column];
         }
         return arrColumn;
     }
 
     public Square[] getRowDeepCopy(int row) {
-        Square[] copy = new Square[SIZE];
+        Square[] copy = new Square[DIMENSION];
 
-        for (int col = 0; col < SIZE; col++) {
+        for (int col = 0; col < DIMENSION; col++) {
             copy[col] = new Square(squares[row][col].getColor());
         }
         return copy;
     }
 
     public Square[] getColumnDeepCopy(int col) {
-        Square[] copy = new Square[SIZE];
+        Square[] copy = new Square[DIMENSION];
 
-        for (int row = 0; row < SIZE; row++) {
+        for (int row = 0; row < DIMENSION; row++) {
             copy[row] = new Square(squares[row][col].getColor());
         }
         return copy;
     }
 
     public Square[][] deepCopy() {
-        Square[][] squareCopies = new Square[SIZE][SIZE];
+        Square[][] squareCopies = new Square[DIMENSION][DIMENSION];
 
         for (int row = 0; row < squares.length; row++) {
             for (int col = 0; col < squares[row].length; col++) {

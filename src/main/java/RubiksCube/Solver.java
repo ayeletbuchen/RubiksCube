@@ -5,7 +5,7 @@ import java.util.Stack;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class Solver extends Stack<Move> implements Observer<Move> {
+public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, CubeColors {
 
     //<editor-fold defaultstate="collapsed" desc="Attributes">
     private Cube cube;
@@ -14,18 +14,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     private Stack<Move> computerMoveStack, solveStack;
     private EdgesMap edgesMap;
     private CornersMap cornersMap;
-    private final int TOP_ROW = CubeValues.TOP_ROW.getValue();
-    private final int MIDDLE_ROW = CubeValues.MIDDLE_ROW.getValue();
-    private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
-    private final int LEFT_COLUMN = CubeValues.LEFT_COLUMN.getValue();
-    private final int MIDDLE_COLUMN = CubeValues.MIDDLE_COLUMN.getValue();
-    private final int RIGHT_COLUMN = CubeValues.RIGHT_COLUMN.getValue();
-    private final Color UP_FACE_COLOR = CubeColors.UP_FACE_COLOR.getColor();
-    private final Color LEFT_FACE_COLOR = CubeColors.LEFT_FACE_COLOR.getColor();
-    private final Color RIGHT_FACE_COLOR = CubeColors.RIGHT_FACE_COLOR.getColor();
-    private final Color FRONT_FACE_COLOR = CubeColors.FRONT_FACE_COLOR.getColor();
-    private final Color BACK_FACE_COLOR = CubeColors.BACK_FACE_COLOR.getColor();
-    private final Color DOWN_FACE_COLOR = CubeColors.DOWN_FACE_COLOR.getColor();
     private Color upColor, leftColor, frontColor, rightColor, backColor;
     private DirectionLabel directionLabel;
     //</editor-fold>

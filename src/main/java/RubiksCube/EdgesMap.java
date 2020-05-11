@@ -2,7 +2,7 @@ package RubiksCube;
 
 import java.util.HashMap;
 
-public class EdgesMap extends HashMap<Square, Square> {
+public class EdgesMap extends HashMap<Square, Square> implements CubeValues {
 
     private Face upFace;
     private Face leftFace;
@@ -10,12 +10,6 @@ public class EdgesMap extends HashMap<Square, Square> {
     private Face frontFace;
     private Face backFace;
     private Face downFace;
-    private final int TOP_ROW = CubeValues.TOP_ROW.getValue();
-    private final int MIDDLE_ROW = CubeValues.MIDDLE_ROW.getValue();
-    private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
-    private final int LEFT_COLUMN = CubeValues.LEFT_COLUMN.getValue();
-    private final int MIDDLE_COLUMN = CubeValues.MIDDLE_COLUMN.getValue();
-    private final int RIGHT_COLUMN = CubeValues.RIGHT_COLUMN.getValue();
 
     public EdgesMap(Face upFace, Face leftFace, Face frontFace, Face rightFace, Face backFace, Face downFace) {
         this.upFace = upFace;

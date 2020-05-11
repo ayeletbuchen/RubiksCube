@@ -2,7 +2,7 @@ package RubiksCube;
 
 import java.util.HashMap;
 
-public class CornersMap extends HashMap<Square, Square[]> {
+public class CornersMap extends HashMap<Square, Square[]> implements CubeValues {
 
     private Face upFace;
     private Face leftFace;
@@ -10,10 +10,6 @@ public class CornersMap extends HashMap<Square, Square[]> {
     private Face rightFace;
     private Face backFace;
     private Face downFace;
-    private final int TOP_ROW = CubeValues.TOP_ROW.getValue();
-    private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
-    private final int LEFT_COLUMN = CubeValues.LEFT_COLUMN.getValue();
-    private final int RIGHT_COLUMN = CubeValues.RIGHT_COLUMN.getValue();
 
     public CornersMap(Face upFace, Face leftFace, Face frontFace, Face rightFace, Face backFace, Face downFace) {
         this.upFace = upFace;

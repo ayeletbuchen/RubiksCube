@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CubeTest {
+public class CubeTest implements CubeValues {
 
     private Cube cube = new Cube();
     private Square[][] upFaceCopy;
@@ -19,12 +19,6 @@ public class CubeTest {
     private Square[][] rightSquares;
     private Square[][] backSquares;
     private Square[][] downSquares;
-    private final int TOP_ROW = CubeValues.TOP_ROW.getValue();
-    private final int MIDDLE_ROW = CubeValues.MIDDLE_ROW.getValue();
-    private final int BOTTOM_ROW = CubeValues.BOTTOM_ROW.getValue();
-    private final int LEFT_COLUMN = CubeValues.LEFT_COLUMN.getValue();
-    private final int MIDDLE_COLUMN = CubeValues.MIDDLE_COLUMN.getValue();
-    private final int RIGHT_COLUMN = CubeValues.RIGHT_COLUMN.getValue();
 
     @BeforeEach
     public void shuffleCube() {
