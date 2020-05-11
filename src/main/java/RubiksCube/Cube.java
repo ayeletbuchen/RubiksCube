@@ -363,7 +363,6 @@ public class Cube extends JComponent {
 
     public void shuffle() {
         subject.onNext(Move.SHUFFLE);
-        reset();
         for (int rotation = 0; rotation < CubeValues.NUM_SHUFFLE_STEPS.getValue(); rotation++) {
             int method = random.nextInt(NUM_POSSIBLE_ROTATIONS);
             switch(method) {

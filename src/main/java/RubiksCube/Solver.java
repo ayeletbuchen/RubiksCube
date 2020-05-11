@@ -108,7 +108,7 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 //        }
 //    }
 
-    @Override
+    /*@Override
     public void onNext(Move move) {
         if (move.equals(Move.SHUFFLE)) {
             computerMoveStack.clear();
@@ -127,6 +127,31 @@ public class Solver extends Stack<Move> implements Observer<Move> {
                 System.out.println(solveStack.peek().getPrompt());
             }
         }
+    }*/
+
+    @Override
+    public void onNext(Move move) {
+        if (move.equals(Move.SHUFFLE)) {
+            computerMoveStack.clear();
+            solveStack.clear();
+        }
+        else if (computerSolving) {
+            computerMoveStack.push(move);
+        } else if (!reshuffling) {
+            if (!solveStack.isEmpty()) {
+                Move nextMove = solveStack.peek();
+                if (move.equals(nextMove)) {
+                    solveStack.pop();
+                } else {
+                    solveStack.push(move.getCounterMove());
+                }
+                if (solveStack.isEmpty()) {
+                    System.out.println("Good job!");
+                } else {
+                    System.out.println(solveStack.peek().getPrompt());
+                }
+            }
+        }
     }
 
     @Override
@@ -142,19 +167,31 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 
     //<editor-fold defaultstate="collapsed" desc="Solve">
     public void solve() {
+        computerSolving = true;
         // userSolving = false;
         // shuffling = false;
         // userSolving = false;
         // computerSolving = true;
         solveTopLayer();
-        // solveMiddleLayer();
-        // solveBottomLayer();
+        solveMiddleLayer();
+        solveBottomLayer();
         computerSolving = false;
         reshuffleCube();
-        // userSolving = true;
     }
 
     private void reshuffleCube() {
+        reshuffling = true;
+
+        while(!computerMoveStack.isEmpty()) {
+            Move move = computerMoveStack.pop();
+            cube.doMove(move.getCounterMove());
+            solveStack.push(move);
+        }
+        System.out.println(solveStack.peek().getPrompt());
+        reshuffling = false;
+    }
+
+    /*private void reshuffleCube() {
         reshuffling = true;
         System.out.println("RESHUFFLE CUBE");
         cube.reset();
@@ -178,13 +215,13 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 //            // cube.doMove(move.getCounterMove());
 ////            solveStack.push(move);
 //        }
-    }
+    }*/
 
     //<editor-fold defaultstate-"collapsed" desc="Solve top layer">
     private void solveTopLayer() {
         positionWhiteCenterSquare();
-        // createWhiteCross();
-        // putWhiteCornersInPlace();
+        createWhiteCross();
+        putWhiteCornersInPlace();
     }
 
     //<editor-fold defaultstate="collapsed" desc="Position white center square">
