@@ -12,12 +12,14 @@ public class CubeFrame extends JFrame {
         JPanel root = new JPanel(new BorderLayout());
 
         Cube cube = new Cube();
-        Solver solver = new Solver(cube, true);
+        DirectionLabel directionLabel = new DirectionLabel();
+        Solver solver = new Solver(cube, directionLabel);
         cube.subject.subscribe(solver);
         ControlPanel controlPanel = new ControlPanel(cube, solver);
 
         root.add(cube, BorderLayout.CENTER);
         root.add(controlPanel, BorderLayout.SOUTH);
+        root.add(directionLabel, BorderLayout.NORTH);
         setContentPane(root);
     }
 }

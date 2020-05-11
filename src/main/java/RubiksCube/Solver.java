@@ -1,7 +1,6 @@
 package RubiksCube;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Stack;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -10,20 +9,9 @@ public class Solver extends Stack<Move> implements Observer<Move> {
 
     //<editor-fold defaultstate="collapsed" desc="Attributes">
     private Cube cube;
-    private Face upFace;
-    private Face leftFace;
-    private Face frontFace;
-    private Face rightFace;
-    private Face backFace;
-    private Face downFace;
-    private boolean userSolving;
-    private boolean computerSolving;
-    private boolean shuffling;
-    private boolean educationMode;
-    private boolean reshuffling;
-    private ArrayList<Move> shuffleStepsArray;
-    private Stack<Move> computerMoveStack;
-    private Stack<Move> solveStack;
+    private Face upFace , leftFace, frontFace, rightFace, backFace, downFace;
+    private boolean computerSolving, reshuffling;
+    private Stack<Move> computerMoveStack, solveStack;
     private EdgesMap edgesMap;
     private CornersMap cornersMap;
     private final int TOP_ROW = CubeValues.TOP_ROW.getValue();
@@ -38,13 +26,14 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     private final Color FRONT_FACE_COLOR = CubeColors.FRONT_FACE_COLOR.getColor();
     private final Color BACK_FACE_COLOR = CubeColors.BACK_FACE_COLOR.getColor();
     private final Color DOWN_FACE_COLOR = CubeColors.DOWN_FACE_COLOR.getColor();
-    Color upColor, leftColor, frontColor, rightColor, backColor;
+    private Color upColor, leftColor, frontColor, rightColor, backColor;
+    private DirectionLabel directionLabel;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructor">
-    public Solver(Cube cube, boolean educationMode) {
+    public Solver(Cube cube, DirectionLabel directionLabel) {
         this.cube = cube;
-        this.educationMode = educationMode;
+        this.directionLabel = directionLabel;
         upFace = cube.getUpFace();
         leftFace = cube.getLeftFace();
         frontFace = cube.getFrontFace();
@@ -52,12 +41,9 @@ public class Solver extends Stack<Move> implements Observer<Move> {
         backFace = cube.getBackFace();
         downFace = cube.getDownFace();
         computerSolving = false;
-        shuffling = false;
         reshuffling = false;
-        userSolving = true;
         edgesMap = new EdgesMap(upFace, leftFace, frontFace, rightFace, backFace, downFace);
         cornersMap = new CornersMap(upFace, leftFace, frontFace, rightFace, backFace, downFace);
-        shuffleStepsArray = new ArrayList<>();
         solveStack = new Stack<>();
         computerMoveStack = new Stack<>();
         Move.setCounterMoves();
@@ -69,65 +55,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     public void onSubscribe(Disposable disposable) {
 
     }
-
-//    @Override
-//    public void onNext(Move move) {
-//        if (educationMode) {
-//            System.out.println(move);
-//            if (move.equals(Move.SHUFFLE)) {
-//                System.out.println("Move equals shuffleeeee");
-//                solveStack.clear();
-//                shuffleStepsArray.clear();
-//                shuffling = true;
-//            } else if (shuffling) {
-//                System.out.println("shuffling: ");
-//                shuffleStepsArray.add(move);
-//                if (shuffleStepsArray.size() == CubeValues.NUM_SHUFFLE_STEPS.getValue()) {
-//                    System.out.println("shuffling = false");
-//                    shuffling = false;
-//                }
-//            } else if (computerSolving) {
-//                System.out.println("computer solving");
-//                solveStack.add(0, move);
-//            } else if (userSolving && !solveStack.isEmpty() && shuffleStepsArray.isEmpty()) {
-//                System.out.println("usersolving && !solveStack.isEmpty() && shuffleStepsAra..");
-//                Move nextMove = solveStack.peek();
-//                if (move.equals(nextMove)) {
-//                    System.out.println("move = next move");
-//                    solveStack.pop();
-//                    if (solveStack.isEmpty()) {
-//                        System.out.println("Done! Great job!");
-//                    } else {
-//                        System.out.println(solveStack.peek().getPrompt());
-//                    }
-//                } else {
-//                    System.out.println("pushing move onto solvestack");
-//                    solveStack.push(move.getCounterMove());
-//                }
-//            }
-//        }
-//    }
-
-    /*@Override
-    public void onNext(Move move) {
-        if (move.equals(Move.SHUFFLE)) {
-            computerMoveStack.clear();
-            solveStack.clear();
-            computerSolving = true;
-        } else if (!reshuffling) {
-            if (computerSolving) {
-                computerMoveStack.push(move);
-            } else if (!solveStack.isEmpty()) {
-                Move nextMove = solveStack.peek();
-                if (move.equals(nextMove)) {
-                    solveStack.pop();
-                } else {
-                    solveStack.push(move.getCounterMove());
-                }
-                System.out.println(solveStack.peek().getPrompt());
-            }
-        }
-    }*/
 
     @Override
     public void onNext(Move move) {
@@ -146,9 +73,9 @@ public class Solver extends Stack<Move> implements Observer<Move> {
                     solveStack.push(move.getCounterMove());
                 }
                 if (solveStack.isEmpty()) {
-                    System.out.println("Good job!");
+                    directionLabel.setText("Good job!");
                 } else {
-                    System.out.println(solveStack.peek().getPrompt());
+                    directionLabel.setText(solveStack.peek().getPrompt());
                 }
             }
         }
@@ -168,10 +95,6 @@ public class Solver extends Stack<Move> implements Observer<Move> {
     //<editor-fold defaultstate="collapsed" desc="Solve">
     public void solve() {
         computerSolving = true;
-        // userSolving = false;
-        // shuffling = false;
-        // userSolving = false;
-        // computerSolving = true;
         solveTopLayer();
         solveMiddleLayer();
         solveBottomLayer();
@@ -187,35 +110,10 @@ public class Solver extends Stack<Move> implements Observer<Move> {
             cube.doMove(move.getCounterMove());
             solveStack.push(move);
         }
-        System.out.println(solveStack.peek().getPrompt());
+        directionLabel.setText(solveStack.peek().getPrompt());
+
         reshuffling = false;
     }
-
-    /*private void reshuffleCube() {
-        reshuffling = true;
-        System.out.println("RESHUFFLE CUBE");
-        cube.reset();
-        for (int i = 0; i < CubeValues.NUM_SHUFFLE_STEPS.getValue(); i++) {
-            cube.doMove(computerMoveStack.firstElement());
-            computerMoveStack.remove(0);
-        }
-        while (!computerMoveStack.isEmpty()) {
-            solveStack.push(computerMoveStack.pop());
-        }
-//        while (!shuffleStepsArray.isEmpty()) {
-//            // System.out.println(move);
-//            System.out.println(shuffleStepsArray.get(0));
-//            cube.doMove(shuffleStepsArray.get(0));
-//            shuffleStepsArray.remove(0);
-//        }
-        reshuffling = false;
-//        while (!shuffleStepsArray.isEmpty()) {
-//            shuffleStepsArray.remove(0);
-//            // System.out.println(move.getPrompt());
-//            // cube.doMove(move.getCounterMove());
-////            solveStack.push(move);
-//        }
-    }*/
 
     //<editor-fold defaultstate-"collapsed" desc="Solve top layer">
     private void solveTopLayer() {
