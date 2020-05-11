@@ -7,18 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CubeTest implements CubeValues {
 
     private Cube cube = new Cube();
-    private Square[][] upFaceCopy;
-    private Square[][] leftFaceCopy;
-    private Square[][] frontFaceCopy;
-    private Square[][] rightFaceCopy;
-    private Square[][] backFaceCopy;
-    private Square[][] downFaceCopy;
-    private Square[][] upSquares;
-    private Square[][] leftSquares;
-    private Square[][] frontSquares;
-    private Square[][] rightSquares;
-    private Square[][] backSquares;
-    private Square[][] downSquares;
+    private Square[][] upFaceCopy, leftFaceCopy, frontFaceCopy, rightFaceCopy, backFaceCopy, downFaceCopy;
+    private Square[][] upSquares, leftSquares, frontSquares, rightSquares, backSquares, downSquares;
 
     @BeforeEach
     public void shuffleCube() {
