@@ -1,6 +1,7 @@
 package RubiksCube;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 import io.reactivex.subjects.PublishSubject;
 
@@ -26,21 +27,60 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
 
         random = new Random();
         subject = PublishSubject.create();
+        System.out.println(FRONT_FACE_X1);
+        System.out.println(FRONT_FACE_X2);
+        System.out.println(FRONT_FACE_Y1);
+        System.out.println(FRONT_FACE_Y2);
+        // repaint();
 
-        upFace.setLocation(FRAME_MARGIN + FACE_WIDTH, FRAME_MARGIN);
-        leftFace.setLocation(FRAME_MARGIN, upFace.getY() + FACE_WIDTH);
-        frontFace.setLocation(FRAME_MARGIN + FACE_WIDTH, leftFace.getY());
-        rightFace.setLocation(frontFace.getX() + FACE_WIDTH, leftFace.getY());
-        backFace.setLocation(rightFace.getX() + FACE_WIDTH, leftFace.getY());
-        downFace.setLocation(frontFace.getX(), frontFace.getY() + FACE_WIDTH);
+//        upFace.setLocation(FRAME_MARGIN + FACE_WIDTH, FRAME_MARGIN);
+//        leftFace.setLocation(FRAME_MARGIN, upFace.getY() + FACE_WIDTH);
+        // frontFace.setLocation(FRAME_MARGIN + FACE_WIDTH, leftFace.getY());
+//        rightFace.setLocation(frontFace.getX() + FACE_WIDTH, leftFace.getY());
+//        backFace.setLocation(rightFace.getX() + FACE_WIDTH, leftFace.getY());
+//        downFace.setLocation(frontFace.getX(), frontFace.getY() + FACE_WIDTH);
         // downFace.getGraphics().fillPolygon();
 
-        add(upFace);
-        add(leftFace);
-        add(frontFace);
-        add(rightFace);
-        add(backFace);
-        add(downFace);
+        // frontFace.setLocation(FRONT_FACE_X1, FRONT_FACE_Y1);
+
+
+        // frontFace.getGraphics().fillPolygon(FRONT_FACE_X_POINTS, FRONT_FACE_Y_POINTS, SQUARE_POINTS);
+
+        // add(upFace);
+        // add(leftFace);
+        // add(frontFace);
+        // add(rightFace);
+        // add(backFace);
+        // add(downFace);
+    }
+
+    @Override
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+        recolorFace(graphics, frontFace, FRONT_FACE_X1, FRONT_FACE_Y1);
+    }
+
+    private void recolorFace(Graphics graphics, Face face, int startingX, int startingY) {
+        int leftX = startingX;
+        int topY = startingY;
+        int rightX = leftX + SQUARE_WIDTH;
+        int bottomY = topY + SQUARE_WIDTH;
+
+        for (int row = 0; row < DIMENSION; row++) {
+            for (int col = 0; col < DIMENSION; col++) {
+                graphics.setColor(face.squares[row][col].getColor());
+                graphics.fillPolygon(
+                        new int[] {leftX, rightX, rightX, leftX},
+                        new int[] {topY, topY, bottomY, bottomY},
+                        SQUARE_POINTS);
+                leftX = rightX + SQUARE_MARGIN;
+                rightX = leftX + SQUARE_WIDTH;
+            }
+            topY = bottomY + SQUARE_MARGIN;
+            bottomY = topY + SQUARE_WIDTH;
+            leftX = startingX;
+            rightX = leftX + SQUARE_WIDTH;
+        }
     }
 
     public void doMove(Move move) {

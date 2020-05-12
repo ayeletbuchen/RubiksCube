@@ -46,6 +46,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
     @Override
     public void onNext(Move move) {
+        cube.repaint();
         if (move.equals(Move.SHUFFLE)) {
             computerMoveStack.clear();
             solveStack.clear();

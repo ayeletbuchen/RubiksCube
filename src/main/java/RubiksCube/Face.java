@@ -10,7 +10,7 @@ public class Face extends JPanel implements FrameValues, CubeValues {
 
     public Face(Color color) {
         ORIGINAL_COLOR = color;
-        setLayout(new GridLayout(DIMENSION, DIMENSION, FACE_MARGIN, FACE_MARGIN));
+        setLayout(new GridLayout(DIMENSION, DIMENSION, SQUARE_MARGIN, SQUARE_MARGIN));
         setSize(FrameValues.FACE_WIDTH, FrameValues.FACE_WIDTH);
         setBackground(Color.BLACK);
 
