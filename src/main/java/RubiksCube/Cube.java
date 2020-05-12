@@ -24,62 +24,42 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         rightFace = new Face(RIGHT_FACE_COLOR);
         backFace = new Face(BACK_FACE_COLOR);
         downFace = new Face(DOWN_FACE_COLOR);
-
         random = new Random();
         subject = PublishSubject.create();
-        System.out.println(FRONT_FACE_X1);
-        System.out.println(FRONT_FACE_X2);
-        System.out.println(FRONT_FACE_Y1);
-        System.out.println(FRONT_FACE_Y2);
-        // repaint();
-
-//        upFace.setLocation(FRAME_MARGIN + FACE_WIDTH, FRAME_MARGIN);
-//        leftFace.setLocation(FRAME_MARGIN, upFace.getY() + FACE_WIDTH);
-        // frontFace.setLocation(FRAME_MARGIN + FACE_WIDTH, leftFace.getY());
-//        rightFace.setLocation(frontFace.getX() + FACE_WIDTH, leftFace.getY());
-//        backFace.setLocation(rightFace.getX() + FACE_WIDTH, leftFace.getY());
-//        downFace.setLocation(frontFace.getX(), frontFace.getY() + FACE_WIDTH);
-        // downFace.getGraphics().fillPolygon();
-
-        // frontFace.setLocation(FRONT_FACE_X1, FRONT_FACE_Y1);
-
-
-        // frontFace.getGraphics().fillPolygon(FRONT_FACE_X_POINTS, FRONT_FACE_Y_POINTS, SQUARE_POINTS);
-
-        // add(upFace);
-        // add(leftFace);
-        // add(frontFace);
-        // add(rightFace);
-        // add(backFace);
-        // add(downFace);
     }
 
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        recolorFace(graphics, frontFace, FRONT_FACE_X1, FRONT_FACE_Y1);
+        colorFrontFace(graphics);
+        colorUpFace(graphics);
     }
 
-    private void recolorFace(Graphics graphics, Face face, int startingX, int startingY) {
-        int leftX = startingX;
-        int topY = startingY;
-        int rightX = leftX + SQUARE_WIDTH;
-        int bottomY = topY + SQUARE_WIDTH;
-
+    private void colorFrontFace(Graphics graphics) {
         for (int row = 0; row < DIMENSION; row++) {
             for (int col = 0; col < DIMENSION; col++) {
-                graphics.setColor(face.squares[row][col].getColor());
+                graphics.setColor(frontFace.squares[row][col].getColor());
                 graphics.fillPolygon(
-                        new int[] {leftX, rightX, rightX, leftX},
-                        new int[] {topY, topY, bottomY, bottomY},
+                        new int[] {FRONT_FACE_LEFT_X[col], FRONT_FACE_RIGHT_X[col],
+                                FRONT_FACE_RIGHT_X[col], FRONT_FACE_LEFT_X[col]},
+                        new int[] {FRONT_FACE_TOP_Y[row], FRONT_FACE_TOP_Y[row],
+                                FRONT_FACE_BOTTOM_Y[row], FRONT_FACE_BOTTOM_Y[row]},
                         SQUARE_POINTS);
-                leftX = rightX + SQUARE_MARGIN;
-                rightX = leftX + SQUARE_WIDTH;
             }
-            topY = bottomY + SQUARE_MARGIN;
-            bottomY = topY + SQUARE_WIDTH;
-            leftX = startingX;
-            rightX = leftX + SQUARE_WIDTH;
+        }
+    }
+
+    private void colorUpFace(Graphics graphics) {
+        for (int row = 0; row < DIMENSION; row++) {
+            for (int col = 0; col < DIMENSION; col++) {
+                graphics.setColor(upFace.squares[row][col].getColor());
+                graphics.fillPolygon(
+                        new int[] {UP_FACE_LEFT_X[row][col], UP_FACE_RIGHT_X[row][col],
+                            UP_FACE_RIGHT_X[row + 1][col], UP_FACE_LEFT_X[row + 1][col]},
+                        new int[] {UP_FACE_TOP_Y[row], UP_FACE_TOP_Y[row],
+                                UP_FACE_BOTTOM_Y[row], UP_FACE_BOTTOM_Y[row]},
+                        SQUARE_POINTS);
+            }
         }
     }
 
