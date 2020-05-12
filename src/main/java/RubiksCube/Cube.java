@@ -33,6 +33,7 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         super.paintComponent(graphics);
         colorFrontFace(graphics);
         colorUpFace(graphics);
+        colorRightFace(graphics);
 //        graphics.setColor(Color.BLACK);
 //        graphics.drawLine(0, 0, getWidth(), getHeight());
     }
@@ -61,6 +62,20 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
                         new int[] {UP_FACE_Y[row], UP_FACE_Y[row],
                                 UP_FACE_Y[row + 1], UP_FACE_Y[row + 1]},
                         SQUARE_POINTS);
+            }
+        }
+    }
+
+    private void colorRightFace(Graphics graphics) {
+        for (int row = 0; row < DIMENSION; row++) {
+            for (int col = 0; col < DIMENSION; col++) {
+                graphics.setColor(rightFace.squares[row][col].getColor());
+                graphics.fillPolygon(
+                        new int[] {RIGHT_FACE_X[col], RIGHT_FACE_X[col + 1], RIGHT_FACE_X[col + 1], RIGHT_FACE_X[col]},
+                        new int[] {RIGHT_FACE_Y[row][col], RIGHT_FACE_Y[row][col + 1],
+                                RIGHT_FACE_Y[row + 1][col + 1], RIGHT_FACE_Y[row + 1][col]},
+                        SQUARE_POINTS
+                );
             }
         }
     }

@@ -5,7 +5,8 @@ public interface FrameValues {
     int FRAME_HEIGHT = 1350;
     int FACE_WIDTH = 100;
     int SQUARE_WIDTH = FACE_WIDTH / 3;
-    int PARTIAL_SQUARE_WIDTH = (int) (SQUARE_WIDTH / 3);
+    int PARTIAL_SQUARE_WIDTH = SQUARE_WIDTH / 3;
+    int SQUARE_POINTS = 4;
 
     //<editor-fold desc="Front face coordinates">
     int FRONT_FACE_X_1 = (int) (FRAME_WIDTH / 2.5);
@@ -52,12 +53,18 @@ public interface FrameValues {
     //</editor-fold>
     //</editor-fold>
 
-//    int RIGHT_FACE_LEFT_X_1 = FRONT_FACE_RIGHT_X_3 + SQUARE_MARGIN;
-//    int RIGHT_FACE_RIGHT_X_1 = UP_FACE_MIDDLE_ROW_RIGHT_X_3;
-//    int RIGHT_FACE_LEFT_X_2 = ;
-//    int RIGHT_FACE_RIGHT_X_2 = UP_FACE_TOP_ROW_RIGHT_X_3;
-//    int RIGHT_FACE_LEFT_X_3 =
+    //<editor-fold desc="Right face coordinates">
+    int[] RIGHT_FACE_X = new int[] {FRONT_FACE_X_4, UP_FACE_ROW3_X_4, UP_FACE_ROW2_X_4, UP_FACE_ROW1_X_4};
 
+    // UP_FACE_Y
+    int[] RIGHT_FACE_ROW1_Y = new int[] {UP_FACE_Y[3], UP_FACE_Y[2], UP_FACE_Y[1], UP_FACE_Y[0]};
+    int[] RIGHT_FACE_ROW2_Y = new int[] {FRONT_FACE_Y_2, RIGHT_FACE_ROW1_Y[1] + SQUARE_WIDTH,
+            RIGHT_FACE_ROW1_Y[2] + SQUARE_WIDTH, RIGHT_FACE_ROW1_Y[3] + SQUARE_WIDTH};
+    int[] RIGHT_FACE_ROW3_Y = new int[] {FRONT_FACE_Y_3, RIGHT_FACE_ROW2_Y[1] + SQUARE_WIDTH,
+            RIGHT_FACE_ROW2_Y[2] + SQUARE_WIDTH, RIGHT_FACE_ROW2_Y[3] + SQUARE_WIDTH};
+    int[] RIGHT_FACE_ROW4_Y = new int[] {FRONT_FACE_Y_4, RIGHT_FACE_ROW3_Y[1] + SQUARE_WIDTH,
+            RIGHT_FACE_ROW3_Y[2] + SQUARE_WIDTH, RIGHT_FACE_ROW3_Y[3] + SQUARE_WIDTH};
 
-    int SQUARE_POINTS = 4;
+    int[][] RIGHT_FACE_Y = new int[][] {RIGHT_FACE_ROW1_Y, RIGHT_FACE_ROW2_Y, RIGHT_FACE_ROW3_Y, RIGHT_FACE_ROW4_Y};
+    //</editor-fold>
 }
