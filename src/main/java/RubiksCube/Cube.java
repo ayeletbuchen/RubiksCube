@@ -33,6 +33,8 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         super.paintComponent(graphics);
         colorFrontFace(graphics);
         colorUpFace(graphics);
+//        graphics.setColor(Color.BLACK);
+//        graphics.drawLine(0, 0, getWidth(), getHeight());
     }
 
     private void colorFrontFace(Graphics graphics) {
@@ -40,10 +42,10 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
             for (int col = 0; col < DIMENSION; col++) {
                 graphics.setColor(frontFace.squares[row][col].getColor());
                 graphics.fillPolygon(
-                        new int[] {FRONT_FACE_LEFT_X[col], FRONT_FACE_RIGHT_X[col],
-                                FRONT_FACE_RIGHT_X[col], FRONT_FACE_LEFT_X[col]},
-                        new int[] {FRONT_FACE_TOP_Y[row], FRONT_FACE_TOP_Y[row],
-                                FRONT_FACE_BOTTOM_Y[row], FRONT_FACE_BOTTOM_Y[row]},
+                        new int[] {FRONT_FACE_X[col], FRONT_FACE_X[col + 1],
+                                FRONT_FACE_X[col + 1], FRONT_FACE_X[col]},
+                        new int[] {FRONT_FACE_Y[row], FRONT_FACE_Y[row],
+                                FRONT_FACE_Y[row + 1], FRONT_FACE_Y[row + 1]},
                         SQUARE_POINTS);
             }
         }
@@ -54,10 +56,10 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
             for (int col = 0; col < DIMENSION; col++) {
                 graphics.setColor(upFace.squares[row][col].getColor());
                 graphics.fillPolygon(
-                        new int[] {UP_FACE_LEFT_X[row][col], UP_FACE_RIGHT_X[row][col],
-                            UP_FACE_RIGHT_X[row + 1][col], UP_FACE_LEFT_X[row + 1][col]},
-                        new int[] {UP_FACE_TOP_Y[row], UP_FACE_TOP_Y[row],
-                                UP_FACE_BOTTOM_Y[row], UP_FACE_BOTTOM_Y[row]},
+                        new int[] {UP_FACE_X[row][col], UP_FACE_X[row][col + 1],
+                            UP_FACE_X[row + 1][col + 1], UP_FACE_X[row + 1][col]},
+                        new int[] {UP_FACE_Y[row], UP_FACE_Y[row],
+                                UP_FACE_Y[row + 1], UP_FACE_Y[row + 1]},
                         SQUARE_POINTS);
             }
         }
@@ -451,6 +453,7 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         rightFace.reset();
         backFace.reset();
         downFace.reset();
+        repaint();
     }
 
     protected Face getUpFace() {
