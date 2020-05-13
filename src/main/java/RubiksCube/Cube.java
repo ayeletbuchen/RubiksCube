@@ -89,8 +89,8 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         graphics.setColor(Color.BLACK);
         drawUpFaceLines(graphics);
         drawFrontFaceLines(graphics);
-        drawRightFaceLines(graphics);
-        drawLeftFaceLines(graphics);
+        drawLeftRightFaceLines(graphics, RIGHT_FACE_X, RIGHT_FACE_Y);
+        drawLeftRightFaceLines(graphics, LEFT_FACE_X, LEFT_FACE_Y);
     }
 
     private void drawUpFaceLines(Graphics graphics) {
@@ -114,24 +114,15 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         graphics.drawLine(FRONT_FACE_X_4, FRONT_FACE_Y_1, FRONT_FACE_X_4, FRONT_FACE_Y_4);
     }
 
-    private void drawRightFaceLines(Graphics graphics) {
-        graphics.drawLine(RIGHT_FACE_X[1], RIGHT_FACE_ROW1_Y[1], RIGHT_FACE_X[1], RIGHT_FACE_ROW4_Y[1]);
-        graphics.drawLine(RIGHT_FACE_X[2], RIGHT_FACE_ROW1_Y[2], RIGHT_FACE_X[2], RIGHT_FACE_ROW4_Y[2]);
-        graphics.drawLine(RIGHT_FACE_X[3], RIGHT_FACE_ROW1_Y[3], RIGHT_FACE_X[3], RIGHT_FACE_ROW4_Y[3]);
-        graphics.drawLine(RIGHT_FACE_X[0], RIGHT_FACE_ROW2_Y[0], RIGHT_FACE_X[3], RIGHT_FACE_ROW2_Y[3]);
-        graphics.drawLine(RIGHT_FACE_X[0], RIGHT_FACE_ROW3_Y[0], RIGHT_FACE_X[3], RIGHT_FACE_ROW3_Y[3]);
-        graphics.drawLine(RIGHT_FACE_X[0], RIGHT_FACE_ROW4_Y[0], RIGHT_FACE_X[3], RIGHT_FACE_ROW4_Y[3]);
-    }
-
-    private void drawLeftFaceLines(Graphics graphics) {
-        graphics.drawLine(LEFT_FACE_X[0], LEFT_FACE_Y[0][0], LEFT_FACE_X[0], LEFT_FACE_Y[3][0]);
-        graphics.drawLine(LEFT_FACE_X[1], LEFT_FACE_Y[0][1], LEFT_FACE_X[1], LEFT_FACE_Y[3][1]);
-        graphics.drawLine(LEFT_FACE_X[2], LEFT_FACE_Y[0][2], LEFT_FACE_X[2], LEFT_FACE_Y[3][2]);
-        graphics.drawLine(LEFT_FACE_X[3], LEFT_FACE_Y[0][3], LEFT_FACE_X[3], LEFT_FACE_Y[3][3]);
-        graphics.drawLine(LEFT_FACE_X[0], LEFT_FACE_Y[0][0], LEFT_FACE_X[3], LEFT_FACE_Y[0][3]);
-        graphics.drawLine(LEFT_FACE_X[0], LEFT_FACE_Y[1][0], LEFT_FACE_X[3], LEFT_FACE_Y[1][3]);
-        graphics.drawLine(LEFT_FACE_X[0], LEFT_FACE_Y[2][0], LEFT_FACE_X[3], LEFT_FACE_Y[2][3]);
-        graphics.drawLine(LEFT_FACE_X[0], LEFT_FACE_Y[3][0], LEFT_FACE_X[3], LEFT_FACE_Y[3][3]);
+    private void drawLeftRightFaceLines(Graphics graphics, int[] xCoordinates, int[][] yCoordinates) {
+        graphics.drawLine(xCoordinates[0], yCoordinates[0][0], xCoordinates[0], yCoordinates[3][0]);
+        graphics.drawLine(xCoordinates[1], yCoordinates[0][1], xCoordinates[1], yCoordinates[3][1]);
+        graphics.drawLine(xCoordinates[2], yCoordinates[0][2], xCoordinates[2], yCoordinates[3][2]);
+        graphics.drawLine(xCoordinates[3], yCoordinates[0][3], xCoordinates[3], yCoordinates[3][3]);
+        graphics.drawLine(xCoordinates[0], yCoordinates[0][0], xCoordinates[3], yCoordinates[0][3]);
+        graphics.drawLine(xCoordinates[0], yCoordinates[1][0], xCoordinates[3], yCoordinates[1][3]);
+        graphics.drawLine(xCoordinates[0], yCoordinates[2][0], xCoordinates[3], yCoordinates[2][3]);
+        graphics.drawLine(xCoordinates[0], yCoordinates[3][0], xCoordinates[3], yCoordinates[3][3]);
     }
 
     public void doMove(Move move) {
