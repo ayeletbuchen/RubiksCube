@@ -10,7 +10,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     //<editor-fold defaultstate="collapsed" desc="Attributes">
     private Cube cube;
     private Face upFace , leftFace, frontFace, rightFace, backFace, downFace;
-    private boolean computerSolving, reshuffling;
+    private boolean computerSolving, reshuffling, teaching;
     private Stack<Move> computerMoveStack, solveStack;
     private EdgesMap edgesMap;
     private CornersMap cornersMap;
@@ -30,6 +30,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         downFace = cube.getDownFace();
         computerSolving = false;
         reshuffling = false;
+        teaching = false;
         edgesMap = new EdgesMap(upFace, leftFace, frontFace, rightFace, backFace, downFace);
         cornersMap = new CornersMap(upFace, leftFace, frontFace, rightFace, backFace, downFace);
         solveStack = new Stack<>();
@@ -47,24 +48,25 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     @Override
     public void onNext(Move move) {
         cube.repaint();
-        if (move.equals(Move.SHUFFLE)) {
-            computerMoveStack.clear();
-            solveStack.clear();
+        if (move.equals(Move.SHUFFLE) || move.equals(Move.RESET)) {
+            clear();
         }
-        else if (computerSolving) {
-            computerMoveStack.push(move);
-        } else if (!reshuffling) {
-            if (!solveStack.isEmpty()) {
-                Move nextMove = solveStack.peek();
-                if (move.equals(nextMove)) {
-                    solveStack.pop();
-                } else {
-                    solveStack.push(move.getCounterMove());
-                }
-                if (solveStack.isEmpty()) {
-                    directionLabel.setText("Good job!");
-                } else {
-                    directionLabel.setText(solveStack.peek().getPrompt());
+        else if (teaching) {
+            if (computerSolving) {
+                computerMoveStack.push(move);
+            } else if (!reshuffling) {
+                if (!solveStack.isEmpty()) {
+                    Move nextMove = solveStack.peek();
+                    if (move.equals(nextMove)) {
+                        solveStack.pop();
+                    } else {
+                        solveStack.push(move.getCounterMove());
+                    }
+                    if (solveStack.isEmpty()) {
+                        directionLabel.setText("Good job!");
+                    } else {
+                        directionLabel.setText(solveStack.peek().getPrompt());
+                    }
                 }
             }
         }
@@ -81,8 +83,16 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     }
     //</editor-fold>
 
+    public void clear() {
+        computerMoveStack.clear();
+        solveStack.clear();
+        directionLabel.clear();
+        teaching = false;
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Solve">
     public void solve() {
+        teaching = true;
         computerSolving = true;
         solveTopLayer();
         solveMiddleLayer();

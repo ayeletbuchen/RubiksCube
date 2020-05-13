@@ -539,7 +539,7 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         rightFace.reset();
         backFace.reset();
         downFace.reset();
-        repaint();
+        subject.onNext(Move.RESET);
     }
 
     protected Face getUpFace() {

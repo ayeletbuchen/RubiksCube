@@ -26,7 +26,8 @@ public enum Move {
     X_PRIME("Turn cube downwards", "Turn cube downwards"),
     Z("Turn cube clockwise along Z axis", "Z axis clockwise turn"),
     Z_PRIME("Turn cube counterclockwise along Z axis", "Z axis counterclockwise turn"),
-    SHUFFLE("Shuffle cube", "Shuffle");
+    SHUFFLE("Shuffle cube", "Shuffle"),
+    RESET("Reset cube", "Reset");
 
     private String prompt;
     private String symbol;
