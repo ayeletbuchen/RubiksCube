@@ -15,11 +15,10 @@ public class CubeFrame extends JFrame {
         DirectionLabel directionLabel = new DirectionLabel();
         Solver solver = new Solver(cube, directionLabel);
         cube.subject.subscribe(solver);
-        ControlPanel controlPanel = new ControlPanel(cube, solver);
+        ControlPanel controlPanel = new ControlPanel(cube, solver, directionLabel);
 
         root.add(cube, BorderLayout.CENTER);
         root.add(controlPanel, BorderLayout.SOUTH);
-        root.add(directionLabel, BorderLayout.NORTH);
         setContentPane(root);
     }
 }
