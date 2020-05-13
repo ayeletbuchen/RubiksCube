@@ -139,14 +139,14 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     //<editor-fold defaultstate="collapsed" desc="Create white cross">
     private void createWhiteCross() {
         if (!edgesAreOriented(upFace, upColor)) {
-            moveEdgeSquaresFromBottomLayerToUpFace();
-//            moveWhiteEdgeSquaresFromMiddleLayerToUpFace();
+            moveUpFaceEdgesFromBottomLayer();
+            moveUpFaceEdgesFromMiddleLayer();
 //            moveWhiteEdgeSquaresFromTopLayerToUpFace();
         }
     }
 
     //<editor-fold desc="Move up face edges from bottom layer">
-    private void moveEdgeSquaresFromBottomLayerToUpFace() {
+    private void moveUpFaceEdgesFromBottomLayer() {
         moveUpFaceEdgeFromBottomLayer(TOP_ROW, MIDDLE_COLUMN);
         moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, LEFT_COLUMN);
         moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, RIGHT_COLUMN);
@@ -224,24 +224,122 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         cube.rotateDownFaceCounterclockwise();
 
         if (endCol == LEFT_COLUMN) {
+            boolean topPositioned = upTopEdgePositioned();
             cube.rotateBackFaceCounterclockwise();
             cube.rotateLeftFaceClockwise();
-            cube.rotateBackFaceClockwise();
+            if (topPositioned) {
+                cube.rotateBackFaceClockwise();
+            }
         } else if (endRow == TOP_ROW) {
+            boolean leftPositioned = upLeftEdgePositioned();
             cube.rotateLeftFaceCounterclockwise();
             cube.rotateFrontFaceClockwise();
-            cube.rotateLeftFaceClockwise();
+            if (leftPositioned) {
+                cube.rotateLeftFaceClockwise();
+            }
         } else if (endCol == RIGHT_COLUMN) {
+            boolean bottomPositioned = upBottomEdgePositioned();
             cube.rotateFrontFaceCounterclockwise();
             cube.rotateRightFaceClockwise();
-            cube.rotateFrontFaceClockwise();
+            if (bottomPositioned) {
+                cube.rotateFrontFaceClockwise();
+            }
         } else {
+            boolean rightPositioned = upRightEdgePositioned();
             cube.rotateRightFaceCounterclockwise();
             cube.rotateBackFaceClockwise();
-            cube.rotateRightFaceClockwise();
+            if (rightPositioned) {
+                cube.rotateRightFaceClockwise();
+            }
         }
     }
     //</editor-fold>
+
+    private void moveUpFaceEdgesFromMiddleLayer() {
+        moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, MIDDLE_ROW, LEFT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, MIDDLE_ROW, RIGHT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(leftFace, MIDDLE_ROW, LEFT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(leftFace, MIDDLE_ROW, RIGHT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(rightFace, MIDDLE_ROW, LEFT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(rightFace, MIDDLE_ROW, RIGHT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(backFace, MIDDLE_ROW, LEFT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(backFace, MIDDLE_ROW, RIGHT_COLUMN);
+    }
+
+    private void moveUpFaceEdgeFromMiddleLayerToDownFace(Face face, int row, int col) {
+        if (squareIsColor(face.squares[row][col], upColor)) {
+            boolean leftPositioned = upLeftEdgePositioned();
+            boolean rightPositioned = upRightEdgePositioned();
+            boolean topPositioned = upTopEdgePositioned();
+            boolean bottomPositioned = upBottomEdgePositioned();
+
+            if (face.equals(frontFace)) {
+                if (col == LEFT_COLUMN) {
+                    cube.rotateLeftFaceClockwise();
+                    cube.rotateDownFaceClockwise();
+                    if (leftPositioned) {
+                        cube.rotateLeftFaceCounterclockwise();
+                    }
+                    moveUpFaceEdgeFromBottomLayer(TOP_ROW, MIDDLE_COLUMN);
+                } else {
+                    cube.rotateRightFaceCounterclockwise();
+                    cube.rotateDownFaceClockwise();
+                    if (rightPositioned) {
+                        cube.rotateRightFaceClockwise();
+                    }
+                    moveUpFaceEdgeFromBottomLayer(BOTTOM_ROW, MIDDLE_COLUMN);
+                }
+            } else if (face.equals(leftFace)) {
+                if (col == LEFT_COLUMN) {
+                    cube.rotateBackFaceClockwise();
+                    cube.rotateDownFaceClockwise();
+                    if (topPositioned) {
+                        cube.rotateBackFaceCounterclockwise();
+                    }
+                    moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, LEFT_COLUMN);
+                } else {
+                    cube.rotateFrontFaceCounterclockwise();
+                    cube.rotateDownFaceClockwise();
+                    if (bottomPositioned) {
+                        cube.rotateFrontFaceClockwise();
+                    }
+                    moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, RIGHT_COLUMN);
+                }
+            } else if (face.equals(rightFace)) {
+                if (col == LEFT_COLUMN) {
+                    cube.rotateFrontFaceClockwise();
+                    cube.rotateDownFaceClockwise();
+                    if (bottomPositioned) {
+                        cube.rotateFrontFaceCounterclockwise();
+                    }
+                    moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, RIGHT_COLUMN);
+                } else {
+                    cube.rotateBackFaceCounterclockwise();
+                    cube.rotateDownFaceClockwise();
+                    if (topPositioned) {
+                        cube.rotateBackFaceClockwise();
+                    }
+                    moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, LEFT_COLUMN);
+                }
+            } else {
+                if (col == LEFT_COLUMN) {
+                    cube.rotateRightFaceClockwise();
+                    cube.rotateDownFaceClockwise();
+                    if (rightPositioned) {
+                        cube.rotateRightFaceCounterclockwise();
+                    }
+                    moveUpFaceEdgeFromBottomLayer(BOTTOM_ROW, MIDDLE_COLUMN);
+                } else {
+                    cube.rotateLeftFaceCounterclockwise();
+                    cube.rotateDownFaceClockwise();
+                    if (leftPositioned) {
+                        cube.rotateLeftFaceClockwise();
+                    }
+                    moveUpFaceEdgeFromBottomLayer(TOP_ROW, MIDDLE_COLUMN);
+                }
+            }
+        }
+    }
 
     //</editor-fold>
     //</editor-fold>
@@ -340,6 +438,26 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                 && squareIsColor(face.squares[MIDDLE_ROW][LEFT_COLUMN], color)
                 && squareIsColor(face.squares[MIDDLE_ROW][RIGHT_COLUMN], color)
                 && squareIsColor(face.squares[BOTTOM_ROW][MIDDLE_COLUMN], color);
+    }
+
+    private boolean edgeIsPositioned(Square square, Color squareColor, Color edgeColor) {
+        return squareIsColor(square, squareColor) && edgeIsColor(square, edgeColor);
+    }
+
+    private boolean upLeftEdgePositioned() {
+        return edgeIsPositioned(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor, leftColor);
+    }
+
+    private boolean upRightEdgePositioned() {
+        return edgeIsPositioned(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor, rightColor);
+    }
+
+    private boolean upTopEdgePositioned() {
+        return edgeIsPositioned(upFace.squares[TOP_ROW][MIDDLE_COLUMN], upColor, backColor);
+    }
+
+    private boolean upBottomEdgePositioned() {
+        return edgeIsPositioned(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], upColor, frontColor);
     }
     //</editor-fold>
 
