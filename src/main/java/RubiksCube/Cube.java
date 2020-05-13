@@ -32,7 +32,7 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         drawFrontFace(graphics);
-        drawUpFace(graphics);
+        drawUpDownFace(graphics, upFace, UP_FACE_X, UP_FACE_Y);
         drawLeftRightFace(graphics, rightFace, RIGHT_FACE_X, RIGHT_FACE_Y);
         drawLeftRightFace(graphics, leftFace, LEFT_FACE_X, LEFT_FACE_Y);
         drawLines(graphics);
@@ -52,15 +52,21 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         }
     }
 
-    private void drawUpFace(Graphics graphics) {
+    private void drawUpDownFace(Graphics graphics, Face face, int[][] xCoordinates, int[] yCoordinates) {
         for (int row = 0; row < DIMENSION; row++) {
             for (int col = 0; col < DIMENSION; col++) {
-                graphics.setColor(upFace.squares[row][col].getColor());
+                int colorRow;
+                if (face.equals(downFace)) {
+                    colorRow = DIMENSION - 1 - row;
+                } else {
+                    colorRow = row;
+                }
+                graphics.setColor(face.squares[row][col].getColor());
                 graphics.fillPolygon(
-                        new int[] {UP_FACE_X[row][col], UP_FACE_X[row][col + 1],
-                            UP_FACE_X[row + 1][col + 1], UP_FACE_X[row + 1][col]},
-                        new int[] {UP_FACE_Y[row], UP_FACE_Y[row],
-                                UP_FACE_Y[row + 1], UP_FACE_Y[row + 1]},
+                        new int[] {xCoordinates[row][col], xCoordinates[row][col + 1],
+                                xCoordinates[row + 1][col + 1], xCoordinates[row + 1][col]},
+                        new int[] {yCoordinates[row], yCoordinates[row],
+                                yCoordinates[row + 1], yCoordinates[row + 1]},
                         SQUARE_POINTS);
             }
         }
@@ -87,20 +93,24 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
 
     private void drawLines(Graphics graphics) {
         graphics.setColor(Color.BLACK);
-        drawUpFaceLines(graphics);
+        drawUpDownFaceLines(graphics, UP_FACE_X, UP_FACE_Y);
         drawFrontFaceLines(graphics);
         drawLeftRightFaceLines(graphics, RIGHT_FACE_X, RIGHT_FACE_Y);
         drawLeftRightFaceLines(graphics, LEFT_FACE_X, LEFT_FACE_Y);
     }
 
-    private void drawUpFaceLines(Graphics graphics) {
-        graphics.drawLine(UP_FACE_ROW1_X_1, UP_FACE_Y_1, FRONT_FACE_X_1, FRONT_FACE_Y_1);
-        graphics.drawLine(UP_FACE_ROW1_X_2, UP_FACE_Y_1, FRONT_FACE_X_2, FRONT_FACE_Y_1);
-        graphics.drawLine(UP_FACE_ROW1_X_3, UP_FACE_Y_1, FRONT_FACE_X_3, FRONT_FACE_Y_1);
-        graphics.drawLine(UP_FACE_ROW1_X_4, UP_FACE_Y_1, FRONT_FACE_X_4, FRONT_FACE_Y_1);
-        graphics.drawLine(UP_FACE_ROW1_X_1, UP_FACE_Y_1, UP_FACE_ROW1_X_4, UP_FACE_Y_1);
-        graphics.drawLine(UP_FACE_ROW2_X_1, UP_FACE_Y_2, UP_FACE_ROW2_X_4, UP_FACE_Y_2);
-        graphics.drawLine(UP_FACE_ROW3_X_1, UP_FACE_Y_3, UP_FACE_ROW3_X_4, UP_FACE_Y_3);
+    private void drawUpDownFaceLines(Graphics graphics, int[][] xCoordinates, int[] yCoordinates) {
+        // vertical lines
+        graphics.drawLine(xCoordinates[0][0], yCoordinates[0], xCoordinates[3][0], yCoordinates[3]);
+        graphics.drawLine(xCoordinates[0][1], yCoordinates[0], xCoordinates[3][1], yCoordinates[3]);
+        graphics.drawLine(xCoordinates[0][2], yCoordinates[0], xCoordinates[3][2], yCoordinates[3]);
+        graphics.drawLine(xCoordinates[0][3], yCoordinates[0], xCoordinates[3][3], yCoordinates[3]);
+
+        // horizontal lines
+        graphics.drawLine(xCoordinates[0][0], yCoordinates[0], xCoordinates[0][3], yCoordinates[0]);
+        graphics.drawLine(xCoordinates[1][0], yCoordinates[1], xCoordinates[1][3], yCoordinates[1]);
+        graphics.drawLine(xCoordinates[2][0], yCoordinates[2], xCoordinates[2][3], yCoordinates[2]);
+        graphics.drawLine(xCoordinates[3][0], yCoordinates[3], xCoordinates[3][3], yCoordinates[3]);
     }
 
     private void drawFrontFaceLines(Graphics graphics) {
@@ -115,10 +125,13 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
     }
 
     private void drawLeftRightFaceLines(Graphics graphics, int[] xCoordinates, int[][] yCoordinates) {
+        // vertical lines
         graphics.drawLine(xCoordinates[0], yCoordinates[0][0], xCoordinates[0], yCoordinates[3][0]);
         graphics.drawLine(xCoordinates[1], yCoordinates[0][1], xCoordinates[1], yCoordinates[3][1]);
         graphics.drawLine(xCoordinates[2], yCoordinates[0][2], xCoordinates[2], yCoordinates[3][2]);
         graphics.drawLine(xCoordinates[3], yCoordinates[0][3], xCoordinates[3], yCoordinates[3][3]);
+
+        // horizontal lines
         graphics.drawLine(xCoordinates[0], yCoordinates[0][0], xCoordinates[3], yCoordinates[0][3]);
         graphics.drawLine(xCoordinates[0], yCoordinates[1][0], xCoordinates[3], yCoordinates[1][3]);
         graphics.drawLine(xCoordinates[0], yCoordinates[2][0], xCoordinates[3], yCoordinates[2][3]);
