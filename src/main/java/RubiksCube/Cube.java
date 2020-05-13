@@ -31,14 +31,14 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        colorFrontFace(graphics);
-        colorUpFace(graphics);
-        colorRightFace(graphics);
-//        graphics.setColor(Color.BLACK);
-//        graphics.drawLine(0, 0, getWidth(), getHeight());
+        drawFrontFace(graphics);
+        drawUpFace(graphics);
+        drawRightFace(graphics);
+        drawLeftFace(graphics);
+        drawLines(graphics);
     }
 
-    private void colorFrontFace(Graphics graphics) {
+    private void drawFrontFace(Graphics graphics) {
         for (int row = 0; row < DIMENSION; row++) {
             for (int col = 0; col < DIMENSION; col++) {
                 graphics.setColor(frontFace.squares[row][col].getColor());
@@ -52,7 +52,7 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         }
     }
 
-    private void colorUpFace(Graphics graphics) {
+    private void drawUpFace(Graphics graphics) {
         for (int row = 0; row < DIMENSION; row++) {
             for (int col = 0; col < DIMENSION; col++) {
                 graphics.setColor(upFace.squares[row][col].getColor());
@@ -66,7 +66,7 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         }
     }
 
-    private void colorRightFace(Graphics graphics) {
+    private void drawRightFace(Graphics graphics) {
         for (int row = 0; row < DIMENSION; row++) {
             for (int col = 0; col < DIMENSION; col++) {
                 graphics.setColor(rightFace.squares[row][col].getColor());
@@ -78,6 +78,68 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
                 );
             }
         }
+    }
+
+    private void drawLeftFace(Graphics graphics) {
+        for (int row = 0; row < DIMENSION; row++) {
+            for (int col = 0; col < DIMENSION; col++) {
+                graphics.setColor(leftFace.squares[row][col].getColor());
+                graphics.fillPolygon(new int[] {LEFT_FACE_X[col], LEFT_FACE_X[col + 1],
+                        LEFT_FACE_X[col + 1], LEFT_FACE_X[col]},
+                        new int[] {LEFT_FACE_Y[row][col], LEFT_FACE_Y[row][col + 1],
+                            LEFT_FACE_Y[row + 1][col + 1], LEFT_FACE_Y[row + 1][col]},
+                        SQUARE_POINTS);
+            }
+        }
+    }
+
+    private void drawLines(Graphics graphics) {
+        graphics.setColor(Color.BLACK);
+        drawUpFaceLines(graphics);
+        drawFrontFaceLines(graphics);
+        drawRightFaceLines(graphics);
+        drawLeftFaceLines(graphics);
+    }
+
+    private void drawUpFaceLines(Graphics graphics) {
+        graphics.drawLine(UP_FACE_ROW1_X_1, UP_FACE_Y_1, FRONT_FACE_X_1, FRONT_FACE_Y_1);
+        graphics.drawLine(UP_FACE_ROW1_X_2, UP_FACE_Y_1, FRONT_FACE_X_2, FRONT_FACE_Y_1);
+        graphics.drawLine(UP_FACE_ROW1_X_3, UP_FACE_Y_1, FRONT_FACE_X_3, FRONT_FACE_Y_1);
+        graphics.drawLine(UP_FACE_ROW1_X_4, UP_FACE_Y_1, FRONT_FACE_X_4, FRONT_FACE_Y_1);
+        graphics.drawLine(UP_FACE_ROW1_X_1, UP_FACE_Y_1, UP_FACE_ROW1_X_4, UP_FACE_Y_1);
+        graphics.drawLine(UP_FACE_ROW2_X_1, UP_FACE_Y_2, UP_FACE_ROW2_X_4, UP_FACE_Y_2);
+        graphics.drawLine(UP_FACE_ROW3_X_1, UP_FACE_Y_3, UP_FACE_ROW3_X_4, UP_FACE_Y_3);
+    }
+
+    private void drawFrontFaceLines(Graphics graphics) {
+        graphics.drawLine(FRONT_FACE_X_1, FRONT_FACE_Y_1, FRONT_FACE_X_4, FRONT_FACE_Y_1);
+        graphics.drawLine(FRONT_FACE_X_1, FRONT_FACE_Y_2, FRONT_FACE_X_4, FRONT_FACE_Y_2);
+        graphics.drawLine(FRONT_FACE_X_1, FRONT_FACE_Y_3, FRONT_FACE_X_4, FRONT_FACE_Y_3);
+        graphics.drawLine(FRONT_FACE_X_1, FRONT_FACE_Y_4, FRONT_FACE_X_4, FRONT_FACE_Y_4);
+        graphics.drawLine(FRONT_FACE_X_1, FRONT_FACE_Y_1, FRONT_FACE_X_1, FRONT_FACE_Y_4);
+        graphics.drawLine(FRONT_FACE_X_2, FRONT_FACE_Y_1, FRONT_FACE_X_2, FRONT_FACE_Y_4);
+        graphics.drawLine(FRONT_FACE_X_3, FRONT_FACE_Y_1, FRONT_FACE_X_3, FRONT_FACE_Y_4);
+        graphics.drawLine(FRONT_FACE_X_4, FRONT_FACE_Y_1, FRONT_FACE_X_4, FRONT_FACE_Y_4);
+    }
+
+    private void drawRightFaceLines(Graphics graphics) {
+        graphics.drawLine(RIGHT_FACE_X[1], RIGHT_FACE_ROW1_Y[1], RIGHT_FACE_X[1], RIGHT_FACE_ROW4_Y[1]);
+        graphics.drawLine(RIGHT_FACE_X[2], RIGHT_FACE_ROW1_Y[2], RIGHT_FACE_X[2], RIGHT_FACE_ROW4_Y[2]);
+        graphics.drawLine(RIGHT_FACE_X[3], RIGHT_FACE_ROW1_Y[3], RIGHT_FACE_X[3], RIGHT_FACE_ROW4_Y[3]);
+        graphics.drawLine(RIGHT_FACE_X[0], RIGHT_FACE_ROW2_Y[0], RIGHT_FACE_X[3], RIGHT_FACE_ROW2_Y[3]);
+        graphics.drawLine(RIGHT_FACE_X[0], RIGHT_FACE_ROW3_Y[0], RIGHT_FACE_X[3], RIGHT_FACE_ROW3_Y[3]);
+        graphics.drawLine(RIGHT_FACE_X[0], RIGHT_FACE_ROW4_Y[0], RIGHT_FACE_X[3], RIGHT_FACE_ROW4_Y[3]);
+    }
+
+    private void drawLeftFaceLines(Graphics graphics) {
+        graphics.drawLine(LEFT_FACE_X[0], LEFT_FACE_Y[0][0], LEFT_FACE_X[0], LEFT_FACE_Y[3][0]);
+        graphics.drawLine(LEFT_FACE_X[1], LEFT_FACE_Y[0][1], LEFT_FACE_X[1], LEFT_FACE_Y[3][1]);
+        graphics.drawLine(LEFT_FACE_X[2], LEFT_FACE_Y[0][2], LEFT_FACE_X[2], LEFT_FACE_Y[3][2]);
+        graphics.drawLine(LEFT_FACE_X[3], LEFT_FACE_Y[0][3], LEFT_FACE_X[3], LEFT_FACE_Y[3][3]);
+        graphics.drawLine(LEFT_FACE_X[0], LEFT_FACE_Y[0][0], LEFT_FACE_X[3], LEFT_FACE_Y[0][3]);
+        graphics.drawLine(LEFT_FACE_X[0], LEFT_FACE_Y[1][0], LEFT_FACE_X[3], LEFT_FACE_Y[1][3]);
+        graphics.drawLine(LEFT_FACE_X[0], LEFT_FACE_Y[2][0], LEFT_FACE_X[3], LEFT_FACE_Y[2][3]);
+        graphics.drawLine(LEFT_FACE_X[0], LEFT_FACE_Y[3][0], LEFT_FACE_X[3], LEFT_FACE_Y[3][3]);
     }
 
     public void doMove(Move move) {

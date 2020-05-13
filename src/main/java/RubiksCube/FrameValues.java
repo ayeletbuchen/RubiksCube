@@ -7,6 +7,7 @@ public interface FrameValues {
     int SQUARE_WIDTH = FACE_WIDTH / 3;
     int PARTIAL_SQUARE_WIDTH = SQUARE_WIDTH / 3;
     int SQUARE_POINTS = 4;
+    int DOUBLE_FACE_WIDTH = 2 * FACE_WIDTH;
 
     //<editor-fold desc="Front face coordinates">
     int FRONT_FACE_X_1 = (int) (FRAME_WIDTH / 2.5);
@@ -66,5 +67,11 @@ public interface FrameValues {
             RIGHT_FACE_ROW3_Y[2] + SQUARE_WIDTH, RIGHT_FACE_ROW3_Y[3] + SQUARE_WIDTH};
 
     int[][] RIGHT_FACE_Y = new int[][] {RIGHT_FACE_ROW1_Y, RIGHT_FACE_ROW2_Y, RIGHT_FACE_ROW3_Y, RIGHT_FACE_ROW4_Y};
+    //</editor-fold>
+
+    //<editor-fold desc="Left face coordinates">
+    int[][] LEFT_FACE_Y = RIGHT_FACE_Y;
+    int[] LEFT_FACE_X = new int[] {RIGHT_FACE_X[0] - DOUBLE_FACE_WIDTH, RIGHT_FACE_X[1] - DOUBLE_FACE_WIDTH,
+                    RIGHT_FACE_X[2] - DOUBLE_FACE_WIDTH, RIGHT_FACE_X[3] - DOUBLE_FACE_WIDTH};
     //</editor-fold>
 }
