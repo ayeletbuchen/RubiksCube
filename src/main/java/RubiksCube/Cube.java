@@ -34,6 +34,8 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         drawFrontBackFace(graphics, frontFace, FRONT_FACE_X, FRONT_FACE_Y);
         drawUpDownFace(graphics, upFace, UP_FACE_X, UP_FACE_Y);
         drawLeftRightFace(graphics, rightFace, RIGHT_FACE_X, RIGHT_FACE_Y);
+        drawUpDownFace(graphics, downFace, DOWN_FACE_X, DOWN_FACE_Y);
+        drawFrontBackFace(graphics, backFace, BACK_FACE_X, BACK_FACE_Y);
         drawLeftRightFace(graphics, leftFace, LEFT_FACE_X, LEFT_FACE_Y);
         drawLines(graphics);
     }
@@ -102,6 +104,8 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         drawUpDownFaceLines(graphics, UP_FACE_X, UP_FACE_Y);
         drawFrontBackFaceLines(graphics, FRONT_FACE_X, FRONT_FACE_Y);
         drawLeftRightFaceLines(graphics, RIGHT_FACE_X, RIGHT_FACE_Y);
+        drawUpDownFaceLines(graphics, DOWN_FACE_X, DOWN_FACE_Y);
+        drawFrontBackFaceLines(graphics, BACK_FACE_X, BACK_FACE_Y);
         drawLeftRightFaceLines(graphics, LEFT_FACE_X, LEFT_FACE_Y);
     }
 

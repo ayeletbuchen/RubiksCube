@@ -8,6 +8,7 @@ public interface FrameValues {
     int PARTIAL_SQUARE_WIDTH = SQUARE_WIDTH / 3;
     int SQUARE_POINTS = 4;
     int DOUBLE_FACE_WIDTH = 2 * FACE_WIDTH;
+    int MOST_FACE_WIDTH = (2 * SQUARE_WIDTH) + PARTIAL_SQUARE_WIDTH;
 
     //<editor-fold desc="Front face coordinates">
     int FRONT_FACE_X_1 = (int) (FRAME_WIDTH / 2.5);
@@ -73,5 +74,18 @@ public interface FrameValues {
     int[][] LEFT_FACE_Y = RIGHT_FACE_Y;
     int[] LEFT_FACE_X = new int[] {RIGHT_FACE_X[0] - DOUBLE_FACE_WIDTH, RIGHT_FACE_X[1] - DOUBLE_FACE_WIDTH,
                     RIGHT_FACE_X[2] - DOUBLE_FACE_WIDTH, RIGHT_FACE_X[3] - DOUBLE_FACE_WIDTH};
+    //</editor-fold>
+
+    //<editor-fold desc="Back face coordinates">
+    int[] BACK_FACE_X = new int[] {FRONT_FACE_X[0] + DOUBLE_FACE_WIDTH,  FRONT_FACE_X[1] + DOUBLE_FACE_WIDTH,
+            FRONT_FACE_X[2] + DOUBLE_FACE_WIDTH, FRONT_FACE_X[3] + DOUBLE_FACE_WIDTH};
+    int[] BACK_FACE_Y = new int[] {FRONT_FACE_Y[0] - MOST_FACE_WIDTH, FRONT_FACE_Y[1] - MOST_FACE_WIDTH,
+            FRONT_FACE_Y[2] - MOST_FACE_WIDTH, FRONT_FACE_Y[3] - MOST_FACE_WIDTH};
+    //</editor-fold>
+
+    //<editor-fold desc="Down face coordinates">
+    int[][] DOWN_FACE_X = UP_FACE_X;
+    int[] DOWN_FACE_Y = new int[] {UP_FACE_Y[0] + DOUBLE_FACE_WIDTH, UP_FACE_Y[1] + DOUBLE_FACE_WIDTH,
+            UP_FACE_Y[2] + DOUBLE_FACE_WIDTH, UP_FACE_Y[3] + DOUBLE_FACE_WIDTH};
     //</editor-fold>
 }
