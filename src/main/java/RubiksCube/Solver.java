@@ -145,6 +145,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         }
     }
 
+    //<editor-fold desc="Move up face edges from bottom layer">
     private void moveEdgeSquaresFromBottomLayerToUpFace() {
         moveUpFaceSquareFromBottomLayer(TOP_ROW, MIDDLE_COLUMN);
         moveUpFaceSquareFromBottomLayer(MIDDLE_ROW, LEFT_COLUMN);
@@ -227,13 +228,16 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
             }
         }
     }
+    //</editor-fold>
 
+    //</editor-fold>
+    //</editor-fold>
+    //</editor-fold>
+
+    //<editor-fold desc="Edge methods">
     private boolean edgesAreOriented(Face face, Color color) {
         return crossExists(face, color) && edgesAreOriented(face);
     }
-
-    //</editor-fold>
-    //</editor-fold>
 
     private boolean edgesAreOriented(Face face) {
         Color topEdgeColor = getEdgeColor(face.squares[TOP_ROW][MIDDLE_COLUMN]);
@@ -310,8 +314,12 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                 && topEdge.equals(topColor) && leftEdge.equals(leftColor);
     }
 
-    private boolean squareIsColor(Square square, Color color) {
-        return square.getColor().equals(color);
+    private boolean edgeIsColor(Square square, Color color) {
+        return getEdgeColor(square).equals(color);
+    }
+
+    private Color getEdgeColor(Square square) {
+        return edgesMap.get(square).getColor();
     }
 
     private boolean crossExists(Face face, Color color) {
@@ -320,12 +328,9 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                 && squareIsColor(face.squares[MIDDLE_ROW][RIGHT_COLUMN], color)
                 && squareIsColor(face.squares[BOTTOM_ROW][MIDDLE_COLUMN], color);
     }
+    //</editor-fold>
 
-    private boolean edgeIsColor(Square square, Color color) {
-        return getEdgeColor(square).equals(color);
-    }
-
-    private Color getEdgeColor(Square square) {
-        return edgesMap.get(square).getColor();
+    private boolean squareIsColor(Square square, Color color) {
+        return square.getColor().equals(color);
     }
 }
