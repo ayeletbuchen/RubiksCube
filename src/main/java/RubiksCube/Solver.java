@@ -147,17 +147,18 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
     //<editor-fold desc="Move up face edges from bottom layer">
     private void moveEdgeSquaresFromBottomLayerToUpFace() {
-        moveUpFaceSquareFromBottomLayer(TOP_ROW, MIDDLE_COLUMN);
-        moveUpFaceSquareFromBottomLayer(MIDDLE_ROW, LEFT_COLUMN);
-        moveUpFaceSquareFromBottomLayer(MIDDLE_ROW, RIGHT_COLUMN);
-        moveUpFaceSquareFromBottomLayer(BOTTOM_ROW, MIDDLE_COLUMN);
+        moveUpFaceEdgeFromBottomLayer(TOP_ROW, MIDDLE_COLUMN);
+        moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, LEFT_COLUMN);
+        moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, RIGHT_COLUMN);
+        moveUpFaceEdgeFromBottomLayer(BOTTOM_ROW, MIDDLE_COLUMN);
     }
 
-    private void moveUpFaceSquareFromBottomLayer(int startRow, int startCol) {
+    private void moveUpFaceEdgeFromBottomLayer(int startRow, int startCol) {
         boolean upSquareOnBottomLayer = false;
         boolean upSquareOnDownFace = false;
         Square downFaceSquare = downFace.squares[startRow][startCol];
         Color edgeColor = null;
+
         if (squareIsColor(downFaceSquare, upColor)) {
             edgeColor = getEdgeColor(downFace.squares[startRow][startCol]);
             upSquareOnDownFace = true;
@@ -182,50 +183,62 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                 endCol = MIDDLE_COLUMN;
             }
 
-            if (startRow != endRow || startCol != endCol) {
-                if (Math.abs(startRow - endRow) == 2 || Math.abs(startCol - endCol) == 2) {
-                    cube.doubleRotateDownFace();
-                } else if ((startRow == TOP_ROW && endCol == RIGHT_COLUMN)
-                        || (startCol == RIGHT_COLUMN && endRow == BOTTOM_ROW)
-                        || (startRow == BOTTOM_ROW && endCol == LEFT_COLUMN)
-                        || (startCol == LEFT_COLUMN && endRow == TOP_ROW)) {
-                    cube.rotateDownFaceClockwise();
-                } else {
-                    cube.rotateDownFaceCounterclockwise();
-                }
-            }
+            positionUpEdgeOnBottomLayer(startRow, startCol, endRow, endCol);
 
             if (upSquareOnDownFace) {
-                if (endRow == TOP_ROW) {
-                    cube.doubleRotateFrontFace();
-                } else if (endRow == BOTTOM_ROW) {
-                    cube.doubleRotateBackFace();
-                } else if (endCol == LEFT_COLUMN) {
-                    cube.doubleRotateLeftFace();
-                } else if (endCol == RIGHT_COLUMN) {
-                    cube.doubleRotateRightFace();
-                }
+                moveUpEdgeFromDownFace(endRow, endCol);
             } else if (upSquareOnBottomLayer) {
-                cube.rotateDownFaceCounterclockwise();
-
-                if (endCol == LEFT_COLUMN) {
-                    cube.rotateBackFaceCounterclockwise();
-                    cube.rotateLeftFaceClockwise();
-                    cube.rotateBackFaceClockwise();
-                } else if (endRow == TOP_ROW) {
-                    cube.rotateLeftFaceCounterclockwise();
-                    cube.rotateFrontFaceClockwise();
-                    cube.rotateLeftFaceClockwise();
-                } else if (endCol == RIGHT_COLUMN) {
-                    cube.rotateFrontFaceCounterclockwise();
-                    cube.rotateRightFaceClockwise();
-                    cube.rotateFrontFaceClockwise();
-                } else {
-                    cube.rotateRightFaceCounterclockwise();
-                    cube.rotateBackFaceClockwise();
-                    cube.rotateRightFaceClockwise();
-                }
+                moveUpEdgeFromBottomLayer(endRow, endCol);
             }
+        }
+    }
+
+    private void positionUpEdgeOnBottomLayer(int startRow, int startCol, int endRow, int endCol) {
+        if (startRow != endRow || startCol != endCol) {
+            if (Math.abs(startRow - endRow) == 2 || Math.abs(startCol - endCol) == 2) {
+                cube.doubleRotateDownFace();
+            } else if ((startRow == TOP_ROW && endCol == RIGHT_COLUMN)
+                    || (startCol == RIGHT_COLUMN && endRow == BOTTOM_ROW)
+                    || (startRow == BOTTOM_ROW && endCol == LEFT_COLUMN)
+                    || (startCol == LEFT_COLUMN && endRow == TOP_ROW)) {
+                cube.rotateDownFaceClockwise();
+            } else {
+                cube.rotateDownFaceCounterclockwise();
+            }
+        }
+    }
+
+    private void moveUpEdgeFromDownFace(int endRow, int endCol) {
+        if (endRow == TOP_ROW) {
+            cube.doubleRotateFrontFace();
+        } else if (endRow == BOTTOM_ROW) {
+            cube.doubleRotateBackFace();
+        } else if (endCol == LEFT_COLUMN) {
+            cube.doubleRotateLeftFace();
+        } else if (endCol == RIGHT_COLUMN) {
+            cube.doubleRotateRightFace();
+        }
+    }
+
+    private void moveUpEdgeFromBottomLayer(int endRow, int endCol) {
+        cube.rotateDownFaceCounterclockwise();
+
+        if (endCol == LEFT_COLUMN) {
+            cube.rotateBackFaceCounterclockwise();
+            cube.rotateLeftFaceClockwise();
+            cube.rotateBackFaceClockwise();
+        } else if (endRow == TOP_ROW) {
+            cube.rotateLeftFaceCounterclockwise();
+            cube.rotateFrontFaceClockwise();
+            cube.rotateLeftFaceClockwise();
+        } else if (endCol == RIGHT_COLUMN) {
+            cube.rotateFrontFaceCounterclockwise();
+            cube.rotateRightFaceClockwise();
+            cube.rotateFrontFaceClockwise();
+        } else {
+            cube.rotateRightFaceCounterclockwise();
+            cube.rotateBackFaceClockwise();
+            cube.rotateRightFaceClockwise();
         }
     }
     //</editor-fold>
