@@ -83,7 +83,7 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
     private void drawLeftFace(Graphics graphics) {
         for (int row = 0; row < DIMENSION; row++) {
             for (int col = 0; col < DIMENSION; col++) {
-                graphics.setColor(leftFace.squares[row][col].getColor());
+                graphics.setColor(leftFace.squares[row][DIMENSION - 1 - col].getColor());
                 graphics.fillPolygon(new int[] {LEFT_FACE_X[col], LEFT_FACE_X[col + 1],
                         LEFT_FACE_X[col + 1], LEFT_FACE_X[col]},
                         new int[] {LEFT_FACE_Y[row][col], LEFT_FACE_Y[row][col + 1],
