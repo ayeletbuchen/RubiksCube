@@ -33,8 +33,8 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         super.paintComponent(graphics);
         drawFrontFace(graphics);
         drawUpFace(graphics);
-        drawRightFace(graphics);
-        drawLeftFace(graphics);
+        drawLeftRightFace(graphics, rightFace, RIGHT_FACE_X, RIGHT_FACE_Y);
+        drawLeftRightFace(graphics, leftFace, LEFT_FACE_X, LEFT_FACE_Y);
         drawLines(graphics);
     }
 
@@ -66,28 +66,20 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         }
     }
 
-    private void drawRightFace(Graphics graphics) {
+    private void drawLeftRightFace(Graphics graphics, Face face, int[] xCoordinates, int[][] yCoordinates) {
         for (int row = 0; row < DIMENSION; row++) {
             for (int col = 0; col < DIMENSION; col++) {
-                graphics.setColor(rightFace.squares[row][col].getColor());
-                graphics.fillPolygon(
-                        new int[] {RIGHT_FACE_X[col], RIGHT_FACE_X[col + 1], RIGHT_FACE_X[col + 1], RIGHT_FACE_X[col]},
-                        new int[] {RIGHT_FACE_Y[row][col], RIGHT_FACE_Y[row][col + 1],
-                                RIGHT_FACE_Y[row + 1][col + 1], RIGHT_FACE_Y[row + 1][col]},
-                        SQUARE_POINTS
-                );
-            }
-        }
-    }
-
-    private void drawLeftFace(Graphics graphics) {
-        for (int row = 0; row < DIMENSION; row++) {
-            for (int col = 0; col < DIMENSION; col++) {
-                graphics.setColor(leftFace.squares[row][DIMENSION - 1 - col].getColor());
-                graphics.fillPolygon(new int[] {LEFT_FACE_X[col], LEFT_FACE_X[col + 1],
-                        LEFT_FACE_X[col + 1], LEFT_FACE_X[col]},
-                        new int[] {LEFT_FACE_Y[row][col], LEFT_FACE_Y[row][col + 1],
-                            LEFT_FACE_Y[row + 1][col + 1], LEFT_FACE_Y[row + 1][col]},
+                int colorCol;
+                if (face.equals(leftFace)) {
+                    colorCol = DIMENSION - 1 - col;
+                } else {
+                    colorCol = col;
+                }
+                graphics.setColor(face.squares[row][colorCol].getColor());
+                graphics.fillPolygon(new int[] {xCoordinates[col], xCoordinates[col + 1],
+                                xCoordinates[col + 1], xCoordinates[col]},
+                        new int[] {yCoordinates[row][col], yCoordinates[row][col + 1],
+                                yCoordinates[row + 1][col + 1], yCoordinates[row + 1][col]},
                         SQUARE_POINTS);
             }
         }
