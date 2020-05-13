@@ -31,22 +31,28 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
     @Override
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        drawFrontFace(graphics);
+        drawFrontBackFace(graphics, frontFace, FRONT_FACE_X, FRONT_FACE_Y);
         drawUpDownFace(graphics, upFace, UP_FACE_X, UP_FACE_Y);
         drawLeftRightFace(graphics, rightFace, RIGHT_FACE_X, RIGHT_FACE_Y);
         drawLeftRightFace(graphics, leftFace, LEFT_FACE_X, LEFT_FACE_Y);
         drawLines(graphics);
     }
 
-    private void drawFrontFace(Graphics graphics) {
+    private void drawFrontBackFace(Graphics graphics, Face face, int[] xCoordinates, int[] yCoordinates) {
         for (int row = 0; row < DIMENSION; row++) {
             for (int col = 0; col < DIMENSION; col++) {
-                graphics.setColor(frontFace.squares[row][col].getColor());
+                int colorCol;
+                if (face.equals(backFace)) {
+                    colorCol = DIMENSION - 1 - col;
+                } else {
+                    colorCol = col;
+                }
+                graphics.setColor(face.squares[row][colorCol].getColor());
                 graphics.fillPolygon(
-                        new int[] {FRONT_FACE_X[col], FRONT_FACE_X[col + 1],
-                                FRONT_FACE_X[col + 1], FRONT_FACE_X[col]},
-                        new int[] {FRONT_FACE_Y[row], FRONT_FACE_Y[row],
-                                FRONT_FACE_Y[row + 1], FRONT_FACE_Y[row + 1]},
+                        new int[] {xCoordinates[col], xCoordinates[col + 1],
+                                xCoordinates[col + 1], xCoordinates[col]},
+                        new int[] {yCoordinates[row], yCoordinates[row],
+                                yCoordinates[row + 1], yCoordinates[row + 1]},
                         SQUARE_POINTS);
             }
         }
@@ -61,7 +67,7 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
                 } else {
                     colorRow = row;
                 }
-                graphics.setColor(face.squares[row][col].getColor());
+                graphics.setColor(face.squares[colorRow][col].getColor());
                 graphics.fillPolygon(
                         new int[] {xCoordinates[row][col], xCoordinates[row][col + 1],
                                 xCoordinates[row + 1][col + 1], xCoordinates[row + 1][col]},
@@ -94,7 +100,7 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
     private void drawLines(Graphics graphics) {
         graphics.setColor(Color.BLACK);
         drawUpDownFaceLines(graphics, UP_FACE_X, UP_FACE_Y);
-        drawFrontFaceLines(graphics);
+        drawFrontBackFaceLines(graphics, FRONT_FACE_X, FRONT_FACE_Y);
         drawLeftRightFaceLines(graphics, RIGHT_FACE_X, RIGHT_FACE_Y);
         drawLeftRightFaceLines(graphics, LEFT_FACE_X, LEFT_FACE_Y);
     }
@@ -113,15 +119,18 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         graphics.drawLine(xCoordinates[3][0], yCoordinates[3], xCoordinates[3][3], yCoordinates[3]);
     }
 
-    private void drawFrontFaceLines(Graphics graphics) {
-        graphics.drawLine(FRONT_FACE_X_1, FRONT_FACE_Y_1, FRONT_FACE_X_4, FRONT_FACE_Y_1);
-        graphics.drawLine(FRONT_FACE_X_1, FRONT_FACE_Y_2, FRONT_FACE_X_4, FRONT_FACE_Y_2);
-        graphics.drawLine(FRONT_FACE_X_1, FRONT_FACE_Y_3, FRONT_FACE_X_4, FRONT_FACE_Y_3);
-        graphics.drawLine(FRONT_FACE_X_1, FRONT_FACE_Y_4, FRONT_FACE_X_4, FRONT_FACE_Y_4);
-        graphics.drawLine(FRONT_FACE_X_1, FRONT_FACE_Y_1, FRONT_FACE_X_1, FRONT_FACE_Y_4);
-        graphics.drawLine(FRONT_FACE_X_2, FRONT_FACE_Y_1, FRONT_FACE_X_2, FRONT_FACE_Y_4);
-        graphics.drawLine(FRONT_FACE_X_3, FRONT_FACE_Y_1, FRONT_FACE_X_3, FRONT_FACE_Y_4);
-        graphics.drawLine(FRONT_FACE_X_4, FRONT_FACE_Y_1, FRONT_FACE_X_4, FRONT_FACE_Y_4);
+    private void drawFrontBackFaceLines(Graphics graphics, int[] xCoordinates, int[] yCoordinates) {
+        // horizontal lines
+        graphics.drawLine(xCoordinates[0], yCoordinates[0], xCoordinates[3], yCoordinates[0]);
+        graphics.drawLine(xCoordinates[0], yCoordinates[1], xCoordinates[3], yCoordinates[1]);
+        graphics.drawLine(xCoordinates[0], yCoordinates[2], xCoordinates[3], yCoordinates[2]);
+        graphics.drawLine(xCoordinates[0], yCoordinates[3], xCoordinates[3], yCoordinates[3]);
+
+        // vertical lines
+        graphics.drawLine(xCoordinates[0], yCoordinates[0], xCoordinates[0], yCoordinates[3]);
+        graphics.drawLine(xCoordinates[1], yCoordinates[0], xCoordinates[1], yCoordinates[3]);
+        graphics.drawLine(xCoordinates[2], yCoordinates[0], xCoordinates[2], yCoordinates[3]);
+        graphics.drawLine(xCoordinates[3], yCoordinates[0], xCoordinates[3], yCoordinates[3]);
     }
 
     private void drawLeftRightFaceLines(Graphics graphics, int[] xCoordinates, int[][] yCoordinates) {
