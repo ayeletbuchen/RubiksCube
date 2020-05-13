@@ -137,14 +137,63 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
     //<editor-fold defaultstate="collapsed" desc="Create white cross">
     private void createWhiteCross() {
-        System.out.println(edgesAreOriented(upFace, upColor));
-//        while (!whiteEdgesAreOriented()) {
-//            orientUpFaceWhiteEdges();
-//            moveWhiteEdgeSquaresFromDownFaceToUpFace();
+        if (!edgesAreOriented(upFace, upColor)) {
+            moveEdgeSquaresFromDownFaceToUpFace();
 //            moveAllWhiteEdgeSquaresFromBottomLayerToUpFace();
 //            moveWhiteEdgeSquaresFromMiddleLayerToUpFace();
 //            moveWhiteEdgeSquaresFromTopLayerToUpFace();
-//        }
+        }
+    }
+
+    private void moveEdgeSquaresFromDownFaceToUpFace() {
+        moveUpFaceSquareFromDownFace(TOP_ROW, MIDDLE_COLUMN);
+        moveUpFaceSquareFromDownFace(MIDDLE_ROW, LEFT_COLUMN);
+        moveUpFaceSquareFromDownFace(MIDDLE_ROW, RIGHT_COLUMN);
+        moveUpFaceSquareFromDownFace(BOTTOM_ROW, MIDDLE_COLUMN);
+    }
+
+    private void moveUpFaceSquareFromDownFace(int startRow, int startCol) {
+        if (squareIsColor(downFace.squares[startRow][startCol], upColor)) {
+            Color edgeColor = getAdjacentEdgeColor(downFace.squares[startRow][startCol]);
+
+            int endRow, endCol;
+            if (edgeColor.equals(frontColor)) {
+                endRow = TOP_ROW;
+                endCol = MIDDLE_COLUMN;
+            } else if (edgeColor.equals(leftColor)) {
+                endRow = MIDDLE_ROW;
+                endCol = LEFT_COLUMN;
+            } else if (edgeColor.equals(rightColor)) {
+                endRow = MIDDLE_ROW;
+                endCol = RIGHT_COLUMN;
+            } else {
+                endRow = BOTTOM_ROW;
+                endCol = MIDDLE_COLUMN;
+            }
+
+            if (startRow != endRow || startCol != endCol) {
+                if (Math.abs(startRow - endRow) == 2 || Math.abs(startCol - endCol) == 2) {
+                    cube.doubleRotateDownFace();
+                } else if ((startRow == TOP_ROW && endCol == RIGHT_COLUMN)
+                        || (startCol == RIGHT_COLUMN && endRow == BOTTOM_ROW)
+                        || (startRow == BOTTOM_ROW && endCol == LEFT_COLUMN)
+                        || (startCol == LEFT_COLUMN && endRow == TOP_ROW)) {
+                    cube.rotateDownFaceClockwise();
+                } else {
+                    cube.rotateDownFaceCounterclockwise();
+                }
+            }
+
+            if (endRow == TOP_ROW) {
+                cube.doubleRotateFrontFace();
+            } else if (endRow == BOTTOM_ROW) {
+                cube.doubleRotateBackFace();
+            } else if (endCol == LEFT_COLUMN) {
+                cube.doubleRotateLeftFace();
+            } else if (endCol == RIGHT_COLUMN) {
+                cube.doubleRotateRightFace();
+            }
+        }
     }
 
     private boolean edgesAreOriented(Face face, Color color) {
