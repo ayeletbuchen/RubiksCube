@@ -139,15 +139,13 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     //<editor-fold defaultstate="collapsed" desc="Create white cross">
     private void createWhiteCross() {
         if (!edgesAreOriented(upFace, upColor)) {
-            moveEdgeSquaresFromBottomLayerToUpFace(true);
-            moveEdgeSquaresFromBottomLayerToUpFace(false);
-//            moveAllWhiteEdgeSquaresFromBottomLayerToUpFace();
+            moveEdgeSquaresFromBottomLayerToUpFace();
 //            moveWhiteEdgeSquaresFromMiddleLayerToUpFace();
 //            moveWhiteEdgeSquaresFromTopLayerToUpFace();
         }
     }
 
-    private void moveEdgeSquaresFromBottomLayerToUpFace(boolean upSquareOnDownFace) {
+    private void moveEdgeSquaresFromBottomLayerToUpFace() {
         moveUpFaceSquareFromBottomLayer(TOP_ROW, MIDDLE_COLUMN);
         moveUpFaceSquareFromBottomLayer(MIDDLE_ROW, LEFT_COLUMN);
         moveUpFaceSquareFromBottomLayer(MIDDLE_ROW, RIGHT_COLUMN);
