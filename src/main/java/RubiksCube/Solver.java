@@ -138,10 +138,10 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
     //<editor-fold defaultstate="collapsed" desc="Create white cross">
     private void createWhiteCross() {
-        if (!edgesAreOriented(upFace, upColor)) {
+        while (!edgesAreOriented(upFace, upColor)) {
             moveUpFaceEdgesFromBottomLayer();
             moveUpFaceEdgesFromMiddleLayer();
-//            moveWhiteEdgeSquaresFromTopLayerToUpFace();
+            moveUpFaceEdgesFromTopLayer();
         }
     }
 
@@ -185,10 +185,10 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
             positionUpEdgeOnBottomLayer(startRow, startCol, endRow, endCol);
 
-            if (upSquareOnDownFace) {
-                moveUpEdgeFromDownFace(endRow, endCol);
-            } else if (upSquareOnBottomLayer) {
+            if (upSquareOnBottomLayer) {
                 moveUpEdgeFromBottomLayer(endRow, endCol);
+            } else {
+                moveUpEdgeFromDownFace(endRow, endCol);
             }
         }
     }
@@ -208,53 +208,36 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         }
     }
 
-    private void moveUpEdgeFromDownFace(int endRow, int endCol) {
-        if (endRow == TOP_ROW) {
-            cube.doubleRotateFrontFace();
-        } else if (endRow == BOTTOM_ROW) {
-            cube.doubleRotateBackFace();
-        } else if (endCol == LEFT_COLUMN) {
-            cube.doubleRotateLeftFace();
-        } else if (endCol == RIGHT_COLUMN) {
-            cube.doubleRotateRightFace();
+    private void moveUpEdgeFromBottomLayer(int downFaceRow, int downFaceCol) {
+        if (downFaceRow == TOP_ROW) {
+            cube.rotateFrontFaceCounterclockwise();
+            moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, RIGHT_COLUMN);
+        } else if (downFaceRow == BOTTOM_ROW) {
+            cube.rotateBackFaceClockwise();
+            moveUpFaceEdgeFromMiddleLayerToDownFace(backFace, LEFT_COLUMN);
+        } else if (downFaceCol == LEFT_COLUMN) {
+            cube.rotateLeftFaceCounterclockwise();
+            moveUpFaceEdgeFromMiddleLayerToDownFace(leftFace, RIGHT_COLUMN);
+        } else {
+            cube.rotateRightFaceClockwise();
+            moveUpFaceEdgeFromMiddleLayerToDownFace(rightFace, LEFT_COLUMN);
         }
     }
 
-    private void moveUpEdgeFromBottomLayer(int endRow, int endCol) {
-        cube.rotateDownFaceCounterclockwise();
-
-        if (endCol == LEFT_COLUMN) {
-            boolean topPositioned = upTopEdgePositioned();
-            cube.rotateBackFaceCounterclockwise();
-            cube.rotateLeftFaceClockwise();
-            if (topPositioned) {
-                cube.rotateBackFaceClockwise();
-            }
-        } else if (endRow == TOP_ROW) {
-            boolean leftPositioned = upLeftEdgePositioned();
-            cube.rotateLeftFaceCounterclockwise();
-            cube.rotateFrontFaceClockwise();
-            if (leftPositioned) {
-                cube.rotateLeftFaceClockwise();
-            }
-        } else if (endCol == RIGHT_COLUMN) {
-            boolean bottomPositioned = upBottomEdgePositioned();
-            cube.rotateFrontFaceCounterclockwise();
-            cube.rotateRightFaceClockwise();
-            if (bottomPositioned) {
-                cube.rotateFrontFaceClockwise();
-            }
-        } else {
-            boolean rightPositioned = upRightEdgePositioned();
-            cube.rotateRightFaceCounterclockwise();
-            cube.rotateBackFaceClockwise();
-            if (rightPositioned) {
-                cube.rotateRightFaceClockwise();
-            }
+    private void moveUpEdgeFromDownFace(int row, int col) {
+        if (row == TOP_ROW) {
+            cube.doubleRotateFrontFace();
+        } else if (row == BOTTOM_ROW) {
+            cube.doubleRotateBackFace();
+        } else if (col == LEFT_COLUMN) {
+            cube.doubleRotateLeftFace();
+        } else if (col == RIGHT_COLUMN) {
+            cube.doubleRotateRightFace();
         }
     }
     //</editor-fold>
 
+    //<editor-fold desc="Move up face edges from middle layer">
     private void moveUpFaceEdgesFromMiddleLayer() {
         moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, LEFT_COLUMN);
         moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, RIGHT_COLUMN);
@@ -283,11 +266,11 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                     moveUpFaceEdgeFromBottomLayer(TOP_ROW, MIDDLE_COLUMN);
                 } else {
                     cube.rotateRightFaceCounterclockwise();
-                    cube.rotateDownFaceClockwise();
+                    cube.rotateDownFaceCounterclockwise();
                     if (rightPositioned) {
                         cube.rotateRightFaceClockwise();
                     }
-                    moveUpFaceEdgeFromBottomLayer(BOTTOM_ROW, MIDDLE_COLUMN);
+                    moveUpFaceEdgeFromBottomLayer(TOP_ROW, MIDDLE_COLUMN);
                 }
             } else if (face.equals(leftFace)) {
                 if (col == LEFT_COLUMN) {
@@ -299,11 +282,11 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                     moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, LEFT_COLUMN);
                 } else {
                     cube.rotateFrontFaceCounterclockwise();
-                    cube.rotateDownFaceClockwise();
+                    cube.rotateDownFaceCounterclockwise();
                     if (bottomPositioned) {
                         cube.rotateFrontFaceClockwise();
                     }
-                    moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, RIGHT_COLUMN);
+                    moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, LEFT_COLUMN);
                 }
             } else if (face.equals(rightFace)) {
                 if (col == LEFT_COLUMN) {
@@ -315,11 +298,11 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                     moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, RIGHT_COLUMN);
                 } else {
                     cube.rotateBackFaceCounterclockwise();
-                    cube.rotateDownFaceClockwise();
+                    cube.rotateDownFaceCounterclockwise();
                     if (topPositioned) {
                         cube.rotateBackFaceClockwise();
                     }
-                    moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, LEFT_COLUMN);
+                    moveUpFaceEdgeFromBottomLayer(MIDDLE_ROW, RIGHT_COLUMN);
                 }
             } else {
                 if (col == LEFT_COLUMN) {
@@ -331,15 +314,37 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                     moveUpFaceEdgeFromBottomLayer(BOTTOM_ROW, MIDDLE_COLUMN);
                 } else {
                     cube.rotateLeftFaceCounterclockwise();
-                    cube.rotateDownFaceClockwise();
+                    cube.rotateDownFaceCounterclockwise();
                     if (leftPositioned) {
                         cube.rotateLeftFaceClockwise();
                     }
-                    moveUpFaceEdgeFromBottomLayer(TOP_ROW, MIDDLE_COLUMN);
+                    moveUpFaceEdgeFromBottomLayer(BOTTOM_ROW, MIDDLE_COLUMN);
                 }
             }
         }
     }
+    //</editor-fold>
+
+    //<editor-fold desc="Move up face edges from top layer">
+    private void moveUpFaceEdgesFromTopLayer() {
+        if (edgeIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor)) {
+            cube.rotateLeftFaceCounterclockwise();
+            moveUpFaceEdgeFromMiddleLayerToDownFace(leftFace, RIGHT_COLUMN);
+        }
+        if (edgeIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], upColor)) {
+            cube.rotateFrontFaceClockwise();
+            moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, RIGHT_COLUMN);
+        }
+        if (edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor)) {
+            cube.rotateRightFaceCounterclockwise();
+            moveUpFaceEdgeFromMiddleLayerToDownFace(rightFace, LEFT_COLUMN);
+        }
+        if (edgeIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], upColor)) {
+            cube.rotateBackFaceClockwise();
+            moveUpFaceEdgeFromMiddleLayerToDownFace(leftFace, RIGHT_COLUMN);
+        }
+    }
+    //</editor-fold>
 
     //</editor-fold>
     //</editor-fold>
