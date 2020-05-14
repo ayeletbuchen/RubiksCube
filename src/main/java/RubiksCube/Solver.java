@@ -113,13 +113,13 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
     //<editor-fold defaultstate-"collapsed" desc="Solve top layer">
     private void solveTopLayer() {
-        positionWhiteCenterSquare();
+        positionUpFaceCenter();
         createWhiteCross();
-        // putWhiteCornersInPlace();
+        positionUpCorners();
     }
 
     //<editor-fold defaultstate="collapsed" desc="Position white center square">
-    private void positionWhiteCenterSquare() {
+    private void positionUpFaceCenter() {
         if (!squareIsColor(upFace.squares[MIDDLE_ROW][MIDDLE_COLUMN], upColor)) {
             if (squareIsColor(leftFace.squares[MIDDLE_ROW][MIDDLE_COLUMN], upColor)) {
                 cube.turnCubeClockwiseAlongZAxis();
@@ -337,6 +337,10 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     //</editor-fold>
 
     //</editor-fold>
+
+    private void positionUpCorners() {
+
+    }
     //</editor-fold>
     //</editor-fold>
 
