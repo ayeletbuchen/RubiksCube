@@ -405,6 +405,24 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     }
     //</editor-fold>
     //</editor-fold>
+
+    //<editor-fold desc="Solve middle layer">
+    private void solveMiddleLayer() {
+        alignMiddleLayerCenterSquares();
+    }
+
+    private void alignMiddleLayerCenterSquares() {
+        if (!squareIsColor(frontFace.squares[MIDDLE_ROW][MIDDLE_COLUMN], frontColor)) {
+            if (squareIsColor(leftFace.squares[MIDDLE_ROW][MIDDLE_COLUMN], frontColor)) {
+                cube.sliceEquatorialLayerClockwise();
+            } else if (squareIsColor(rightFace.squares[MIDDLE_ROW][MIDDLE_COLUMN], frontColor)) {
+                cube.sliceEquatorialLayerCounterclockwise();
+            } else {
+                cube.doubleSliceEquatorialLayer();
+            }
+        }
+    }
+    //</editor-fold>
     //</editor-fold>
 
     //<editor-fold desc="Edge methods">
