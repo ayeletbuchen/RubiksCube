@@ -157,7 +157,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         Square downFaceSquare = downFace.squares[startRow][startCol];
 
         if (edgeIsColor(downFaceSquare, upColor)) {
-            moveUpEdgeFromBottomLayer(startRow, startCol);
+            moveUpEdgeFromBottomToMiddleLayer(startRow, startCol);
         }
 
         else if (squareIsColor(downFaceSquare, upColor)) {
@@ -198,7 +198,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         }
     }
 
-    private void moveUpEdgeFromBottomLayer(int downFaceRow, int downFaceCol) {
+    private void moveUpEdgeFromBottomToMiddleLayer(int downFaceRow, int downFaceCol) {
         if (downFaceRow == TOP_ROW) {
             cube.rotateFrontFaceCounterclockwise();
             moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, RIGHT_COLUMN);
