@@ -256,18 +256,18 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     //</editor-fold>
 
     private void moveUpFaceEdgesFromMiddleLayer() {
-        moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, MIDDLE_ROW, LEFT_COLUMN);
-        moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, MIDDLE_ROW, RIGHT_COLUMN);
-        moveUpFaceEdgeFromMiddleLayerToDownFace(leftFace, MIDDLE_ROW, LEFT_COLUMN);
-        moveUpFaceEdgeFromMiddleLayerToDownFace(leftFace, MIDDLE_ROW, RIGHT_COLUMN);
-        moveUpFaceEdgeFromMiddleLayerToDownFace(rightFace, MIDDLE_ROW, LEFT_COLUMN);
-        moveUpFaceEdgeFromMiddleLayerToDownFace(rightFace, MIDDLE_ROW, RIGHT_COLUMN);
-        moveUpFaceEdgeFromMiddleLayerToDownFace(backFace, MIDDLE_ROW, LEFT_COLUMN);
-        moveUpFaceEdgeFromMiddleLayerToDownFace(backFace, MIDDLE_ROW, RIGHT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, LEFT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(frontFace, RIGHT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(leftFace, LEFT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(leftFace, RIGHT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(rightFace, LEFT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(rightFace, RIGHT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(backFace, LEFT_COLUMN);
+        moveUpFaceEdgeFromMiddleLayerToDownFace(backFace, RIGHT_COLUMN);
     }
 
-    private void moveUpFaceEdgeFromMiddleLayerToDownFace(Face face, int row, int col) {
-        if (squareIsColor(face.squares[row][col], upColor)) {
+    private void moveUpFaceEdgeFromMiddleLayerToDownFace(Face face, int col) {
+        if (squareIsColor(face.squares[MIDDLE_ROW][col], upColor)) {
             boolean leftPositioned = upLeftEdgePositioned();
             boolean rightPositioned = upRightEdgePositioned();
             boolean topPositioned = upTopEdgePositioned();
