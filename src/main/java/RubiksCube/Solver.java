@@ -338,6 +338,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
     //</editor-fold>
 
+    //<editor-fold desc="Position up corners">
     private void positionUpCorners() {
         while (!upCornersAreOriented()) {
             setUpFaceBottomRightCorner();
@@ -402,6 +403,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         cube.rotateDownFaceClockwise();
         orientUpFaceCornerFromRightFace();
     }
+    //</editor-fold>
     //</editor-fold>
     //</editor-fold>
 
