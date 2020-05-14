@@ -154,21 +154,16 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     }
 
     private void moveUpFaceEdgeFromBottomLayer(int startRow, int startCol) {
-        boolean upSquareOnBottomLayer = false;
-        boolean upSquareOnDownFace = false;
         Square downFaceSquare = downFace.squares[startRow][startCol];
-        Color edgeColor = null;
 
-        if (squareIsColor(downFaceSquare, upColor)) {
-            edgeColor = getEdgeColor(downFace.squares[startRow][startCol]);
-            upSquareOnDownFace = true;
-        } else if (edgeIsColor(downFaceSquare, upColor)) {
-            edgeColor = downFaceSquare.getColor();
-            upSquareOnBottomLayer = true;
+        if (edgeIsColor(downFaceSquare, upColor)) {
+            moveUpEdgeFromBottomLayer(startRow, startCol);
         }
 
-        if (upSquareOnDownFace || upSquareOnBottomLayer) {
+        else if (squareIsColor(downFaceSquare, upColor)) {
+            Color edgeColor = getEdgeColor(downFace.squares[startRow][startCol]);
             int endRow, endCol;
+
             if (edgeColor.equals(frontColor)) {
                 endRow = TOP_ROW;
                 endCol = MIDDLE_COLUMN;
@@ -183,17 +178,12 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                 endCol = MIDDLE_COLUMN;
             }
 
-            positionUpEdgeOnBottomLayer(startRow, startCol, endRow, endCol);
-
-            if (upSquareOnBottomLayer) {
-                moveUpEdgeFromBottomLayer(endRow, endCol);
-            } else {
-                moveUpEdgeFromDownFace(endRow, endCol);
-            }
+            positionUpEdgeOnDownFace(startRow, startCol, endRow, endCol);
+            moveUpEdgeFromDownFace(endRow, endCol);
         }
     }
 
-    private void positionUpEdgeOnBottomLayer(int startRow, int startCol, int endRow, int endCol) {
+    private void positionUpEdgeOnDownFace(int startRow, int startCol, int endRow, int endCol) {
         if (startRow != endRow || startCol != endCol) {
             if (Math.abs(startRow - endRow) == 2 || Math.abs(startCol - endCol) == 2) {
                 cube.doubleRotateDownFace();
