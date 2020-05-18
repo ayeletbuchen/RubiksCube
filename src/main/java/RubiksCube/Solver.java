@@ -69,23 +69,12 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                 }
                 if (solveStack.size() > 1) {
                     nextMove = solveStack.pop();
-                    if (nextMove.equals(solveStack.peek().getCounterMove())) {
-                        solveStack.pop();
-                    } else {
-                        solveStack.push(nextMove);
-                    }
-                }
-                /*
-
-                if (solveStack.size() > 1) {
-                    nextMove = solveStack.pop();
                     while (!solveStack.isEmpty() && nextMove.equals(solveStack.peek().getCounterMove())) {
                         solveStack.pop();
                         nextMove = solveStack.pop();
                     }
                     solveStack.push(nextMove);
                 }
-                 */
                 if (solveStack.isEmpty()) {
                     directionLabel.setText("Good job!");
                 } else {
@@ -563,66 +552,29 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         Square middleLeft = upFace.squares[MIDDLE_ROW][LEFT_COLUMN];
 
         while (!upCrossIsOriented()) {
-            System.out.println("while");
             if (!edgeIsColor(middleLeft, leftColor)) {
-                System.out.println("if");
                 if (edgeIsColor(middleLeft, rightColor)
                         && edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], leftColor)) {
-                    System.out.println("a");
                     swapUpHorizontalFacingSquares();
                 } else if (edgeIsColor(middleLeft, frontColor)
                         && edgeIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], leftColor)) {
-                    System.out.println("b");
                     swapUpBottomLeftEdges();
                 } else {
-                    System.out.println("c");
-                    // cube.rotateUpFaceCounterclockwise();
                     turnCubeRight();
                     swapUpBottomLeftEdges();
                 }
             } else if (!edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightColor)) {
-                System.out.println("else if");
                 if (edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], backColor)
                     && edgeIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], rightColor)) {
-                    System.out.println("a");
-                    // cube.rotateUpFaceCounterclockwise();
                     turnCubeRight();
                 } else {
-                    System.out.println("b");
                     turnCubeLeft();
-                    // cube.rotateUpFaceClockwise();
                 }
                 swapUpBottomLeftEdges();
             } else if (!edgeIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], frontColor)) {
-                System.out.println("last else if");
                 turnCubeRight();
-                // cube.rotateUpFaceCounterclockwise();
                 swapUpHorizontalFacingSquares();
             }
-
-//            if (!edgeIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], leftColor)) {
-//                System.out.println("if");
-//                if (!edgeIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], backColor)) {
-//                    cube.rotateUpFaceCounterclockwise();
-//                    swapUpBottomLeftEdges();
-//                } else if (!edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightColor)) {
-//                    swapUpHorizontalFacingSquares();
-//                } else {
-//                    swapUpBottomLeftEdges();
-//                }
-//            } else if (!edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightColor)) {
-//                System.out.println("else if");
-//                if (!edgeIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], backColor)) {
-//                    cube.doubleRotateUpFace();
-//                } else {
-//                    cube.rotateUpFaceClockwise();
-//                }
-//                swapUpBottomLeftEdges();
-//            } else {
-//                System.out.println("else");
-//                cube.rotateUpFaceCounterclockwise();
-//                swapUpHorizontalFacingSquares();
-//            }
         }
     }
 
