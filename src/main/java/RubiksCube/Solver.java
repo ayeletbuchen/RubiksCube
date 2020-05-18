@@ -67,6 +67,14 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                 } else {
                     solveStack.push(move.getCounterMove());
                 }
+                if (solveStack.size() > 1) {
+                    nextMove = solveStack.pop();
+                    if (nextMove.equals(solveStack.peek().getCounterMove())) {
+                        solveStack.pop();
+                    } else {
+                        solveStack.push(nextMove);
+                    }
+                }
                 if (solveStack.isEmpty()) {
                     directionLabel.setText("Good job!");
                 } else {
