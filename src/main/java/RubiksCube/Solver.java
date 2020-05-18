@@ -353,7 +353,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
         if (!upFaceBottomRightCornerInCorrectOrientation()) {
             moveUpFaceBottomRightCornerFromBottomLayer();
-            if (cornerHasColor(square, upColor) && !upFaceBottomRightCornerInCorrectOrientation()) {
+            if (!upFaceBottomRightCornerInCorrectOrientation() && cornerHasColor(square, upColor)) {
                 orientUpFaceCornerFromRightFace();
             }
         }
@@ -449,30 +449,10 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
     //<editor-fold desc="Edge methods">
     private boolean upCrossExists() {
-        return upFaceCrossExists() && upEdgesAreOriented();
-    }
-
-    private boolean upEdgesAreOriented() {
-        Color topEdgeColor = getEdgeColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN]);
-        Color bottomEdgeColor = getEdgeColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN]);
-        Color leftEdgeColor = getEdgeColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN]);
-        Color rightEdgeColor = getEdgeColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN]);
-
-        if (bottomEdgeColor.equals(frontColor)) {
-            return upEdgesAreColored(rightEdgeColor, topEdgeColor, leftEdgeColor, rightColor, backColor, leftColor);
-        } else if (bottomEdgeColor.equals(leftColor)) {
-            return upEdgesAreColored(rightEdgeColor, topEdgeColor, leftEdgeColor, frontColor, rightColor, backColor);
-        } else if (bottomEdgeColor.equals(rightColor)) {
-            return upEdgesAreColored(rightEdgeColor, topEdgeColor, leftEdgeColor, backColor, leftColor, frontColor);
-        } else {
-            return upEdgesAreColored(rightEdgeColor, topEdgeColor, leftEdgeColor, leftColor, frontColor, rightColor);
-        }
-    }
-
-    private boolean upEdgesAreColored(Color rightEdge, Color topEdge, Color leftEdge,
-                                      Color rightColor, Color topColor, Color leftColor) {
-        return rightEdge.equals(rightColor)
-                && topEdge.equals(topColor) && leftEdge.equals(leftColor);
+        return edgeIsPositioned(upFace.squares[TOP_ROW][MIDDLE_COLUMN], upColor, backColor)
+                && edgeIsPositioned(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor, leftColor)
+                && edgeIsPositioned(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor, rightColor)
+                && edgeIsPositioned(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], upColor, frontColor);
     }
 
     private boolean edgeIsColor(Square square, Color color) {
@@ -481,13 +461,6 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
     private Color getEdgeColor(Square square) {
         return edgesMap.get(square).getColor();
-    }
-
-    private boolean upFaceCrossExists() {
-        return squareIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], upColor)
-                && squareIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor)
-                && squareIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor)
-                && squareIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], upColor);
     }
 
     private boolean edgeIsPositioned(Square square, Color squareColor, Color edgeColor) {
