@@ -75,6 +75,17 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                         solveStack.push(nextMove);
                     }
                 }
+                /*
+
+                if (solveStack.size() > 1) {
+                    nextMove = solveStack.pop();
+                    while (!solveStack.isEmpty() && nextMove.equals(solveStack.peek().getCounterMove())) {
+                        solveStack.pop();
+                        nextMove = solveStack.pop();
+                    }
+                    solveStack.push(nextMove);
+                }
+                 */
                 if (solveStack.isEmpty()) {
                     directionLabel.setText("Good job!");
                 } else {
@@ -497,8 +508,10 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     //<editor-fold desc="Solve bottom layer">
     private void solveBottomLayer() {
         createBottomCross();
+        orientBottomCross();
     }
 
+    //<editor-fold desc="Create bottom cross">
     private void createBottomCross() {
         while (!upCrossExists()) {
             if (squareIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor)) {
@@ -543,6 +556,84 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         cube.rotateUpFaceCounterclockwise();
         cube.rotateFrontFaceCounterclockwise();
     }
+    //</editor-fold>
+
+    //<editor-fold desc="Orient bottom cross">
+    private void orientBottomCross() {
+        Square middleLeft = upFace.squares[MIDDLE_ROW][LEFT_COLUMN];
+
+        while (!upCrossIsOriented()) {
+            System.out.println("while");
+            if (!edgeIsColor(middleLeft, leftColor)) {
+                System.out.println("if");
+                if (edgeIsColor(middleLeft, rightColor)
+                        && edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], leftColor)) {
+                    System.out.println("a");
+                    swapUpHorizontalFacingSquares();
+                } else if (edgeIsColor(middleLeft, frontColor)
+                        && edgeIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], leftColor)) {
+                    System.out.println("b");
+                    swapUpBottomLeftEdges();
+                } else {
+                    System.out.println("c");
+                    // cube.rotateUpFaceCounterclockwise();
+                    turnCubeRight();
+                    swapUpBottomLeftEdges();
+                }
+            } else if (!edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightColor)) {
+                System.out.println("else if");
+                if (edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], backColor)
+                    && edgeIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], rightColor)) {
+                    System.out.println("a");
+                    // cube.rotateUpFaceCounterclockwise();
+                    turnCubeRight();
+                } else {
+                    System.out.println("b");
+                    turnCubeLeft();
+                    // cube.rotateUpFaceClockwise();
+                }
+                swapUpBottomLeftEdges();
+            } else if (!edgeIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], frontColor)) {
+                System.out.println("last else if");
+                turnCubeRight();
+                // cube.rotateUpFaceCounterclockwise();
+                swapUpHorizontalFacingSquares();
+            }
+
+//            if (!edgeIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], leftColor)) {
+//                System.out.println("if");
+//                if (!edgeIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], backColor)) {
+//                    cube.rotateUpFaceCounterclockwise();
+//                    swapUpBottomLeftEdges();
+//                } else if (!edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightColor)) {
+//                    swapUpHorizontalFacingSquares();
+//                } else {
+//                    swapUpBottomLeftEdges();
+//                }
+//            } else if (!edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightColor)) {
+//                System.out.println("else if");
+//                if (!edgeIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], backColor)) {
+//                    cube.doubleRotateUpFace();
+//                } else {
+//                    cube.rotateUpFaceClockwise();
+//                }
+//                swapUpBottomLeftEdges();
+//            } else {
+//                System.out.println("else");
+//                cube.rotateUpFaceCounterclockwise();
+//                swapUpHorizontalFacingSquares();
+//            }
+        }
+    }
+
+    private void swapUpHorizontalFacingSquares() {
+        cube.rotateUpFaceClockwise();
+        swapUpBottomLeftEdges();
+        turnCubeLeft();
+        turnCubeLeft();
+        swapUpBottomLeftEdges();
+    }
+    //</editor-fold>
     //</editor-fold>
     //</editor-fold>
 
@@ -590,10 +681,25 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     }
 
     private boolean noMiddleEdgesOnTopLayer() {
-        return edgeIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], upColor)
-                && edgeIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor)
-                && edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor)
-                && edgeIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], upColor);
+        return edgeHasColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], upColor)
+                && edgeHasColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor)
+                && edgeHasColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor)
+                && edgeHasColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], upColor);
+    }
+
+    private boolean edgeHasColor(Square square, Color color) {
+        return squareIsColor(square, color) || edgeIsColor(square, color);
+    }
+
+    private void swapUpBottomLeftEdges() {
+        cube.rotateRightFaceClockwise();
+        cube.rotateUpFaceClockwise();
+        cube.rotateRightFaceCounterclockwise();
+        cube.rotateUpFaceClockwise();
+        cube.rotateRightFaceClockwise();
+        cube.doubleRotateUpFace();
+        cube.rotateRightFaceCounterclockwise();
+        cube.rotateUpFaceClockwise();
     }
     //</editor-fold>
 
@@ -645,6 +751,16 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         frontColor = rightColor;
         rightColor = backColor;
         backColor = temp;
+    }
+
+    private void turnCubeRight() {
+        cube.turnCubeRight();
+
+        Color temp = leftColor;
+        leftColor = backColor;
+        backColor = rightColor;
+        rightColor = frontColor;
+        frontColor = temp;
     }
 
     private void turnCubeDownwards() {
