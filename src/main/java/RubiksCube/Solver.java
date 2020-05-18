@@ -100,7 +100,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         computerSolving = true;
         solveTopLayer();
         solveMiddleLayer();
-        //solveBottomLayer();
+        solveBottomLayer();
         computerSolving = false;
         reshuffleCube();
     }
@@ -122,7 +122,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     //<editor-fold defaultstate-"collapsed" desc="Solve top layer">
     private void solveTopLayer() {
         positionUpFaceCenter();
-        createWhiteCross();
+        createTopCross();
         positionUpCorners();
     }
 
@@ -145,8 +145,8 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Create white cross">
-    private void createWhiteCross() {
-        while (!upCrossExists()) {
+    private void createTopCross() {
+        while (!upCrossIsOriented()) {
             moveUpFaceEdgesFromBottomLayer();
             moveUpFaceEdgesFromMiddleLayer();
             moveUpFaceEdgesFromTopLayer();
@@ -443,13 +443,15 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
             } else if (squareAndEdgeAreColored(frontFace.squares[TOP_ROW][MIDDLE_COLUMN], frontColor, rightColor)) {
                 moveMiddleSquareDownRight();
             }
-            if (frontMiddleEdgeIncorrectlyOriented(frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightColor)) {
-                moveMiddleSquareDownRight();
-                continue;
-            }
-            if (frontMiddleEdgeIncorrectlyOriented(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN], leftColor)) {
-                moveMiddleSquareDownLeft();
-                continue;
+            if (noMiddleEdgesOnTopLayer() && !middleLayerEdgesOriented()) {
+                if (frontMiddleEdgeIncorrectlyOriented(frontFace.squares[MIDDLE_ROW][RIGHT_COLUMN], rightColor)) {
+                    moveMiddleSquareDownRight();
+                    continue;
+                }
+                if (frontMiddleEdgeIncorrectlyOriented(frontFace.squares[MIDDLE_ROW][LEFT_COLUMN], leftColor)) {
+                    moveMiddleSquareDownLeft();
+                    continue;
+                }
             }
             if (!middleLayerEdgesOriented()) {
                 turnCubeLeft();
@@ -491,10 +493,61 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         cube.rotateFrontFaceCounterclockwise();
     }
     //</editor-fold>
+
+    //<editor-fold desc="Solve bottom layer">
+    private void solveBottomLayer() {
+        createBottomCross();
+    }
+
+    private void createBottomCross() {
+        while (!upCrossExists()) {
+            if (squareIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor)) {
+                if (squareIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor)) {
+                    createCrossFromRowOrDot();
+                } else {
+                    if (squareIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], upColor)) {
+                        cube.rotateUpFaceClockwise();
+                    }
+                    createCrossFromL();
+                }
+            } else if (squareIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], upColor)) {
+                if (squareIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], upColor)) {
+                    cube.rotateUpFaceClockwise();
+                    createCrossFromRowOrDot();
+                } else {
+                    if (squareIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor)) {
+                        cube.rotateUpFaceCounterclockwise();
+                    }
+                    createCrossFromL();
+                }
+            } else {
+                createCrossFromRowOrDot();
+            }
+        }
+    }
+
+    private void createCrossFromL() {
+        cube.rotateFrontFaceClockwise();
+        cube.rotateUpFaceClockwise();
+        cube.rotateRightFaceClockwise();
+        cube.rotateUpFaceCounterclockwise();
+        cube.rotateRightFaceCounterclockwise();
+        cube.rotateFrontFaceCounterclockwise();
+    }
+
+    private void createCrossFromRowOrDot() {
+        cube.rotateFrontFaceClockwise();
+        cube.rotateRightFaceClockwise();
+        cube.rotateUpFaceClockwise();
+        cube.rotateRightFaceCounterclockwise();
+        cube.rotateUpFaceCounterclockwise();
+        cube.rotateFrontFaceCounterclockwise();
+    }
+    //</editor-fold>
     //</editor-fold>
 
     //<editor-fold desc="Edge methods">
-    private boolean upCrossExists() {
+    private boolean upCrossIsOriented() {
         return squareAndEdgeAreColored(upFace.squares[TOP_ROW][MIDDLE_COLUMN], upColor, backColor)
                 && squareAndEdgeAreColored(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor, leftColor)
                 && squareAndEdgeAreColored(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor, rightColor)
@@ -527,6 +580,20 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     private boolean frontMiddleEdgeIncorrectlyOriented(Square frontSquare, Color edgeColor) {
         return !squareAndEdgeAreColored(frontSquare, frontColor, edgeColor)
                 && !squareIsColor(frontSquare, upColor) && !edgeIsColor(frontSquare, upColor);
+    }
+
+    private boolean upCrossExists() {
+        return squareIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], upColor)
+                && squareIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor)
+                && squareIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor)
+                && squareIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], upColor);
+    }
+
+    private boolean noMiddleEdgesOnTopLayer() {
+        return edgeIsColor(upFace.squares[TOP_ROW][MIDDLE_COLUMN], upColor)
+                && edgeIsColor(upFace.squares[MIDDLE_ROW][LEFT_COLUMN], upColor)
+                && edgeIsColor(upFace.squares[MIDDLE_ROW][RIGHT_COLUMN], upColor)
+                && edgeIsColor(upFace.squares[BOTTOM_ROW][MIDDLE_COLUMN], upColor);
     }
     //</editor-fold>
 
