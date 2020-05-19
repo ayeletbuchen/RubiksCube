@@ -28,12 +28,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         rightFace = cube.getRightFace();
         backFace = cube.getBackFace();
         downFace = cube.getDownFace();
-        upColor = UP_FACE_COLOR;
-        leftColor = LEFT_FACE_COLOR;
-        frontColor = FRONT_FACE_COLOR;
-        rightColor = RIGHT_FACE_COLOR;
-        backColor = BACK_FACE_COLOR;
-        downColor = DOWN_FACE_COLOR;
+        setColors();
         computerSolving = false;
         reshuffling = false;
         edgesMap = new EdgesMap(upFace, leftFace, frontFace, rightFace, backFace, downFace);
@@ -53,11 +48,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     @Override
     public void onNext(Move move) {
         cube.repaint();
-        if (move.equals(Move.SHUFFLE)) {
-            computerMoveStack.clear();
-            solveStack.clear();
-        }
-        else if (computerSolving) {
+        if (computerSolving) {
             computerMoveStack.push(move);
         } else if (!reshuffling) {
             if (!solveStack.isEmpty()) {
@@ -94,6 +85,25 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
 
     }
     //</editor-fold>
+
+    public void clear() {
+        computerMoveStack.clear();
+        solveStack.clear();
+        setColors();
+    }
+
+    private void setColors() {
+        upColor = UP_FACE_COLOR;
+        leftColor = LEFT_FACE_COLOR;
+        frontColor = FRONT_FACE_COLOR;
+        rightColor = RIGHT_FACE_COLOR;
+        backColor = BACK_FACE_COLOR;
+        downColor = DOWN_FACE_COLOR;
+    }
+
+    public boolean alreadySolved() {
+        return !solveStack.isEmpty();
+    }
 
     //<editor-fold defaultstate="collapsed" desc="Solve">
     public void solve() {

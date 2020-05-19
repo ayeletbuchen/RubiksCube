@@ -9,10 +9,6 @@ public class DirectionLabel extends JLabel {
         setFont(new Font("Calibri", Font.PLAIN, 30));
         setHorizontalAlignment(SwingConstants.CENTER);
         setVerticalAlignment(SwingConstants.CENTER);
-        clear();
-    }
-
-    public void clear() {
         setText("");
     }
 }

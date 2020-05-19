@@ -454,23 +454,12 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         subject.onNext(Move.Z_PRIME);
     }
 
-    public void doubleHorizontalCubeTurn() {
-        turnCubeLeft();
-        turnCubeLeft();
-    }
-
     public void doubleVerticalCubeTurn() {
         turnCubeUp();
         turnCubeUp();
     }
 
-    public void doubleCubeTurnAlongZAxis() {
-        turnCubeClockwiseAlongZAxis();
-        turnCubeClockwiseAlongZAxis();
-    }
-
     public void shuffle() {
-        subject.onNext(Move.SHUFFLE);
         for (int rotation = 0; rotation < NUM_SHUFFLE_STEPS; rotation++) {
             int method = random.nextInt(NUM_POSSIBLE_ROTATIONS);
             switch(method) {
@@ -539,7 +528,7 @@ public class Cube extends JComponent implements FrameValues, CubeValues, CubeCol
         rightFace.reset();
         backFace.reset();
         downFace.reset();
-        subject.onNext(Move.RESET);
+        repaint();
     }
 
     protected Face getUpFace() {

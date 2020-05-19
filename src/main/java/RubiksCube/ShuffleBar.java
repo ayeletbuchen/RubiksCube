@@ -12,10 +12,12 @@ public class ShuffleBar extends JPanel {
     private JButton solveButton;
     private String teachMeStr;
     private String solveAloneStr;
+    private DirectionLabel directionLabel;
 
-    public ShuffleBar(Cube cube, Solver solver) {
+    public ShuffleBar(Cube cube, Solver solver, DirectionLabel directionLabel) {
         this.cube = cube;
         this.solver = solver;
+        this.directionLabel = directionLabel;
         teachMeStr = "Teach me";
         solveAloneStr = "Solve alone";
         setLayout(new FlowLayout());
@@ -28,16 +30,16 @@ public class ShuffleBar extends JPanel {
         resetButton = new JButton("Reset");
         resetButton.addActionListener(e -> {
             cube.reset();
-            resetSolveButton();
+            reset();
         });
         add(resetButton);
     }
 
     private void addShuffleButton() {
-        shuffleButton = new JButton(Move.SHUFFLE.getSymbol());
+        shuffleButton = new JButton("Shuffle");
         shuffleButton.addActionListener(e -> {
             cube.shuffle();
-            resetSolveButton();
+            reset();
         });
         add(shuffleButton);
     }
@@ -46,16 +48,21 @@ public class ShuffleBar extends JPanel {
         solveButton = new JButton(teachMeStr);
         solveButton.addActionListener(e -> {
             if (solveButton.getText().equals(teachMeStr)) {
+                directionLabel.setVisible(true);
                 solveButton.setText(solveAloneStr);
-                solver.solve();
+                if (!solver.alreadySolved()) {
+                    solver.solve();
+                }
             } else {
-                resetSolveButton();
+                directionLabel.setVisible(false);
+                solveButton.setText(teachMeStr);
             }
         });
         add(solveButton);
     }
 
-    private void resetSolveButton() {
+    private void reset() {
+        directionLabel.setVisible(false);
         solveButton.setText(teachMeStr);
         solver.clear();
     }
