@@ -1,8 +1,8 @@
 package RubiksCube;
 
 public interface FrameValues {
-    int FRAME_WIDTH = 1000;
-    int FRAME_HEIGHT = 1350;
+    int FRAME_WIDTH = 600;
+    int FRAME_HEIGHT = 600;
     int FACE_WIDTH = 100;
     int SQUARE_WIDTH = FACE_WIDTH / 3;
     int PARTIAL_SQUARE_WIDTH = SQUARE_WIDTH / 3;
@@ -11,7 +11,7 @@ public interface FrameValues {
     int MOST_FACE_WIDTH = (2 * SQUARE_WIDTH) + PARTIAL_SQUARE_WIDTH;
 
     //<editor-fold desc="Front face coordinates">
-    int FRONT_FACE_X_1 = (int) (FRAME_WIDTH / 2.5);
+    int FRONT_FACE_X_1 = FRAME_WIDTH / 3;
     int FRONT_FACE_X_2 = FRONT_FACE_X_1 + SQUARE_WIDTH;
     int FRONT_FACE_X_3 = FRONT_FACE_X_2 + SQUARE_WIDTH;
     int FRONT_FACE_X_4 = FRONT_FACE_X_3 + SQUARE_WIDTH;
