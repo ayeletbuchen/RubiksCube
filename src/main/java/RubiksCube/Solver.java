@@ -69,7 +69,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
                 if (solveStack.isEmpty()) {
                     directionLabel.setText("Good job!");
                 } else {
-                    directionLabel.setText(solveStack.peek().getPrompt());
+                    directionLabel.setText(solveStack.peek().getPrompt() + " (" + solveStack.peek().getSymbol() + ")");
                 }
             }
         }
@@ -124,7 +124,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
             solveStack.push(move);
         }
         if (!solveStack.isEmpty()) {
-            directionLabel.setText(solveStack.peek().getPrompt());
+            directionLabel.setText(solveStack.peek().getPrompt() + " (" + solveStack.peek().getSymbol() + ")");
         }
         reshuffling = false;
     }

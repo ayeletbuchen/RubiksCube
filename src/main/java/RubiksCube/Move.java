@@ -20,12 +20,12 @@ public enum Move {
     M_PRIME("Slice middle layer counterclockwise", "M'"),
     E_PRIME("Slice equatorial layer counterclockwise", "E'"),
     S_PRIME("Slice standing layer counterclockwise", "S'"),
-    Y_PRIME("Turn cube to the right", "Turn cube right"),
-    Y("Turn cube to the left", "Turn cube left"),
-    X("Turn cube upwards", "Turn cube upwards"),
-    X_PRIME("Turn cube downwards", "Turn cube downwards"),
-    Z("Turn cube clockwise along Z axis", "Z axis clockwise turn"),
-    Z_PRIME("Turn cube counterclockwise along Z axis", "Z axis counterclockwise turn");
+    Y_PRIME("Turn cube to the right", "Y'"),
+    Y("Turn cube to the left", "Y"),
+    X("Turn cube upwards", "X"),
+    X_PRIME("Turn cube downwards", "X'"),
+    Z("Turn cube clockwise along Z axis", "Z"),
+    Z_PRIME("Turn cube counterclockwise along Z axis", "Z'");
 
     private String prompt;
     private String symbol;
