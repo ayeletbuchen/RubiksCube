@@ -499,6 +499,7 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
         createBottomCross();
         orientBottomCross();
         positionBottomCorners();
+        orientBottomCorners();
     }
 
     //<editor-fold desc="Bottom cross">
@@ -605,6 +606,44 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
             }
             swapThreeUpFaceCorners();
         }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Orient bottom corners">
+    private void orientBottomCorners() {
+        while (!upCornersAreOriented()) {
+            Color front, right;
+            Square square = upFace.squares[BOTTOM_ROW][RIGHT_COLUMN];
+
+            if (cornerHasColor(square, frontColor)) {
+                if (cornerHasColor(square, leftColor)) {
+                    front = leftColor;
+                    right = frontColor;
+                } else {
+                    right = rightColor;
+                    front = frontColor;
+                }
+            } else {
+                if (cornerHasColor(square, leftColor)) {
+                    front = backColor;
+                    right = leftColor;
+                } else {
+                    front = rightColor;
+                    right = backColor;
+                }
+            }
+
+            while (!(squareIsColor(rightFace.squares[TOP_ROW][LEFT_COLUMN], right)
+                    && squareIsColor(frontFace.squares[TOP_ROW][RIGHT_COLUMN], front))) {
+                orientBottomCorner();
+            }
+            cube.rotateUpFaceClockwise();
+        }
+    }
+
+    private void orientBottomCorner() {
+        orientUpFaceCornerFromRightFace();
+        cube.rotateDownFaceClockwise();
     }
     //</editor-fold>
     //</editor-fold>
