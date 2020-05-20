@@ -93,12 +93,12 @@ public class Solver extends Stack<Move> implements Observer<Move>, CubeValues, C
     }
 
     private void setColors() {
-        upColor = UP_FACE_COLOR;
-        leftColor = LEFT_FACE_COLOR;
-        frontColor = FRONT_FACE_COLOR;
-        rightColor = RIGHT_FACE_COLOR;
-        backColor = BACK_FACE_COLOR;
-        downColor = DOWN_FACE_COLOR;
+        upColor = upFace.getOriginalColor();
+        leftColor = leftFace.getOriginalColor();
+        frontColor = frontFace.getOriginalColor();
+        rightColor = rightFace.getOriginalColor();
+        backColor = backFace.getOriginalColor();
+        downColor = downFace.getOriginalColor();
     }
 
     public boolean alreadySolved() {

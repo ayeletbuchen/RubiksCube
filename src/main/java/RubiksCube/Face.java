@@ -136,4 +136,8 @@ public class Face extends JPanel implements FrameValues, CubeValues {
             }
         }
     }
+
+    public Color getOriginalColor() {
+        return ORIGINAL_COLOR;
+    }
 }
